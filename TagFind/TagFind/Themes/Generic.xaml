@@ -34,6 +34,13 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border.Resources>
+                            <CommandBarFlyout x:Name="PART_CommandBarFlyout">
+                                <CommandBarFlyout.SecondaryCommands>
+                                    <AppBarButton x:Name="PART_RemoveReferenceAppBarButton" x:Uid="RemoveReferenceAppBarButton" Icon="Delete"/>
+                                </CommandBarFlyout.SecondaryCommands>
+                            </CommandBarFlyout>
+                        </Border.Resources>
                         <RelativePanel>
                             <StackPanel RelativePanel.AlignLeftWithPanel="True">
                                 <TextBlock x:Name="PART_TextBlock" Text="{Binding Name}"
@@ -42,6 +49,7 @@
                                        Style="{StaticResource BodyStrongTextBlockStyle}"/>
                             </StackPanel>
                             <AppBarButton x:Name="PART_MoreOptionButton"
+                                          Icon="More"
                                           RelativePanel.AlignTopWithPanel="True"
                                           RelativePanel.AlignRightWithPanel="True"/>
                         </RelativePanel>

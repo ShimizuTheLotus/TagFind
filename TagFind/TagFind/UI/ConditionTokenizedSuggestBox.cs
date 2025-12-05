@@ -277,6 +277,7 @@ namespace TagFind.UI
             }
             return null;
         }
+
         private DBContentManager? GetContentManager()
         {
             Page? currentPage = FindVisualParent<Page>(this);

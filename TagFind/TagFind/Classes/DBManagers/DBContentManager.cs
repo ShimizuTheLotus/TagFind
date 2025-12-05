@@ -234,7 +234,8 @@ namespace TagFind.Classes.DB
                 }
                 string command =
                     $"SELECT * FROM {nameof(Meta)} " +
-                    $"WHERE {new Meta().Property} = @{new Meta().Property}";
+                    $"WHERE {new Meta().Property} = @{new Meta().Property} " +
+                    $"LIMIT 1";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new Meta().Property}", Property);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
@@ -277,6 +278,37 @@ namespace TagFind.Classes.DB
             }
             finally
 #endif
+            {
+                _lock.Release();
+            }
+        }
+
+        public async Task<string> GetMeta(string Property)
+        {
+            await _lock.WaitAsync();
+
+            try
+            {
+                string result = string.Empty;
+                string command =
+                    $"SELECT * FROM {nameof(Meta)} " +
+                    $"WHERE {new Meta().Property} = @{new Meta().Property} " +
+                    $"LIMIT 1";
+                SqliteCommand SqliteCommand = new(command, dbConnection);
+                SqliteCommand.Parameters.AddWithValue($"@{new Meta().Property}", Property);
+                SqliteDataReader reader = SqliteCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    result = reader.GetString(1);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
+                return string.Empty;
+            }
+            finally
             {
                 _lock.Release();
             }

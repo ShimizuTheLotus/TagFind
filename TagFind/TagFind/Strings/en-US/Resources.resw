@@ -144,7 +144,7 @@
   <data name="SetDatabaseNameTextBlock.Text" xml:space="preserve">
     <value>Set Database Name</value>
   </data>
-  <data name="SettingsButton.Label" xml:space="preserve">
+  <data name="SettingsAppBarButton.Label" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="RemoveDatabaseReferenceButton.Label" xml:space="preserve">
@@ -242,5 +242,8 @@
   </data>
   <data name="DBTagEditPageNavigationViewItem.Content" xml:space="preserve">
     <value>Tags</value>
+  </data>
+  <data name="RemoveReferenceAppBarButton.Label" xml:space="preserve">
+    <value>Remove Reference</value>
   </data>
 </root>

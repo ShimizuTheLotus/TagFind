@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.Windows.Storage.Pickers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using TagFind.Classes;
 using TagFind.Classes.DB;
 using TagFind.Classes.Extensions;
 using TagFind.Interfaces;
@@ -33,7 +35,7 @@ namespace TagFind.Pages;
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class DBListPage : Page
+public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
 {
     private DBListManager _listManager = new();
     private DBContentManager _contentManager = new();
@@ -90,7 +92,7 @@ public sealed partial class DBListPage : Page
         DatabaseListView.DatabaseList = DatabaseInfoList;
     }
 
-    private async void AddDatabaseButton_Click(object sender, RoutedEventArgs e)
+    private async void AddDatabaseAppBarButton_Click(object sender, RoutedEventArgs e)
     {
         ContentDialog CreateDatabaseDialog = new();
         CreateDatabaseDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
@@ -142,13 +144,41 @@ public sealed partial class DBListPage : Page
         }
     }
 
-    private void SettingsButton_Click(object sender, RoutedEventArgs e)
+    private void SettingsAppBarButton_Click(object sender, RoutedEventArgs e)
     {
         Frame.Navigate(typeof(SettingsPage));
     }
 
-    private void RemoveDatabaseReferenceButton_Click(object sender, RoutedEventArgs e)
+    public void RemoveReferenceOfID(long id)
     {
+        _listManager.Remove(id);
+        UpdateDatabaseList();
+    }
 
+    private async void AddReferenceAppBarButton_Click(object sender, RoutedEventArgs e)
+    {
+        var window = new Microsoft.UI.Xaml.Window();
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+        var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+        // DO NOT USE Windows.Storage.Pickers since it cant open without filter
+        var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(windowId);
+
+        PickFileResult file = await picker.PickSingleFileAsync();
+        if (file != null)
+        {
+            string filePath = file.Path;
+
+            if (File.Exists(filePath))
+            {
+                _contentManager.OpenDB(filePath);
+                if (_contentManager.Connected)
+                {
+                    string description = await _contentManager.GetMeta(nameof(Consts.DB.UserDB.Meta.Description));
+                    _listManager.Add(filePath, description);
+                    _contentManager.CloseDB();
+                    UpdateDatabaseList();
+                }
+            }
+        }
     }
 }

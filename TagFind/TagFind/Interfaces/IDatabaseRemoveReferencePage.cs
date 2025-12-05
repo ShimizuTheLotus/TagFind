@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TagFind.Interfaces
 {
-    internal interface ITagFindDatabaseOption : IDatabaseOption
+    internal interface IDatabaseRemoveReferencePage
     {
-        public void AddTag();
-        public void RemoveTag();  }
+        public void RemoveReferenceOfID(long id);
+    }
 }

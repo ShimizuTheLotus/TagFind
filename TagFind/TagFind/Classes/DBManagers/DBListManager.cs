@@ -126,7 +126,7 @@ namespace TagFind.Classes.DB
             }
         }
 
-        public void Remove(int ID)
+        public void Remove(long ID)
         {
             lock (_lock)
             {

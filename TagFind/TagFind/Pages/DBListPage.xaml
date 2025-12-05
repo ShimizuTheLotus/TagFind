@@ -12,13 +12,13 @@
     <Grid x:Name="MainGrid">
         <RelativePanel>
             <CommandBar x:Name="PageCommandBar" RelativePanel.AlignTopWithPanel="True">
-                <AppBarButton x:Name="AddDatabaseButton" x:Uid="AddAppBarButton" Click="AddDatabaseButton_Click">
+                <AppBarButton x:Name="AddDatabaseAppBarButton" x:Uid="AddAppBarButton" Click="AddDatabaseAppBarButton_Click">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="&#xEC87;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton x:Name="RemoveDatabaseReferenceButton" x:Uid="RemoveDatabaseReferenceButton" Icon="Remove" Click="RemoveDatabaseReferenceButton_Click"/>
-                <AppBarButton x:Name="SettingsButton" x:Uid="SettingsButton" Icon="Setting" Click="SettingsButton_Click"/>
+                <AppBarButton x:Name="AddReferenceAppBarButton" x:Uid="AddReferenceAppBarButton" Icon="Add" Click="AddReferenceAppBarButton_Click"/>
+                <AppBarButton x:Name="SettingsAppBarButton" x:Uid="SettingsAppBarButton" Icon="Setting" Click="SettingsAppBarButton_Click"/>
             </CommandBar>
             <Grid RelativePanel.AlignLeftWithPanel="True"
                   RelativePanel.Below="PageCommandBar"
