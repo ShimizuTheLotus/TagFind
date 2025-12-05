@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.UI.ContentDialogPages.CreateDatabaseContentDialogPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.UI.ContentDialogPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <ScrollViewer>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Margin="0 0 32 0">
+                        <TextBlock x:Uid="CreateDatabasePathAtTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        <TextBlock x:Name="CreateDatabasePathTextBlock"/>
+                    </StackPanel>
+                    <Button x:Name="SelectFolderButton" x:Uid="SelectFolderButton" Click="SelectFolderButton_Click"/>
+                </StackPanel>
+                <TextBlock x:Uid="SetDatabaseNameTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBox x:Name="SetDatabaseNameTextBox"/>
+                <TextBlock x:Uid="AddDescriptionTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBox x:Name="DescriptionTextBox"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

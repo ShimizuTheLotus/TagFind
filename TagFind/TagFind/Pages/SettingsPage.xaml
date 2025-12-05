@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <RelativePanel>
+            <CommandBar RelativePanel.AlignTopWithPanel="True">
+                <AppBarButton x:Name="BackButton" x:Uid="BackButton" Icon="Back" Click="BackButton_Click"/>
+                <AppBarButton x:Name="ThirdPartyAttributionButton" x:Uid="ThirdPartyAttributionButton" Click="ThirdPartyAttributionButton_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xF133;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar>
+        </RelativePanel>
+    </Grid>
+</Page>

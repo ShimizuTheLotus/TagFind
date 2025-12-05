@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.ThirdPartyAttributionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <RelativePanel>
+            <AppBarButton x:Name="BackButton"
+                          Icon="Back"
+                          Click="BackButton_Click"
+                          RelativePanel.AlignLeftWithPanel="True"
+                          RelativePanel.AlignTopWithPanel="True"/>
+            <ScrollViewer RelativePanel.Below="BackButton"
+                          RelativePanel.AlignLeftWithPanel="True"
+                          RelativePanel.AlignRightWithPanel="True">
+                <Grid RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.Below="PageCommandBar"
+                  RelativePanel.AlignRightWithPanel="True"
+                  RelativePanel.AlignBottomWithPanel="True"
+                  CornerRadius="{ThemeResource OverlayCornerRadius}"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  Margin="16"
+                  Padding="8">
+                    <TextBlock x:Name="ThirdPartyAttributionTextBlock" TextWrapping="WrapWholeWords"/>
+                </Grid>
+            </ScrollViewer>
+        </RelativePanel>
+    </Grid>
+</Page>

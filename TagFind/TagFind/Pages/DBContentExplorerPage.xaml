@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.DBContentExplorerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:TagFind.UI"
+    mc:Ignorable="d">
+
+    <Grid Margin="0 48 0 0">
+        <RelativePanel>
+            <StackPanel x:Name="OptionBarStackPanel">
+                <ui:ConditionTokenizedSuggestBox x:Name="ConditionTokenizedSuggestBox" Margin="16 0 16 0"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <BreadcrumbBar x:Name="BreadcrumbBar" Grid.Column="0" Margin="16 0 16 0" VerticalAlignment="Center" >
+                        <BreadcrumbBar.ItemTemplate>
+                            <DataTemplate>
+                                <BreadcrumbBarItem Content="{Binding}" AutomationProperties.Name="{Binding Name}">
+                                    <BreadcrumbBarItem.ContentTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                        </DataTemplate>
+                                    </BreadcrumbBarItem.ContentTemplate>
+                                </BreadcrumbBarItem>
+                            </DataTemplate>
+                        </BreadcrumbBar.ItemTemplate>
+                    </BreadcrumbBar>
+                    <CommandBar x:Name="CommandBar" Grid.Column="1">
+                        <AppBarButton x:Name="AddAppBarButton" x:Uid="AddAppBarButton" Icon="Add"
+                                  Click="AddAppBarButton_Click"/>
+                        <AppBarButton x:Name="MoveAppBarButton" x:Uid="MoveAppBarButton" Icon="MoveToFolder"
+                                  Click="MoveAppBarButton_Click"/>
+                        <AppBarButton x:Name="DeleteAppBarButton" x:Uid="DeleteAppBarButton" Icon="Delete" Click="DeleteAppBarButton_Click"/>
+                        <AppBarButton x:Name="SortAppBarButton" x:Uid="SortAppBarButton" Icon="Sort"
+                                  Click="SortAppBarButton_Click"/>
+                        <AppBarButton x:Name="SelectAppBarButton" x:Uid="SelectAppBarButton"
+                                  Click="SelectAppBarButton_Click">
+                            <AppBarButton.Icon>
+                                <FontIcon x:Name="SelectAppBarButtonFontIcon" Glyph="&#xE73A;"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar>
+                </Grid>
+            </StackPanel>
+            <Grid Margin="16 0 16 0" CornerRadius="8" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.Below="OptionBarStackPanel"
+                  RelativePanel.AlignRightWithPanel="True"
+                  RelativePanel.AlignBottomWithPanel="True">
+                <TextBlock x:Name="DataItemIsEmptyTextBlock" x:Uid="DataItemIsEmptyTextBlock" Margin="0 0 0 32" Opacity="0.6" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource DisplayTextBlockStyle}"/>
+                <ScrollView>
+                    <ui:DataItemListView x:Name="DataItemListView"/>
+                </ScrollView>
+            </Grid>
+        </RelativePanel>
+    </Grid>
+</Page>

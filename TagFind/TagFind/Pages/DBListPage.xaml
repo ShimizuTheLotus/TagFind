@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.DBListPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui ="using:TagFind.UI"
+        xmlns:media="using:Microsoft.UI.Xaml.Media"
+    mc:Ignorable="d">
+    <Grid x:Name="MainGrid">
+        <RelativePanel>
+            <CommandBar x:Name="PageCommandBar" RelativePanel.AlignTopWithPanel="True">
+                <AppBarButton x:Name="AddDatabaseButton" x:Uid="AddAppBarButton" Click="AddDatabaseButton_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xEC87;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton x:Name="RemoveDatabaseReferenceButton" x:Uid="RemoveDatabaseReferenceButton" Icon="Remove" Click="RemoveDatabaseReferenceButton_Click"/>
+                <AppBarButton x:Name="SettingsButton" x:Uid="SettingsButton" Icon="Setting" Click="SettingsButton_Click"/>
+            </CommandBar>
+            <Grid RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.Below="PageCommandBar"
+                  RelativePanel.AlignRightWithPanel="True"
+                  RelativePanel.AlignBottomWithPanel="True"
+                  CornerRadius="{ThemeResource OverlayCornerRadius}"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  Margin="16"
+                  Padding="8">
+                <ui:DatabaseListView x:Name="DatabaseListView"/>
+            </Grid>
+        </RelativePanel>
+    </Grid>
+</Page>

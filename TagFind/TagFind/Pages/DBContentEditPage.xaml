@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.DBContentEditPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:TagFind.UI"
+    mc:Ignorable="d">
+
+    <Grid Margin="0 48 0 0"
+          Padding="16">
+        <ui:DataItemEditor x:Name="DataItemEditor"/>
+    </Grid>
+</Page>

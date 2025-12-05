@@ -1,0 +1,582 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.UI"
+    xmlns:common="using:CommunityToolkit.Common"
+    xmlns:winui="using:CommunityToolkit.WinUI.Controls">
+
+    <Style TargetType="local:DatabaseListView">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DatabaseListView">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ListView x:Name="PART_ListView" ItemsSource="{Binding DatabaseList}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <local:DatabaseListViewItem DatabaseInfo="{Binding}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DatabaseListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DatabaseListViewItem">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <RelativePanel>
+                            <StackPanel RelativePanel.AlignLeftWithPanel="True">
+                                <TextBlock x:Name="PART_TextBlock" Text="{Binding Name}"
+                                       Style="{StaticResource TitleTextBlockStyle}"/>
+                                <TextBlock Text="{Binding Description}"
+                                       Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                            </StackPanel>
+                            <AppBarButton x:Name="PART_MoreOptionButton"
+                                          RelativePanel.AlignTopWithPanel="True"
+                                          RelativePanel.AlignRightWithPanel="True"/>
+                        </RelativePanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemListView">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemListView">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ListView x:Name="PART_ListView">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <local:DataItemListViewItem DataItem="{Binding}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemListViewItem">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <RelativePanel>
+                            <Image x:Name="PART_Image" Height="100" Width="100"
+                                   Margin="0 8 0 8"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.AlignTopWithPanel="True"/>
+                            <StackPanel Margin="32 0 0 0"
+                                        RelativePanel.RightOf="PART_Image"
+                                        RelativePanel.AlignTopWithPanel="True">
+                                <TextBlock Text="{Binding Title}"
+                                           TextWrapping="WrapWholeWords"
+                                           TextTrimming="CharacterEllipsis"
+                                           Style="{StaticResource TitleTextBlockStyle}"
+                                           RelativePanel.AlignLeftWithPanel="True"
+                                           RelativePanel.AlignTopWithPanel="True"/>
+                                <TextBlock Text="{Binding Description}"/>
+                                <local:TagsWrapPanel x:Name="PART_TagsWrapPanel" Margin="0 16 0 0"/>
+                            </StackPanel>
+                        </RelativePanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <CommandBar>
+                                <AppBarButton x:Name="PART_SaveContentButton" x:Uid="SaveButton" Icon="Save"/>
+                                <AppBarButton x:Name="PART_NewContentButton" x:Uid="AddAppBarButton" Icon="Add"/>
+                            </CommandBar>
+                            <TextBlock x:Uid="TitleTextBlock"
+                                   Style="{StaticResource TitleTextBlockStyle}"
+                                       TextWrapping="WrapWholeWords"/>
+                            <TextBox x:Name="PART_TitleTextBox"/>
+                            <TextBlock x:Uid="DescriptionTextBlock"
+                                   Style="{StaticResource TitleTextBlockStyle}"/>
+                            <TextBox x:Name="PART_DescriptionTextBox"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"/>
+                            <TextBlock x:Uid="ReferencedFilePathTextBlock"
+                                       Style="{StaticResource TitleTextBlockStyle}"/>
+                            <RelativePanel>
+                                <TextBlock x:Name="PART_ReferencedFilePathTextBlock" TextWrapping="Wrap"/>
+                                <StackPanel RelativePanel.AlignRightWithPanel="True">
+                                    <Button x:Name="PART_SelectFileButton" x:Uid="SelectFileButton"/>
+                                    <Button x:Name="PART_RemoveReferenceButton" x:Uid="RemoveReferenceButton"/>
+                                </StackPanel>
+                            </RelativePanel>
+                            <local:DataItemTagListEditor x:Name="PART_TagListEditor"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:TagEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TagEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <TextBlock x:Uid="TagNameTextBlock"
+                                       Style="{StaticResource TitleTextBlockStyle}"/>
+                            <TextBox x:Name="PART_TagNameTextBox"/>
+                            <TextBlock x:Uid="DescriptionTextBlock"
+                                       Style="{StaticResource TitleTextBlockStyle}"/>
+                            <TextBox x:Name="PART_DescriptionTextBox"/>
+                            <TextBlock x:Uid="SurnamesTextBlock"
+                                       Style="{StaticResource TitleTextBlockStyle}"/>
+                            <TextBox x:Name="PART_SurnamesTextBox" AcceptsReturn="True"/>
+                            <TextBlock x:Uid="CreatedTimeTextBlock"/>
+                            <TextBlock x:Name="PART_CreatedTimeTextBlock"/>
+                            <TextBlock x:Uid="ModifiedTimeTextBlock"/>
+                            <TextBlock x:Name="PART_ModifiedTimeTextBlock"/>
+                            <TextBlock x:Uid="LogicChainsTextBlock"
+                                       Style="{StaticResource TitleTextBlockStyle}"/>
+                            <local:LogicChainListEditor x:Name="PART_LogicChainListEditor"/>
+                            <TextBlock x:Uid="PropertiesTextBlock"
+                                       Style="{StaticResource TitleTextBlockStyle}"/>
+                            <local:PropertyListEditor x:Name="PART_PropertyListEditor"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:ConditionTokenizedSuggestBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:ConditionTokenizedSuggestBox">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <winui:TokenizingTextBox x:Name="PART_TokenizingTextBox" x:Uid="SearchTextBox">
+                            <winui:TokenizingTextBox.QueryIcon>
+                                <FontIconSource Glyph="&#xE721;"/>
+                            </winui:TokenizingTextBox.QueryIcon>
+                            <winui:TokenizingTextBox.SuggestedItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding MainName}"/>
+                                            <ListView ItemsSource="{Binding LogicChains}" SelectionMode="None" IsItemClickEnabled="False">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <local:LogicChainPanel/>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                            <local:TagsWrapPanel ItemsSource="{Binding Surnames}">
+                                                <local:TagsWrapPanel.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <local:TagBlock TagName="{Binding}" TagID="{Binding}"/>
+                                                    </DataTemplate>
+                                                </local:TagsWrapPanel.ItemTemplate>
+                                            </local:TagsWrapPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </winui:TokenizingTextBox.SuggestedItemTemplate>
+                            <winui:TokenizingTextBox.TokenItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon Glyph="{Binding IconGlyph, FallbackValue='&#xE897;'}"/>
+                                        <TextBlock Text="{Binding MainName}" Margin="8 0 0 0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </winui:TokenizingTextBox.TokenItemTemplate>
+                        </winui:TokenizingTextBox>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:LogicChainListEditor">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ThemeResource ResourceKey="CardBackgroundFillColorDefaultBrush"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:LogicChainListEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="16"
+                        CornerRadius="16">
+                        <StackPanel>
+                            <CommandBar>
+                                <AppBarButton x:Name="PART_AddLogicChainButton"
+                                              x:Uid="AddAppBarButton"
+                                              Icon="Add"/>
+                                <AppBarButton x:Name="PART_RemoveLogicChainButton"
+                                              x:Uid="RemoveAppBarButton"
+                                              Icon="Delete"/>
+                            </CommandBar>
+                            <ListView x:Name="PART_ListView"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:LogicChainEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:LogicChainEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock/>
+                            <winui:WrapPanel x:Name="PART_LogicChainWrapPanel">
+                                <TextBox x:Name="PART_InputTextBox"/>
+                            </winui:WrapPanel>
+                            <Popup x:Name="PART_SuggestPopup"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:PropertyListEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:PropertyListEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <CommandBar>
+                                <AppBarButton x:Name="PART_CreatePropertyItemButton" x:Uid="AddAppBarButton" Icon="Add"/>
+                                <AppBarButton x:Name="PART_DeletePropertyItemButton" x:Uid="RemoveAppBarButton" Icon="Remove"/>
+                            </CommandBar>
+                            <ListView x:Name="PART_ListView" HorizontalContentAlignment="Stretch"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:PropertyEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:PropertyEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <TextBox x:Name="PART_PropertyNameTextBox"/>
+                            <local:LogicChainListEditor x:Name="PART_LogicChainListEditor"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:TagSuggestPopupContent">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ThemeResource ResourceKey="ApplicationPageBackgroundThemeBrush"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TagSuggestPopupContent">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                        <ListView x:Name="PART_TagListView">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding MainName}"/>
+                                            <ListView ItemsSource="{Binding LogicChains}">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <local:LogicChainPanel/>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                            <local:TagsWrapPanel ItemsSource="{Binding Surnames}">
+                                                <local:TagsWrapPanel.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <local:TagBlock TagName="{Binding}"/>
+                                                    </DataTemplate>
+                                                </local:TagsWrapPanel.ItemTemplate>
+                                            </local:TagsWrapPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:PropertySuggestPopupContent">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:PropertySuggestPopupContent">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ListView x:Name="PART_ListView">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding PropertyName}"/>
+                                        <local:LogicChainPanel ItemsSource="{Binding RestrictedTagLogicChains.LogicChainData}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:TagsWrapPanel">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TagsWrapPanel">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <winui:WrapPanel x:Name="PART_WrapPanel"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:TagBlock">
+        <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+        </Setter>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <ThemeResource ResourceKey="CardBackgroundFillColorDefaultBrush"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TagBlock">
+                    <Border
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="BorderColorBrush" 
+                                            Storyboard.TargetProperty="Color" To="{ThemeResource SolidBackgroundFillColorSecondary}" Duration="0:0:0.15"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="BorderColorBrush" 
+                                            Storyboard.TargetProperty="Color" To="{ThemeResource SolidBackgroundFillColorTertiary}" Duration="0:0:0.15"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard >
+                                        <ColorAnimation Storyboard.TargetName="BorderColorBrush" 
+                                            Storyboard.TargetProperty="Color" To="{ThemeResource SolidBackgroundFillColorQuarternary}" Duration="0:0:0.15"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border.Background>
+                            <SolidColorBrush x:Name="BorderColorBrush" Color="{ThemeResource SolidBackgroundFillColorSecondary}"/>
+                        </Border.Background>
+                        <Grid>
+                            <TextBlock x:Name="PART_TextBlock" Margin="8 4"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:LogicChainPanel">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:LogicChainPanel">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <winui:WrapPanel x:Name="PART_WrapPanel"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:LogicChainArrow">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:LogicChainArrow">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <TextBlock x:Name="PART_TextBlock" TextAlignment="Center"/>
+                            <Canvas x:Name="PART_Canvas" Margin="4"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemTagListEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemTagListEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <AppBarButton x:Name="PART_AddDataItemButton" x:Uid="AddAppBarButton" Icon="Add"/>
+                                <AppBarButton x:Name="PART_DeleteDataItemButton" x:Uid="RemoveAppBarButton" Icon="Remove"/>
+                            </StackPanel>
+                            <ListView x:Name="PART_ListView"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemTagPropertyListEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemTagPropertyListEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <StackPanel x:Name="PART_ListView" Margin="8 2"/>
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemTagPropertyEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemTagPropertyEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel x:Name="PART_StackPanel" Margin="8 2">
+                            <TextBlock x:Name="PART_PropertyNameTextBlock"/>
+                            <local:DataItemTagGroupEditor x:Name="PART_PropertyValueTagGroupEditor"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemTagGroupEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemTagGroupEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <winui:WrapPanel x:Name="PART_WrapPanel" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DataItemTagEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DataItemTagEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <local:TagBlock x:Name="PART_ThisTagTagBlock"/>
+                            <TextBox x:Name="PART_InputTextBox"/>
+                            <local:DataItemTagPropertyListEditor x:Name="PART_StackPanel"/>
+                            <Popup x:Name="PART_TagSuggestPopup"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
