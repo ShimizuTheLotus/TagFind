@@ -117,11 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackButton.Label" xml:space="preserve">
-    <value>Back</value>
-  </data>
   <data name="AddAppBarButton.Label" xml:space="preserve">
     <value>Add</value>
+  </data>
+  <data name="TitleTextBlock.Text" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="BackButton.Label" xml:space="preserve">
+    <value>Back</value>
   </data>
   <data name="CreateDatabaseDialog.PrimaryButtonText" xml:space="preserve">
     <value>Create</value>
@@ -152,9 +155,6 @@
   </data>
   <data name="ThirdPartyAttributionButton.Label" xml:space="preserve">
     <value>Third-Party Attribution</value>
-  </data>
-  <data name="TitleTextBlock.Text" xml:space="preserve">
-    <value>Title</value>
   </data>
   <data name="DescriptionTextBlock.Text" xml:space="preserve">
     <value>Description</value>

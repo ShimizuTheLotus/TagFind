@@ -23,7 +23,7 @@ namespace TagFind.UI.ContentDialogPages
     /// </summary>
     public sealed partial class ConfirmDeleteDataItemContentDialogPage : Page
     {
-        public bool DeleteChildItems => ConfirmDeleteDataItemRemoveSubitemsCheckBox.IsChecked == true; 
+        public bool DeleteChildItems => ConfirmDeleteDataItemRemoveChildItemsCheckBox.IsChecked == true; 
         public ConfirmDeleteDataItemContentDialogPage()
         {
             InitializeComponent();

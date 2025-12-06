@@ -14,6 +14,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using TagFind.Classes.DataTypes;
 using TagFind.Classes.DB;
 using TagFind.Interfaces;
+using TagFind.Interfaces.IPageNavigationParameter;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -44,23 +45,21 @@ namespace TagFind.Pages
                 {
                     manager.OpenDB();
                 }
-                GetTagList();
+            }
+            if (e.Parameter is IDBContentManagerParameter dBContentManagerParameter)
+            {
+                if (dBContentManagerParameter.DBContentManager != null)
+                {
+                    ContentManager = dBContentManagerParameter.DBContentManager;
+                }
+            }
+            if (e.Parameter is ITagParameter tagParameter)
+            {
+                TagEditor.EditedTag = tagParameter.Tag;
             }
         }
 
-        public async void GetTagList()
-        {
-            ObservableCollection<Tag> tagList = [];
-            if (ContentManager != null)
-            {
-                tagList = await ContentManager.TagPoolGetTagList();
-            }
 
-            DispatcherQueue.TryEnqueue(() =>
-            {
-                TagListListView.ItemsSource = tagList;
-            });
-        }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -73,7 +72,6 @@ namespace TagFind.Pages
                 ContentManager?.TagPoolUpdateTag(TagEditor.EditedTag);
             }
             TagEditor.EditedTag = new() { ID = -1 };
-            GetTagList();
         }
 
         private void NewButton_Click(object sender, RoutedEventArgs e)
@@ -81,13 +79,6 @@ namespace TagFind.Pages
             TagEditor.EditedTag = new() { ID = -1 };
         }
 
-        private void TagListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (TagListListView.SelectedIndex < 0) return;
-            if (TagListListView.SelectedItem is Tag selectedTag)
-            {
-                TagEditor.EditedTag = selectedTag;
-            }
-        }
+
     }
 }

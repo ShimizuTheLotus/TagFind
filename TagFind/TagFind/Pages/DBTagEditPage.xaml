@@ -9,53 +9,24 @@
     xmlns:ui="using:TagFind.UI"
     mc:Ignorable="d">
 
-    <ScrollViewer>
-        <StackPanel Margin="0 48 0 0">
-            <CommandBar>
-                <AppBarButton x:Name="SaveButton"
+    <StackPanel Margin="0 48 0 0">
+        <CommandBar>
+            <AppBarButton x:Name="SaveButton"
                               x:Uid="SaveButton"
                               Click="SaveButton_Click"
                               Icon="Save"/>
-                <AppBarButton x:Name="NewButton"
+            <AppBarButton x:Name="NewButton"
                               x:Uid="NewButton"
                               Click="NewButton_Click"
                               Icon="Add"/>
-            </CommandBar>
-            <ScrollView Padding="16">
-                <ui:TagEditor x:Name="TagEditor"/>
-            </ScrollView>
-            <ScrollViewer Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="16" MinHeight="64">
-                <ListView x:Name="TagListListView" HorizontalContentAlignment="Stretch" SelectionChanged="TagListListView_SelectionChanged">
-                    <ScrollViewer.HorizontalScrollBarVisibility>
-                        <ScrollBarVisibility>Disabled</ScrollBarVisibility>
-                    </ScrollViewer.HorizontalScrollBarVisibility>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding MainName}"/>
-                                    <ListView ItemsSource="{Binding LogicChains}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <ui:LogicChainPanel ItemsSource="{Binding LogicChainData}">
+        </CommandBar>
+        <StackPanel>
+            <StackPanel>
+                <ScrollViewer Padding="16">
+                    <ui:TagEditor x:Name="TagEditor"/>
+                </ScrollViewer>
 
-                                                </ui:LogicChainPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                    <ui:TagsWrapPanel ItemsSource="{Binding Surnames}">
-                                        <ui:TagsWrapPanel.ItemTemplate>
-                                            <DataTemplate>
-                                                <ui:TagBlock TagName="{Binding}"/>
-                                            </DataTemplate>
-                                        </ui:TagsWrapPanel.ItemTemplate>
-                                    </ui:TagsWrapPanel>
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </ScrollViewer>
+            </StackPanel>
         </StackPanel>
-    </ScrollViewer>
+    </StackPanel>
 </Page>

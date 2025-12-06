@@ -40,7 +40,7 @@ namespace TagFind.Pages
             {
                 _dbContentManager.OpenDB(path);
             }
-            ContentFrame.Navigate(typeof(DBContentExplorerPage), _dbContentManager);
+            //ContentFrame.Navigate(typeof(DBContentExplorerPage), _dbContentManager);
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.DBTagPoolPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:TagFind.UI"
+    mc:Ignorable="d">
+
+    <RelativePanel Margin="16 48 16 0" CornerRadius="8 8 0 0">
+        <AutoSuggestBox x:Name="TagSearchAutoSuggestBox"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignTopWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True"/>
+        <ScrollViewer Padding="16 16 16 0" MinHeight="64"
+                      Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.Below="TagSearchAutoSuggestBox"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.AlignBottomWithPanel="True">
+            <ListView x:Name="TagListListView" HorizontalContentAlignment="Stretch" SelectionChanged="TagListListView_SelectionChanged">
+                <ScrollViewer.HorizontalScrollBarVisibility>
+                    <ScrollBarVisibility>Disabled</ScrollBarVisibility>
+                </ScrollViewer.HorizontalScrollBarVisibility>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="{Binding MainName}"/>
+                                <ListView ItemsSource="{Binding LogicChains}" IsHitTestVisible="False">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ui:LogicChainPanel ItemsSource="{Binding LogicChainData}">
+
+                                            </ui:LogicChainPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <ui:TagsWrapPanel ItemsSource="{Binding Surnames}">
+                                    <ui:TagsWrapPanel.ItemTemplate>
+                                        <DataTemplate>
+                                            <ui:TagBlock TagName="{Binding}"/>
+                                        </DataTemplate>
+                                    </ui:TagsWrapPanel.ItemTemplate>
+                                </ui:TagsWrapPanel>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+    </RelativePanel>
+</Page>

@@ -32,5 +32,11 @@ namespace TagFind.Classes.DataTypes
             public DataItem DataItem { get; set; } = new() { ID = -1 };
             public ObservableCollection<ExplorerFolder> Path { get; set; } = [];
         }
+
+        public class TagEditPageNavigationParameter : PageNavigateParameter, IDBContentManagerParameter, ITagParameter
+        {
+            public DBContentManager? DBContentManager { get; set; }
+            public Tag Tag { get; set; }
+        }
     }
 }

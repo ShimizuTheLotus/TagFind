@@ -348,7 +348,7 @@
                                     <Grid>
                                         <StackPanel>
                                             <TextBlock Text="{Binding MainName}"/>
-                                            <ListView ItemsSource="{Binding LogicChains}">
+                                            <ListView ItemsSource="{Binding LogicChains}" IsHitTestVisible="False">
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
                                                         <local:LogicChainPanel/>

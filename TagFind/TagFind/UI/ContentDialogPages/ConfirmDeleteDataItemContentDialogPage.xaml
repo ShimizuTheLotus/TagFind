@@ -13,8 +13,8 @@
             <StackPanel>
                 <TextBlock x:Uid="ConfirmDeleteDataItemWarnNoRecycleBinTextBlock"/>
                 <TextBlock x:Uid="ConfirmDeleteDataItemWarnWildSubitemsTextBlock"/>
-                <CheckBox x:Name="ConfirmDeleteDataItemRemoveSubitemsCheckBox"
-                          x:Uid="ConfirmDeleteDataItemRemoveSubitemsCheckBox"/>
+                <CheckBox x:Name="ConfirmDeleteDataItemRemoveChildItemsCheckBox"
+                          x:Uid="ConfirmDeleteDataItemRemoveChildItemsCheckBox"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
