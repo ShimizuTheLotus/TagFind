@@ -10,11 +10,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using TagFind.Classes.DataTypes;
 using TagFind.Classes.DB;
 using TagFind.Interfaces;
 using TagFind.Interfaces.IPageNavigationParameter;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using static TagFind.Classes.Consts.DB.UserDB;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,6 +30,8 @@ namespace TagFind.Pages
     public sealed partial class DBContentEditPage : Page, IDBContentAccessiblePage
     {
         public DBContentManager ContentManager { get; set; } = new();
+
+        DataItem _dataItem = new();
 
         public DBContentEditPage()
         {
@@ -50,21 +55,22 @@ namespace TagFind.Pages
             {
                 ContentManager = dBContentManagerParameter.DBContentManager ?? new();
             }
-            if (e.Parameter is IDataItemParameter dataItemParameter)
-            {
-                DataItemEditor.EditedDataItem = dataItemParameter.DataItem;
-            }
-            if (e.Parameter is IExplorerPathParameter explorerPathParameter)
+            if (e.Parameter is IDataItemParameter dataItemParameter && e.Parameter is IExplorerPathParameter explorerPathParameter)
             {
                 long parentID = explorerPathParameter.Path.Count > 0 ? explorerPathParameter.Path[^1].ID : 0;
-                DataItemEditor.EditedDataItem.ParentID = parentID;
+                dataItemParameter.DataItem.ParentID = parentID;
+                _dataItem = dataItemParameter.DataItem;
+                DataItemEditor.EditedDataItem = _dataItem;
             }
         }
 
-        private void DataItemEditor_RequestSaveContent(object sender, Classes.DataTypes.DataItem dataItem)
+        private async void DataItemEditor_RequestSaveContent(object sender, Classes.DataTypes.DataItem dataItem)
         {
             ContentManager?.DataItemAdd(dataItem);
-            DataItemEditor.EditedDataItem = new() { ID = -1 };
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
         }
     }
 }

@@ -100,6 +100,8 @@ namespace TagFind.UI
             {
                 _removeReferenceButton.Click += _removeReferenceButton_Click;
             }
+
+            UpdateUI();
         }
 
         private void _removeReferenceButton_Click(object sender, RoutedEventArgs e)
@@ -166,10 +168,14 @@ namespace TagFind.UI
                 || _descriptionTextBox == null
                 || _listView == null
                 || _referencedFilePathTextBlock == null) return;
+            _titleTextBox.TextChanged -= _titleTextBox_TextChanged;
+            _descriptionTextBox.TextChanged -= _descriptionTextBox_TextChanged;
             _titleTextBox.Text = _editedDataItem.Title;
             _descriptionTextBox.Text = _editedDataItem.Description;
             _listView.ItemTags = _editedDataItem.ItemTags;
             _referencedFilePathTextBlock.Text = _editedDataItem.RefPath;
+            _titleTextBox.TextChanged += _titleTextBox_TextChanged;
+            _descriptionTextBox.TextChanged += _descriptionTextBox_TextChanged;
         }
     }
 }

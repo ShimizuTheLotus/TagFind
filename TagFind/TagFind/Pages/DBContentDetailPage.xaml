@@ -13,6 +13,9 @@
         <ScrollView HorizontalAlignment="Stretch"
                     HorizontalScrollMode="Disabled">
             <StackPanel Margin="16">
+                <CommandBar>
+                    <AppBarButton x:Name="EditAppBarButton" x:Uid="EditAppBarButton" Click="EditAppBarButton_Click" Icon="Edit"/>
+                </CommandBar>
                 <RelativePanel Margin="16 0 0 0">
                     <Image x:Name="ItemImage"
                            RelativePanel.AlignLeftWithPanel="True"

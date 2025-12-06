@@ -48,7 +48,7 @@ namespace TagFind.Pages
             _dataItem.RefPath.OpenReferencedFileByDefaultProgram();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -74,6 +74,15 @@ namespace TagFind.Pages
             if (e.Parameter is IExplorerPathParameter expParameter)
             {
                 Path = expParameter.Path;
+            }
+            // Navigated using GoBack
+            if(e.NavigationMode == NavigationMode.Back)
+            {
+                if (_dbContentManager != null)
+                {
+                    _dataItem = await _dbContentManager.DataItemGetByID(_dataItem.ID);
+                    ApplyDataItem(_dataItem);
+                }
             }
         }
 
@@ -123,6 +132,17 @@ namespace TagFind.Pages
             parameters.SearchConditions = searchConditions.Duplicate();
             parameters.Path = this.Path;
             Frame.Navigate(typeof(DBContentExplorerPage), parameters);
+        }
+
+        private void EditAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            DataItemEditPageNavigationParameter parameters = new()
+            {
+                DBContentManager = this._dbContentManager,
+                DataItem = this._dataItem,
+                Path = this.Path
+            };
+            Frame.Navigate(typeof(DBContentEditPage), parameters);
         }
     }
 }

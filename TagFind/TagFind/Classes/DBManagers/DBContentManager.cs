@@ -562,6 +562,43 @@ namespace TagFind.Classes.DB
             );
         }
 
+        public async Task<DataItem> DataItemGetByID(long ID)
+        {
+            await _lock.WaitAsync();
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    HashSet<DataItem> result = new(new DataItemEqualityComparer());
+                    string command =
+                        $"SELECT * FROM {nameof(DataItems)} " +
+                        $"WHERE {nameof(DataItems.ID)} = @{nameof(DataItems.ID)} " +
+                        $"LIMIT 1";
+                    SqliteCommand sqliteCommand = new(command, dbConnection);
+                    sqliteCommand.Parameters.AddWithValue($"@{nameof(DataItems.ID)}", ID);
+                    SqliteDataReader SqliteDataReader = sqliteCommand.ExecuteReader();
+                    SqliteDataReader.DataItemsAddDataItemsFromReader(ref result, dbConnection, MessageManager);
+                    if (result.Count == 0)
+                    {
+                        return new();
+                    }
+                    else
+                    {
+                        return result.First();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageManager.PushMessage(MessageType.Error, ex.Message);
+                    return new();
+                }
+                finally
+                {
+                    _lock.Release();
+                }
+            });
+        }
+
         public async Task<List<DataItem>> DataItemsSearchViaSearchConditionsAsync(ObservableCollection<SearchCondition> searchConditions, DataItemSearchConfig dataItemSearchConfig)
         {
             await _lock.WaitAsync();
