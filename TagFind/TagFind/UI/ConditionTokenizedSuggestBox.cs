@@ -13,9 +13,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TagFind.Classes.DataTypes;
-using TagFind.Classes.DB;
+using TagFind.Classes
+    ;
 using TagFind.Interfaces;
 using static TagFind.Classes.DataTypes.SearchCondition;
+using TagFind.Classes.DB;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

@@ -40,7 +40,7 @@ namespace TagFind.Classes.DB
         //Global service
         MessageManager MessageManager = ((App)App.Current)?.ServiceProvider?.GetRequiredService<MessageManager>() ?? new();
 
-        private SemaphoreSlim _lock = new(2, 2);
+        private SemaphoreSlim _lock = new(3, 3);
 
         //Reference
         public string DBPath = string.Empty;
@@ -114,7 +114,7 @@ namespace TagFind.Classes.DB
             }
             finally
             {
-                _lock = new(2, 2);
+                _lock = new(3, 3);
                 Connected = false;
             }
         }
@@ -1572,7 +1572,27 @@ namespace TagFind.Classes.DB
                     $"DELETE FROM {nameof(TagData)} " +
                     $"WHERE {new TagData().TagID} = @{new TagData().TagID}";
                 SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().MainName}", ID);
+                SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", ID);
+                SqliteCommand.ExecuteNonQuery();
+
+                // Remove all references from DataItem ItemTags
+                command =
+                    $"DELETE FROM {nameof(ItemTags)} " +
+                    $"WHERE {nameof(ItemTags.TagID)} = @{nameof(ItemTags.TagID)}";
+                SqliteCommand = new(command, dbConnection);
+                SqliteCommand.Parameters.AddWithValue($"@{nameof(ItemTags.TagID)}", ID);
+                SqliteCommand.ExecuteNonQuery();
+
+                // Set child items where ParentTagID is ID of removed tag to top level tags.
+                command =
+                    $"UPDATE {nameof(ItemTags)} " +
+                    $"SET {nameof(ItemTags.ParentTagID)} = @{nameof(ItemTags.ParentTagID)}new, " +
+                    $"{nameof(ItemTags.PropertyID)} = @{nameof(ItemTags.PropertyID)} " +
+                    $"WHERE {nameof(ItemTags.ParentTagID)} = @{nameof(ItemTags.ParentTagID)}";
+                SqliteCommand = new(command, dbConnection);
+                SqliteCommand.Parameters.AddWithValue($"@{nameof(ItemTags.ParentTagID)}new", -1);
+                SqliteCommand.Parameters.AddWithValue($"@{nameof(ItemTags.PropertyID)}", -1);
+                SqliteCommand.Parameters.AddWithValue($"@{nameof(ItemTags.ParentTagID)}", ID);
                 SqliteCommand.ExecuteNonQuery();
             }
 #if !DEBUG

@@ -19,6 +19,10 @@
                               x:Uid="NewButton"
                               Click="NewButton_Click"
                               Icon="Add"/>
+            <AppBarButton x:Name="DeleteButton"
+                          x:Uid="DeleteAppBarButton"
+                          Click="DeleteButton_Click"
+                          Icon="Delete"/>
         </CommandBar>
         <StackPanel>
             <StackPanel>

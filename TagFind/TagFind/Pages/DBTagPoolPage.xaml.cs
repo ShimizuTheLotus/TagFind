@@ -119,5 +119,20 @@ namespace TagFind.Pages
                 Frame.Navigate(typeof(DBTagEditPage), parameters);
             }
         }
+
+        private void AddTagButton_Click(object sender, RoutedEventArgs e)
+        {
+            TagEditPageNavigationParameter parameters = new()
+            {
+                DBContentManager = this.ContentManager,
+                Tag = new() { ID = -1 }
+            };
+            Frame.Navigate(typeof(DBTagEditPage), parameters);
+        }
+
+        private void DeleteTagButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace TagFind.UI.ContentDialogPages
     public sealed partial class CreateDatabaseContentDialogPage : Page
     {
         string SelectedFolderForCreatingDatabasePath = string.Empty;
-        public string SelectedDatabasePath => Path.Combine(SelectedFolderForCreatingDatabasePath, SetDatabaseNameTextBox.Text.Trim() + ".db");
+        public string SelectedDatabasePath => Path.Combine(SelectedFolderForCreatingDatabasePath, SetDatabaseNameTextBox.Text.Trim() + ".tdb");
         public string Description => DescriptionTextBox.Text;
 
         public delegate void RequestChangeDialogPrimaryButtonStatusEventHandler(bool newStatus);

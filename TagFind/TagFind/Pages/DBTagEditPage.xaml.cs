@@ -79,6 +79,13 @@ namespace TagFind.Pages
             TagEditor.EditedTag = new() { ID = -1 };
         }
 
-
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContentManager?.TagPoolRemoveTagByID(TagEditor.EditedTag.ID);
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
+        }
     }
 }

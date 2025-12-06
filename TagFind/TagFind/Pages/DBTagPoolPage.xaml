@@ -14,10 +14,17 @@
                         RelativePanel.AlignLeftWithPanel="True"
                         RelativePanel.AlignTopWithPanel="True"
                         RelativePanel.AlignRightWithPanel="True"/>
+        <CommandBar x:Name="CommandBar"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.Below="TagSearchAutoSuggestBox"
+                    RelativePanel.AlignRightWithPanel="True">
+            <AppBarButton x:Name="AddTagButton" x:Uid="AddAppBarButton" Icon="Add" Click="AddTagButton_Click"/>
+            <AppBarButton x:Name="DeleteTagButton" x:Uid="DeleteAppBarButton" Icon="Delete" Click="DeleteTagButton_Click" Visibility="Collapsed"/>
+        </CommandBar>
         <ScrollViewer Padding="16 16 16 0" MinHeight="64"
                       Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                       RelativePanel.AlignLeftWithPanel="True"
-                      RelativePanel.Below="TagSearchAutoSuggestBox"
+                      RelativePanel.Below="CommandBar"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.AlignBottomWithPanel="True">
             <ListView x:Name="TagListListView" HorizontalContentAlignment="Stretch" SelectionChanged="TagListListView_SelectionChanged">
