@@ -71,7 +71,10 @@ namespace TagFind.Pages
             {
                 ContentManager?.TagPoolUpdateTag(TagEditor.EditedTag);
             }
-            TagEditor.EditedTag = new() { ID = -1 };
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
         }
 
         private void NewButton_Click(object sender, RoutedEventArgs e)
