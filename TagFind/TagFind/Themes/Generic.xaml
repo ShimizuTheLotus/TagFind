@@ -233,10 +233,10 @@
                                     <Grid>
                                         <StackPanel>
                                             <TextBlock Text="{Binding MainName}"/>
-                                            <ListView ItemsSource="{Binding LogicChains}" SelectionMode="None" IsItemClickEnabled="False">
+                                            <ListView ItemsSource="{Binding LogicChains}" SelectionMode="None" IsItemClickEnabled="False" IsHitTestVisible="False">
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
-                                                        <local:LogicChainPanel/>
+                                                        <local:LogicChainPanel ItemsSource="{Binding LogicChainData}"/>
                                                     </DataTemplate>
                                                 </ListView.ItemTemplate>
                                             </ListView>
@@ -381,7 +381,7 @@
                                             <ListView ItemsSource="{Binding LogicChains}" IsHitTestVisible="False">
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
-                                                        <local:LogicChainPanel/>
+                                                        <local:LogicChainPanel ItemsSource="{Binding LogicChainData}"/>
                                                     </DataTemplate>
                                                 </ListView.ItemTemplate>
                                             </ListView>

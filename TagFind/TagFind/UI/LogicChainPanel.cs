@@ -18,11 +18,27 @@ using Windows.UI;
 
 namespace TagFind.UI
 {
-    public sealed partial class LogicChainPanel : ItemsControl
+    public sealed partial class LogicChainPanel : Control
     {
         private WrapPanel? _wrapPanel;
 
-        public new IEnumerable ItemsSource
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register(
+            nameof(ItemsSource),
+            typeof(IEnumerable),
+            typeof(LogicChainPanel),
+            new PropertyMetadata(null, OnItemsSourceChanged));
+
+        private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as LogicChainPanel;
+            if (control != null)
+            {
+                control.UpdateUI();
+            }
+        }
+
+        public IEnumerable ItemsSource
         {
             get { return (IEnumerable)GetValue(ItemsSourceProperty); }
             set
@@ -42,7 +58,7 @@ namespace TagFind.UI
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            _wrapPanel = GetTemplateChild("PART_WrapPanel") as WrapPanel ?? new();
+            _wrapPanel = GetTemplateChild("PART_WrapPanel") as WrapPanel;
             UpdateUI();
         }
 
