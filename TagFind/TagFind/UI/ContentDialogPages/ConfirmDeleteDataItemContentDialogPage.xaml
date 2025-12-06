@@ -11,8 +11,10 @@
     <Grid>
         <ScrollViewer>
             <StackPanel>
-                <TextBlock x:Uid="ConfirmDeleteDataItemWarnNoRecycleBinTextBlock"/>
-                <TextBlock x:Uid="ConfirmDeleteDataItemWarnWildSubitemsTextBlock"/>
+                <TextBlock x:Uid="ConfirmDeleteDataItemWarnNoRecycleBinTextBlock"
+                           TextWrapping="WrapWholeWords"/>
+                <TextBlock x:Uid="ConfirmDeleteDataItemWarnWildSubitemsTextBlock"
+                           TextWrapping="WrapWholeWords"/>
                 <CheckBox x:Name="ConfirmDeleteDataItemRemoveChildItemsCheckBox"
                           x:Uid="ConfirmDeleteDataItemRemoveChildItemsCheckBox"/>
             </StackPanel>

@@ -246,4 +246,7 @@
   <data name="ConfirmDeleteDataItemWarnWildSubitemsTextBlock.Text" xml:space="preserve">
     <value>如果该项目有子项，它们将会丢失在文件浏览器和当前文件夹的连接。你可以稍后在未连接项页面管理它们。</value>
   </data>
+  <data name="DetailTextBlock.Text" xml:space="preserve">
+    <value>详细信息</value>
+  </data>
 </root>

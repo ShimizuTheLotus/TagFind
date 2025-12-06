@@ -66,7 +66,15 @@ namespace TagFind.Pages
 
         private async void DataItemEditor_RequestSaveContent(object sender, Classes.DataTypes.DataItem dataItem)
         {
-            ContentManager?.DataItemAdd(dataItem);
+            if (dataItem.ID != -1)
+            {
+                ContentManager?.DataItemUpdate(dataItem);
+            }
+            else
+            {
+                ContentManager?.DataItemAdd(dataItem);
+            }
+
             if (Frame.CanGoBack)
             {
                 Frame.GoBack();

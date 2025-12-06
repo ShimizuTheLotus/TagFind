@@ -88,13 +88,43 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="ImageNormal">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_ImageOverlay" 
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="0"
+                                                                     Duration="0:0:0.15"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="ImageHover">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_ImageOverlay" 
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="1"
+                                                                     Duration="0:0:0.15"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                         <RelativePanel>
-                            <Image x:Name="PART_Image" Height="100" Width="100"
-                                   Margin="0 8 0 8"
-                                   RelativePanel.AlignLeftWithPanel="True"
-                                   RelativePanel.AlignTopWithPanel="True"/>
+                            <Grid x:Name="PART_ImageGrid"
+                                  Height="100" Width="100"
+                                  Margin="0 8 0 8"
+                                  RelativePanel.AlignLeftWithPanel="True"
+                                  RelativePanel.AlignTopWithPanel="True">
+                                <Image x:Name="PART_Image" Height="100" Width="100"/>
+                                <Grid x:Name="PART_ImageOverlay" Height="100" Width="100" 
+                                      Opacity="0" IsHitTestVisible="False">
+                                    <Rectangle Height="100" Width="100" Fill="#66000000"/>
+                                    <TextBlock x:Uid="DetailTextBlock"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
                             <StackPanel Margin="32 0 0 0"
-                                        RelativePanel.RightOf="PART_Image"
+                                        RelativePanel.RightOf="PART_ImageGrid"
                                         RelativePanel.AlignTopWithPanel="True">
                                 <TextBlock Text="{Binding Title}"
                                            TextWrapping="WrapWholeWords"
@@ -102,7 +132,7 @@
                                            Style="{StaticResource TitleTextBlockStyle}"
                                            RelativePanel.AlignLeftWithPanel="True"
                                            RelativePanel.AlignTopWithPanel="True"/>
-                                <TextBlock Text="{Binding Description}"/>
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
                                 <local:TagsWrapPanel x:Name="PART_TagsWrapPanel" Margin="0 16 0 0"/>
                             </StackPanel>
                         </RelativePanel>

@@ -246,4 +246,7 @@
   <data name="ConfirmDeleteDataItemWarnWildSubitemsTextBlock.Text" xml:space="preserve">
     <value>If this item has sub-items, they would lost attachment in file explorer system. You can attach them later in wild data items manage page later.</value>
   </data>
+  <data name="DetailTextBlock.Text" xml:space="preserve">
+    <value>Detail</value>
+  </data>
 </root>
