@@ -249,4 +249,7 @@
   <data name="DetailTextBlock.Text" xml:space="preserve">
     <value>详细信息</value>
   </data>
+  <data name="AddReferenceAppBarButton.Label" xml:space="preserve">
+    <value>添加引用</value>
+  </data>
 </root>

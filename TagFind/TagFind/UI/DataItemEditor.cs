@@ -167,7 +167,8 @@ namespace TagFind.UI
             if (_titleTextBox == null
                 || _descriptionTextBox == null
                 || _listView == null
-                || _referencedFilePathTextBlock == null) return;
+                || _referencedFilePathTextBlock == null
+                || _saveContentButton == null) return;
             _titleTextBox.TextChanged -= _titleTextBox_TextChanged;
             _descriptionTextBox.TextChanged -= _descriptionTextBox_TextChanged;
             _titleTextBox.Text = _editedDataItem.Title;
@@ -176,6 +177,7 @@ namespace TagFind.UI
             _referencedFilePathTextBlock.Text = _editedDataItem.RefPath;
             _titleTextBox.TextChanged += _titleTextBox_TextChanged;
             _descriptionTextBox.TextChanged += _descriptionTextBox_TextChanged;
+            _saveContentButton.IsEnabled = _editedDataItem.Title.Length > 0;
         }
     }
 }
