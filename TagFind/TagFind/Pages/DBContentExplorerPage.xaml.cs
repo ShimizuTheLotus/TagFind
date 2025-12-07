@@ -48,6 +48,7 @@ namespace TagFind.Pages
             ConditionTokenizedSuggestBox.RequestSearch += ConditionTokenizedSuggestBox_RequestSearch;
             BreadcrumbBar.ItemsSource = Path;
             BreadcrumbBar.ItemClicked += BreadcrumbBar_ItemClicked;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void BreadcrumbBar_ItemClicked(BreadcrumbBar sender, BreadcrumbBarItemClickedEventArgs args)
@@ -162,7 +163,8 @@ namespace TagFind.Pages
         {
             if (ContentManager != null && ContentManager.Connected)
             {
-                var value = await ContentManager.DataItemsGetChildOfParentItemAsync(0) ?? [];
+                long parentID = this.Path.Count > 0 ? this.Path[^1].ID : 0;
+                var value = await ContentManager.DataItemsGetChildOfParentItemAsync(parentID) ?? [];
                 DispatcherQueue.TryEnqueue(() =>
                 {
                     DataItemListView.DataItemCollection = value;

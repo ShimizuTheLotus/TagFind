@@ -15,7 +15,7 @@
                 <ui:ConditionTokenizedSuggestBox x:Name="ConditionTokenizedSuggestBox" Margin="16 0 16 0"/>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <BreadcrumbBar x:Name="BreadcrumbBar" Grid.Column="0" Margin="16 0 16 0" VerticalAlignment="Center" >
