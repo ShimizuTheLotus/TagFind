@@ -526,9 +526,12 @@ namespace TagFind.Classes.DB
             return [];
         }
 
-        public async Task<ObservableCollection<DataItem>> DataItemsGetChildOfParentItemAsync(long parentDataItemID)
+        public async Task<ObservableCollection<DataItem>> DataItemsGetChildOfParentItemAsync(long parentDataItemID, bool useLock = true)
         {
-            await _lock.WaitAsync();
+            if (useLock)
+            {
+                await _lock.WaitAsync();
+            }
             return await Task.Run(() =>
             {
                 try
@@ -556,7 +559,10 @@ namespace TagFind.Classes.DB
                 }
                 finally
                 {
-                    _lock.Release();
+                    if (useLock)
+                    {
+                        _lock.Release();
+                    }
                 }
             }
             );
@@ -611,7 +617,7 @@ namespace TagFind.Classes.DB
 
                     if (searchConditions == null || searchConditions.Count == 0)
                     {
-                        emptyResult = (await DataItemsGetChildOfParentItemAsync(dataItemSearchConfig.ParentIDLimit)).ToList();
+                        emptyResult = (await DataItemsGetChildOfParentItemAsync(dataItemSearchConfig.ParentIDLimit, useLock: false)).ToList();
                         return emptyResult;
                     }
 
