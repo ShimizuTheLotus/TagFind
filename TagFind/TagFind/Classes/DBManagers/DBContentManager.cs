@@ -614,11 +614,28 @@ namespace TagFind.Classes.DB
                 {
                     List<DataItem> emptyResult = new();
 
-
+                    // No conditions
                     if (searchConditions == null || searchConditions.Count == 0)
                     {
-                        emptyResult = (await DataItemsGetChildOfParentItemAsync(dataItemSearchConfig.ParentIDLimit, useLock: false)).ToList();
-                        return emptyResult;
+                        if (dataItemSearchConfig.SearchMode == SearchModeEnum.Layer)
+                        {
+                            emptyResult = (await DataItemsGetChildOfParentItemAsync(dataItemSearchConfig.ParentOrAncestorIDLimit, useLock: false)).ToList();
+                            return emptyResult;
+                        }
+                        else if(dataItemSearchConfig.SearchMode == SearchModeEnum.Folder)
+                        {
+                            emptyResult = (await GetAllChildDataItemsDFS(dataItemSearchConfig.ParentOrAncestorIDLimit)).ToList();
+                            return emptyResult;
+                        }
+                        else
+                        {
+                            HashSet<DataItem> results = [];
+                            string cmd = $"SELECT * FROM {nameof(DataItems)} ";
+                            SqliteCommand sqlCmd = new (cmd, dbConnection);
+                            SqliteDataReader reader = sqlCmd.ExecuteReader();
+                            reader.DataItemsAddDataItemsFromReader(ref results, dbConnection, MessageManager);
+                            return results.ToList();
+                        }
                     }
 
                     List<TextCondition> textConditions = searchConditions.OfType<TextCondition>().ToList();
@@ -791,13 +808,18 @@ namespace TagFind.Classes.DB
                         reader.DataItemsAddDataItemsFromReader(ref dataItemsSet, dbConnection, MessageManager);
                     }
 
-                    if (dataItemSearchConfig.ParentIDLimit == -1)
+                    if (dataItemSearchConfig.SearchMode == SearchModeEnum.Global)
                     {
                         return dataItemsSet.ToList();
                     }
+                    else if (dataItemSearchConfig.SearchMode == SearchModeEnum.Layer)
+                    {
+                        return dataItemsSet.Where(x => x.ParentID == dataItemSearchConfig.ParentOrAncestorIDLimit).ToList();
+                    }
                     else
                     {
-                        return dataItemsSet.Where(x => x.ParentID == dataItemSearchConfig.ParentIDLimit).ToList();
+                        HashSet<long> ancestors = new(await GetAllChildDataItemIDsDFS(dataItemSearchConfig.ParentOrAncestorIDLimit));
+                        return dataItemsSet.Where(x => ancestors.Contains(x.ParentID)).ToList();
                     }
                 }
                 catch (Exception ex)
@@ -1030,6 +1052,31 @@ namespace TagFind.Classes.DB
             }
 
             return allChildIds;
+        }
+
+        private async Task<ObservableCollection<DataItem>> GetAllChildDataItemsDFS(long parentID)
+        {
+            var allChildIds = new List<DataItem>();
+            var queue = new Queue<DataItem>();
+            queue.Enqueue(new DataItem() { ID = parentID});
+
+            while (queue.Count > 0)
+            {
+                var currentItem = queue.Dequeue();
+                var childItems = await DataItemsGetChildOfParentItemAsync(currentItem.ID, false);
+
+                if (childItems == null || childItems.Count == 0)
+                    continue;
+
+                allChildIds.AddRange(childItems);
+
+                foreach (var childId in childItems)
+                {
+                    queue.Enqueue(childId);
+                }
+            }
+
+            return new ObservableCollection<DataItem>(allChildIds);
         }
 
         /// <summary>

@@ -252,4 +252,13 @@
   <data name="AddReferenceAppBarButton.Label" xml:space="preserve">
     <value>Add Reference</value>
   </data>
+  <data name="GlobalSearchModeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Global search mode</value>
+  </data>
+  <data name="FolderSearchModeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Folder search mode</value>
+  </data>
+  <data name="CurrentLayerSearchModeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Current layer search mode</value>
+  </data>
 </root>

@@ -28,6 +28,13 @@ namespace TagFind.Classes.DataTypes
         }
     }
 
+    public enum SearchModeEnum
+    {
+        Global,
+        Folder,
+        Layer
+    }
+
     public class DataItemEqualityComparer : IEqualityComparer<DataItem>
     {
         public bool Equals(DataItem? a, DataItem? b)

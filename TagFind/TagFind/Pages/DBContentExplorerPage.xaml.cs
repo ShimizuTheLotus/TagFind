@@ -48,7 +48,14 @@ namespace TagFind.Pages
             ConditionTokenizedSuggestBox.RequestSearch += ConditionTokenizedSuggestBox_RequestSearch;
             BreadcrumbBar.ItemsSource = Path;
             BreadcrumbBar.ItemClicked += BreadcrumbBar_ItemClicked;
+            SearchModeSwitcher.SearchModeChanged += SearchModeSwitcher_SearchModeChanged;
+
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+        }
+
+        private void SearchModeSwitcher_SearchModeChanged(object sender, SearchModeEnum searchMode)
+        {
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
         }
 
         private void BreadcrumbBar_ItemClicked(BreadcrumbBar sender, BreadcrumbBarItemClickedEventArgs args)
@@ -60,42 +67,28 @@ namespace TagFind.Pages
                 items.RemoveAt(i);
             }
             Path = items;
-            DataItemSearchConfig config = new()
-            {
-                ParentIDLimit = Path.Count > 0 ? Path[^1].ID : 0,
-                SearchTitle = true,
-                SearchDescription = true
-            };
-            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions, config);
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
         }
 
         private void DataItemListView_RequestOpenDataItemAsFolder(object sender, DataItem dataItem)
         {
             Path.Add(new() { Name = dataItem.Title, ID = dataItem.ID });
             BreadcrumbBar.ItemsSource = Path;
-            DataItemSearchConfig config = new()
-            {
-                ParentIDLimit = Path.Count > 0 ? Path[^1].ID : 0,
-                SearchTitle = true,
-                SearchDescription = true
-            };
-            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions, config);
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
         }
 
-        private async void ConditionTokenizedSuggestBox_RequestSearch(object sender, ObservableCollection<SearchCondition> searchConditions, DataItemSearchConfig? config = null)
+        private async void ConditionTokenizedSuggestBox_RequestSearch(object sender, ObservableCollection<SearchCondition> searchConditions)
         {
             this.searchConditions = searchConditions;
             DataItemListView.DataItemCollection = new ObservableCollection<DataItem>();
 
-            if (config == null)
+            DataItemSearchConfig config = new()
             {
-                config = new()
-                {
-                    ParentIDLimit = Path.Count > 0 ? Path[^1].ID : 0,
-                    SearchTitle = true,
-                    SearchDescription = true
-                };
-            }
+                SearchMode = SearchModeSwitcher.SearchMode,
+                ParentOrAncestorIDLimit = Path.Count > 0 ? Path[^1].ID : 0,
+                SearchTitle = true,
+                SearchDescription = true
+            };
             List<DataItem> results = await ContentManager.DataItemsSearchViaSearchConditionsAsync(searchConditions, config);
 
             DispatcherQueue.TryEnqueue(() =>

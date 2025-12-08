@@ -106,10 +106,14 @@ namespace TagFind.Classes.Extensions
         public static async IAsyncEnumerable<string> GetDocumentFileTextAsync(this string filePath, Encoding? encoding = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentException("filePath is null or empty.", nameof(filePath));
+            {
+                yield break;
+            }
 
             if (!File.Exists(filePath))
-                throw new FileNotFoundException("File not found.", filePath);
+            {
+                yield break;
+            }   
 
             string ext = Path.GetExtension(filePath).ToLowerInvariant();
 
@@ -137,7 +141,7 @@ namespace TagFind.Classes.Extensions
                 using var zip = new ZipArchive(fs, ZipArchiveMode.Read, leaveOpen: false);
                 var entry = zip.GetEntry("word/document.xml") ?? zip.Entries.FirstOrDefault(e => e.FullName.Equals("word/document.xml", StringComparison.OrdinalIgnoreCase));
                 if (entry == null)
-                    throw new InvalidDataException("The DOCX file does not contain 'word/document.xml'.");
+                    yield break;
 
                 using var entryStream = entry.Open();
                 var settings = new XmlReaderSettings { Async = true, DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true, IgnoreProcessingInstructions = true };
@@ -188,20 +192,20 @@ namespace TagFind.Classes.Extensions
             }
 
             // Unsupported/complex formats - require external libraries for reliable extraction
-            switch (ext)
-            {
-                case ".pdf":
-                    throw new NotSupportedException("PDF text extraction is not supported by this implementation. Use a PDF library like 'PdfPig' or 'iText7' to extract text.");
-                case ".doc":
-                    throw new NotSupportedException("Legacy .doc (binary Word) extraction is not supported. Use external libraries (e.g., Microsoft.Office.Interop.Word or third-party) to extract text.");
-                case ".xls":
-                case ".xlsx":
-                case ".ppt":
-                case ".pptx":
-                    throw new NotSupportedException("Office binary/packaged formats (xls/xlsx/ppt/pptx) require external libraries to extract text reliably.");
-                default:
-                    throw new NotSupportedException($"File extension '{ext}' is not supported for text extraction.");
-            }
+            //switch (ext)
+            //{
+            //    case ".pdf":
+            //        //NotSupportedException("PDF text extraction is not supported by this implementation. Use a PDF library like 'PdfPig' or 'iText7' to extract text.");
+            //    case ".doc":
+            //        //NotSupportedException("Legacy .doc (binary Word) extraction is not supported. Use external libraries (e.g., Microsoft.Office.Interop.Word or third-party) to extract text.");
+            //    case ".xls":
+            //    case ".xlsx":
+            //    case ".ppt":
+            //    case ".pptx":
+            //        //NotSupportedException("Office binary/packaged formats (xls/xlsx/ppt/pptx) require external libraries to extract text reliably.");
+            //    default:
+            //        //NotSupportedException($"File extension '{ext}' is not supported for text extraction.");
+            //}
         }
 
         public enum AccessType

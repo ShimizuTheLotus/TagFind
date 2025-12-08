@@ -40,7 +40,7 @@ namespace TagFind.UI
 
         ObservableCollection<Tag> suggestedTags = [];
 
-        public delegate void RequestSearchEventHandler(object sender, ObservableCollection<SearchCondition> searchConditions, DataItemSearchConfig? config = null);
+        public delegate void RequestSearchEventHandler(object sender, ObservableCollection<SearchCondition> searchConditions);
         public event RequestSearchEventHandler? RequestSearch;
 
         public ConditionTokenizedSuggestBox()

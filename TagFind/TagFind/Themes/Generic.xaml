@@ -617,4 +617,44 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:SearchModeSwitcher">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:SearchModeSwitcher">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel Orientation="Horizontal">
+                            <DropDownButton x:Name="PART_SearchModeDropDownButton">
+                                <DropDownButton.Content>
+                                    <FontIcon x:Name="PART_CurrentSearchModeFontIcon" Glyph="&#xE81E;"/>
+                                </DropDownButton.Content>
+                                <DropDownButton.Flyout>
+                                    <MenuFlyout Placement="Bottom">
+                                        <MenuFlyoutItem x:Name="PART_GlobalSearchModeMenuFlyoutItem" x:Uid="GlobalSearchModeMenuFlyoutItem" Tag="Global">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE774;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem x:Name="PART_FolderSearchModeMenuFlyoutItem" x:Uid="FolderSearchModeMenuFlyoutItem" Tag="Folder">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE838;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                        <MenuFlyoutItem x:Name="PART_CurrentLayerSearchModeMenuFlyoutItem" x:Uid="CurrentLayerSearchModeMenuFlyoutItem" Tag="Layer">
+                                            <MenuFlyoutItem.Icon>
+                                                <FontIcon Glyph="&#xE81E;"/>
+                                            </MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </DropDownButton.Flyout>
+                            </DropDownButton>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

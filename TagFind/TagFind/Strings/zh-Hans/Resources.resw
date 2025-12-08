@@ -252,4 +252,13 @@
   <data name="AddReferenceAppBarButton.Label" xml:space="preserve">
     <value>添加引用</value>
   </data>
+  <data name="GlobalSearchModeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>全局搜索模式</value>
+  </data>
+  <data name="FolderSearchModeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>文件夹搜索模式</value>
+  </data>
+  <data name="CurrentLayerSearchModeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Current layer search mode</value>
+  </data>
 </root>
