@@ -72,6 +72,8 @@ namespace TagFind.Classes
                     //public string Title = nameof(Title);
                     //public string Description = nameof(Description);
                     public string Type = nameof(Type);
+                    public string CreatedTime = nameof(CreatedTime);
+                    public string ModifiedTime = nameof(ModifiedTime);
                     //public string RefPath = nameof(RefPath);
                     //public string SearchText = nameof(SearchText);
                 }

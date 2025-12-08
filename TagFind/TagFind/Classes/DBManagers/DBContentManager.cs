@@ -181,7 +181,9 @@ namespace TagFind.Classes.DB
                     $"{nameof(DataItems)} (" +
                     $"{new DataItems().ID} INTEGER PRIMARY KEY," +
                     $"{new DataItems().ParentItemID} INTEGER NOT NULL," +
-                    $"{new DataItems().Type} TEXT NOT NULL" +
+                    $"{new DataItems().Type} TEXT NOT NULL," +
+                    $"{new DataItems().CreatedTime} INTEGER NOT NULL," +
+                    $"{new DataItems().ModifiedTime} INTEGER NOT NULL" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -848,15 +850,21 @@ namespace TagFind.Classes.DB
                 string command =
                     $"INSERT INTO {nameof(DataItems)} (" +
                     $"{new DataItems().ParentItemID}," +
-                    $"{new DataItems().Type}" +
+                    $"{new DataItems().Type}," +
+                    $"{new DataItems().CreatedTime}," +
+                    $"{new DataItems().ModifiedTime}" +
                     $")" +
                     $"VALUES (" +
                     $"@{new DataItems().ParentItemID}," +
-                    $"@{new DataItems().Type}" +
+                    $"@{new DataItems().Type}," +
+                    $"@{new DataItems().CreatedTime}," +
+                    $"@{new DataItems().ModifiedTime}" +
                     $")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", dataItem.ParentID);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", dataItem.ItemType);
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().CreatedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 SqliteCommand.ExecuteNonQuery();
 
                 // Get data item ID
@@ -931,11 +939,13 @@ namespace TagFind.Classes.DB
                     $"UPDATE {nameof(DataItems)} " +
                     $"SET " +
                     $"{new DataItems().ParentItemID} = @{new DataItems().ParentItemID}," +
-                    $"{new DataItems().Type} = @{new DataItems().Type} " +
+                    $"{new DataItems().Type} = @{new DataItems().Type}," +
+                    $"{new DataItems().ModifiedTime} = @{new DataItems().ModifiedTime} " +
                     $"WHERE {new DataItems().ID} = @{new DataItems().ID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", dataItem.ParentID);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", dataItem.ItemType);
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ID}", dataItem.ID);
                 SqliteCommand.ExecuteNonQuery();
 
@@ -1244,15 +1254,21 @@ namespace TagFind.Classes.DB
                     $"INSERT INTO {nameof(DataItems)} (" +
                     $"{new DataItems().ParentItemID}," +
                     $"{new DataItems().Type}," +
+                    $"{new DataItems().CreatedTime}," +
+                    $"{new DataItems().ModifiedTime}" +
                     $")" +
                     $"VALUES (" +
                     $"@{new DataItems().ParentItemID}," +
                     $"@{new DataItems().Type}," +
+                    $"@{new DataItems().CreatedTime}," +
+                    $"@{new DataItems().ModifiedTime}" +
                     ")";
 
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", insertParentID);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", sourceDataItem.ItemType);
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().CreatedTime}", sourceDataItem.CreatedTime);
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", sourceDataItem.ModifiedTime);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Get data item ID
@@ -2489,6 +2505,8 @@ namespace TagFind.Classes.DB
                     item.ID = reader.GetInt64(0);
                     item.ParentID = reader.GetInt64(1);
                     item.ItemType = reader.GetString(2);
+                    item.CreatedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(3)).UtcDateTime;
+                    item.ModifiedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(4)).UtcDateTime;
 
                     // Get DataItem in table DataItems
                     string command =

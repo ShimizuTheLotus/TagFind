@@ -10,6 +10,8 @@ namespace TagFind.Classes.DataTypes
     {
         public long ID = -1;
         public long ParentID = 0;
+        public DateTime CreatedTime { get; set; } = DateTime.Now;
+        public DateTime ModifiedTime { get; set; } = DateTime.Now;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string ItemType = string.Empty;
