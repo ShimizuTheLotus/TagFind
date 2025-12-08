@@ -25,8 +25,16 @@ namespace TagFind.UI
         public delegate void SearchModeChangedEventHandler(object sender, SearchModeEnum searchMode);
         public event SearchModeChangedEventHandler? SearchModeChanged;
 
-        public SearchModeEnum SearchMode { get; private set; } = SearchModeEnum.Layer;
-
+        public SearchModeEnum SearchMode
+        {
+            get => _searchMode;
+            set
+            {
+                _searchMode = value;
+                UpdateUI();
+            }
+        }
+        private SearchModeEnum _searchMode = SearchModeEnum.Layer;
         public SearchModeSwitcher()
         {
             DefaultStyleKey = typeof(SearchModeSwitcher);
@@ -53,39 +61,60 @@ namespace TagFind.UI
             {
                 _currentLayerSearchModeMenuFlyoutItem.Click += _currentLayerSearchModeMenuFlyoutItem_Click;
             }
+
+            UpdateUI();
         }
 
         private void _currentLayerSearchModeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (SearchMode == SearchModeEnum.Layer) return;
-            SearchMode = SearchModeEnum.Layer;
+            if (_searchMode == SearchModeEnum.Layer) return;
+            _searchMode = SearchModeEnum.Layer;
             if (_currentSearchModeFontIcon != null)
             {
                 _currentSearchModeFontIcon.Glyph = "\uE81E";
             }
-            SearchModeChanged?.Invoke(this, SearchMode);
+            SearchModeChanged?.Invoke(this, _searchMode);
         }
 
         private void _folderSearchModeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (SearchMode == SearchModeEnum.Folder) return;
-            SearchMode = SearchModeEnum.Folder;
+            if (_searchMode == SearchModeEnum.Folder) return;
+            _searchMode = SearchModeEnum.Folder;
             if (_currentSearchModeFontIcon != null)
             {
                 _currentSearchModeFontIcon.Glyph = "\uE838";
             }
-            SearchModeChanged?.Invoke(this, SearchMode);
+            SearchModeChanged?.Invoke(this, _searchMode);
         }
 
         private void _globalSearchModeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (SearchMode == SearchModeEnum.Global) return;
-            SearchMode = SearchModeEnum.Global;
+            if (_searchMode == SearchModeEnum.Global) return;
+            _searchMode = SearchModeEnum.Global;
             if (_currentSearchModeFontIcon != null)
             {
                 _currentSearchModeFontIcon.Glyph = "\uE774";
             }
-            SearchModeChanged?.Invoke(this, SearchMode);
+            SearchModeChanged?.Invoke(this, _searchMode);
+        }
+
+        private void UpdateUI()
+        {
+            if (_currentSearchModeFontIcon != null)
+            {
+                switch (_searchMode)
+                {
+                    case SearchModeEnum.Global:
+                        _currentSearchModeFontIcon.Glyph = "\uE774";
+                        break;
+                    case SearchModeEnum.Folder:
+                        _currentSearchModeFontIcon.Glyph = "\uE838";
+                        break;
+                    case SearchModeEnum.Layer:
+                        _currentSearchModeFontIcon.Glyph = "\uE81E";
+                        break;
+                }
+            }
         }
     }
 }

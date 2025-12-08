@@ -1002,7 +1002,6 @@ namespace TagFind.Classes.DB
             }
         }
         
-
         public async Task DataItemBatchDelete(List<long> rootIDs, bool removeChilds)
         {
             // Do not add lock on this function!
@@ -1029,6 +1028,7 @@ namespace TagFind.Classes.DB
                 await DataItemRemoveSingle(childID);
             }
         }
+
         private async Task<List<long>> GetAllChildDataItemIDsDFS(long parentId)
         {
             var allChildIds = new List<long>();
@@ -1077,6 +1077,80 @@ namespace TagFind.Classes.DB
             }
 
             return new ObservableCollection<DataItem>(allChildIds);
+        }
+
+        public async Task<ObservableCollection<ExplorerFolder>> GetDataItemPath(long id)
+        {
+            await _lock.WaitAsync();
+
+            try
+            {
+                HashSet<long> verifier = [];
+                ObservableCollection<ExplorerFolder> result = [];
+
+                long currentID = id;
+                while (true)
+                {
+                    string command =
+                        $"SELECT * FROM {nameof(DataItems)} " +
+                        $"WHERE {nameof(DataItems.ID)} = @{nameof(DataItems.ID)} " +
+                        $"LIMIT 1";
+                    SqliteCommand sqliteCommand = new(command, dbConnection);
+                    sqliteCommand.Parameters.AddWithValue($"@{nameof(DataItems.ID)}", currentID);
+                    SqliteDataReader reader =
+                        sqliteCommand.ExecuteReader();
+                    bool hasData = false;
+                    while (reader.Read())
+                    {
+                        hasData = true;
+                        long parentID = reader.GetInt64(1);
+                        if (!verifier.Contains(currentID))
+                        {
+                            // In searching
+                            verifier.Add(currentID);
+                            DataItem dataItem = await DataItemGetByID(currentID);
+                            if (dataItem.ID != -1)
+                            {
+                                result.Insert(0, new ExplorerFolder() { ID = dataItem.ID, Name = dataItem.Title });
+                            }
+                            else
+                            {
+                                result.Insert(0, new ExplorerFolder() { ID = dataItem.ID, Name = "{No Data}" });
+                                return result;
+                            }
+                        }
+                        // Path looped
+                        else
+                        {
+                            result.Insert(0, new ExplorerFolder() { ID = -1, Name = "*Wild" });
+                            return result;
+                        }
+                        if (parentID == 0)
+                        {
+                            // Got root
+                            result.Insert(0, new ExplorerFolder() { ID = 0, Name = "Root" });
+                            return result;
+                        }
+
+                        currentID = parentID;
+                    }
+                    // No item
+                    if (!hasData)
+                    {
+                        result.Insert(0, new ExplorerFolder() { ID = -1, Name = "*Wild" });
+                        return result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
+                return [];
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
         /// <summary>

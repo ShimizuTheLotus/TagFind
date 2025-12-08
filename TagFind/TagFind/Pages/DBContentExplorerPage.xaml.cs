@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,6 +38,7 @@ namespace TagFind.Pages
 
         public ObservableCollection<SearchCondition> searchConditions { get; set; } = new();
 
+        // Do not change the ID to -1, edit page won't allow edit when the path starts with -1.
         public ObservableCollection<ExplorerFolder> Path { get; set; } = [new() { Name = "Root", ID = 0 }];
 
         public DBContentExplorerPage()
@@ -70,9 +72,20 @@ namespace TagFind.Pages
             ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
         }
 
-        private void DataItemListView_RequestOpenDataItemAsFolder(object sender, DataItem dataItem)
+        private async void DataItemListView_RequestOpenDataItemAsFolder(object sender, DataItem dataItem)
         {
-            Path.Add(new() { Name = dataItem.Title, ID = dataItem.ID });
+            if (SearchModeSwitcher.SearchMode == SearchModeEnum.Layer)
+            {
+                Path.Add(new() { Name = dataItem.Title, ID = dataItem.ID });
+            }
+            else
+            {
+                SearchModeSwitcher.SearchMode = SearchModeEnum.Layer;
+                if (ContentManager.Connected)
+                {
+                    Path = await ContentManager.GetDataItemPath(dataItem.ID);
+                }
+            }
             BreadcrumbBar.ItemsSource = Path;
             ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
         }
@@ -104,14 +117,26 @@ namespace TagFind.Pages
             ConditionTokenizedSuggestBox.ApplyConditions(searchConditions); 
         }
 
-        private void DataItemListView_RequestOpenDataItemDetail(object sender, Classes.DataTypes.DataItem dataItem)
+        private async void DataItemListView_RequestOpenDataItemDetail(object sender, Classes.DataTypes.DataItem dataItem)
         {
+            ObservableCollection<ExplorerFolder> path = [];
+            if (SearchModeSwitcher.SearchMode != SearchModeEnum.Layer)
+            {
+                if (ContentManager.Connected)
+                {
+                    path = await ContentManager.GetDataItemPath(dataItem.ID);
+                }
+            }
+            else
+            {
+                path = this.Path;
+            }
             DataItemDetailPageNavigationParameter parameters = new()
             {
                 DBContentManager = ContentManager,
                 SearchConditions = searchConditions,
                 DataItem = dataItem,
-                Path = this.Path
+                Path = path
             };
             Frame.Navigate(typeof(DBContentDetailPage), parameters);
         }

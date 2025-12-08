@@ -84,6 +84,8 @@ namespace TagFind.Pages
                     ApplyDataItem(_dataItem);
                 }
             }
+
+            EditAppBarButton.IsEnabled = (Path.Count > 0 && Path[0].ID != -1);
         }
 
         public async void ApplyDataItem(DataItem dataItem)

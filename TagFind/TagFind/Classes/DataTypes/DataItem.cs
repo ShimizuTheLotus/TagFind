@@ -8,7 +8,7 @@ namespace TagFind.Classes.DataTypes
 {
     public class DataItem
     {
-        public long ID;
+        public long ID = -1;
         public long ParentID = 0;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
