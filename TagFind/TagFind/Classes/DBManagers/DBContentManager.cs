@@ -6,10 +6,13 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -401,132 +404,132 @@ namespace TagFind.Classes.DB
 #endif
         }
 
-        public async Task<ObservableCollection<DataItem>> DataItemsSearchViaSearchConditions(List<SearchCondition> searchConditions)
-        {
-            await _lock.WaitAsync();
-            try
-            {
-                HashSet<DataItem> result = new(new DataItemEqualityComparer());
+        //public async Task<ObservableCollection<DataItem>> DataItemsSearchViaSearchConditions(List<SearchCondition> searchConditions)
+        //{
+        //    await _lock.WaitAsync();
+        //    try
+        //    {
+        //        HashSet<DataItem> result = new(new DataItemEqualityComparer());
 
-                List<TextCondition> textConditions = searchConditions.OfType<TextCondition>().ToList();
-                List<TagCondition> tagConditions = searchConditions.OfType<TagCondition>().ToList();
+        //        List<TextCondition> textConditions = searchConditions.OfType<TextCondition>().ToList();
+        //        List<TagCondition> tagConditions = searchConditions.OfType<TagCondition>().ToList();
 
-                // DataItemID, match counter, for checking if all conditions matched.
-                Dictionary<long, long> stringStringMatchCountDictionary = [];
-                Dictionary<long, long> tagMatchCountDictionary = [];
+        //        // DataItemID, match counter, for checking if all conditions matched.
+        //        Dictionary<long, long> stringStringMatchCountDictionary = [];
+        //        Dictionary<long, long> tagMatchCountDictionary = [];
 
-                foreach (TextCondition textCondition in textConditions)
-                {
-                    string _command =
-                        $"SELECT * FROM {nameof(DataItemFastSearch)} " +
-                        $"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText}";
-                    SqliteCommand _SqliteCommand = new(_command, dbConnection);
-                    _SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", textCondition.MainName);
-                    using (SqliteDataReader reader = _SqliteCommand.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
-                            if (id == -1) continue;
-                            if (!stringStringMatchCountDictionary.ContainsKey(id)) stringStringMatchCountDictionary[id] = 0;
-                            stringStringMatchCountDictionary[id]++;
-                        }
-                    }
-                }
+        //        foreach (TextCondition textCondition in textConditions)
+        //        {
+        //            string _command =
+        //                $"SELECT * FROM {nameof(DataItemFastSearch)} " +
+        //                $"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText}";
+        //            SqliteCommand _SqliteCommand = new(_command, dbConnection);
+        //            _SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", textCondition.MainName);
+        //            using (SqliteDataReader reader = _SqliteCommand.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
+        //                    if (id == -1) continue;
+        //                    if (!stringStringMatchCountDictionary.ContainsKey(id)) stringStringMatchCountDictionary[id] = 0;
+        //                    stringStringMatchCountDictionary[id]++;
+        //                }
+        //            }
+        //        }
 
-                foreach (TagCondition tagCondition in tagConditions)
-                {
-                    string _command =
-                        $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
-                        $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
-                    SqliteCommand _SqliteCommand = new(_command, dbConnection);
-                    _SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().TagID}", tagCondition.TagID);
-                    using (SqliteDataReader reader = _SqliteCommand.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
-                            if (id == -1) continue;
-                            if (!tagMatchCountDictionary.ContainsKey(id)) tagMatchCountDictionary[id] = 0;
-                            tagMatchCountDictionary[id]++;
-                        }
-                    }
-                }
+        //        foreach (TagCondition tagCondition in tagConditions)
+        //        {
+        //            string _command =
+        //                $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
+        //                $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
+        //            SqliteCommand _SqliteCommand = new(_command, dbConnection);
+        //            _SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().TagID}", tagCondition.TagID);
+        //            using (SqliteDataReader reader = _SqliteCommand.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
+        //                    if (id == -1) continue;
+        //                    if (!tagMatchCountDictionary.ContainsKey(id)) tagMatchCountDictionary[id] = 0;
+        //                    tagMatchCountDictionary[id]++;
+        //                }
+        //            }
+        //        }
 
-                // Determine final set of IDs that satisfy all conditions
-                HashSet<long> finalIDs = new();
+        //        // Determine final set of IDs that satisfy all conditions
+        //        HashSet<long> finalIDs = new();
 
-                bool hasText = textConditions.Count > 0;
-                bool hasTag = tagConditions.Count > 0;
+        //        bool hasText = textConditions.Count > 0;
+        //        bool hasTag = tagConditions.Count > 0;
 
-                if (hasText && hasTag)
-                {
-                    // IDs present in both dictionaries and meeting required counts
-                    foreach (var kv in stringStringMatchCountDictionary)
-                    {
-                        long id = kv.Key;
-                        if (kv.Value == textConditions.Count && tagMatchCountDictionary.TryGetValue(id, out var tagCount) && tagCount == tagConditions.Count)
-                        {
-                            finalIDs.Add(id);
-                        }
-                    }
-                }
-                else if (hasText)
-                {
-                    foreach (var kv in stringStringMatchCountDictionary)
-                    {
-                        if (kv.Value == textConditions.Count) finalIDs.Add(kv.Key);
-                    }
-                }
-                else if (hasTag)
-                {
-                    foreach (var kv in tagMatchCountDictionary)
-                    {
-                        if (kv.Value == tagConditions.Count) finalIDs.Add(kv.Key);
-                    }
-                }
-                else
-                {
-                    // No recognizable conditions -> return empty
-                    return [];
-                }
+        //        if (hasText && hasTag)
+        //        {
+        //            // IDs present in both dictionaries and meeting required counts
+        //            foreach (var kv in stringStringMatchCountDictionary)
+        //            {
+        //                long id = kv.Key;
+        //                if (kv.Value == textConditions.Count && tagMatchCountDictionary.TryGetValue(id, out var tagCount) && tagCount == tagConditions.Count)
+        //                {
+        //                    finalIDs.Add(id);
+        //                }
+        //            }
+        //        }
+        //        else if (hasText)
+        //        {
+        //            foreach (var kv in stringStringMatchCountDictionary)
+        //            {
+        //                if (kv.Value == textConditions.Count) finalIDs.Add(kv.Key);
+        //            }
+        //        }
+        //        else if (hasTag)
+        //        {
+        //            foreach (var kv in tagMatchCountDictionary)
+        //            {
+        //                if (kv.Value == tagConditions.Count) finalIDs.Add(kv.Key);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // No recognizable conditions -> return empty
+        //            return [];
+        //        }
 
-                if (finalIDs.Count == 0) return [];
+        //        if (finalIDs.Count == 0) return [];
 
-                // Retrieve DataItems for the final IDs
-                // Build placeholders and parameters
-                var idList = finalIDs.ToList();
-                string[] paramNames = idList.Select((_, i) => $"@p{i}").ToArray();
-                string placeholders = string.Join(",", paramNames);
+        //        // Retrieve DataItems for the final IDs
+        //        // Build placeholders and parameters
+        //        var idList = finalIDs.ToList();
+        //        string[] paramNames = idList.Select((_, i) => $"@p{i}").ToArray();
+        //        string placeholders = string.Join(",", paramNames);
 
-                string selectCmd =
-                    $"SELECT * FROM {nameof(DataItems)} " +
-                    $"WHERE {new DataItems().ID} IN ({placeholders})";
-                SqliteCommand selectCommand = new(selectCmd, dbConnection);
-                for (int i = 0; i < idList.Count; i++)
-                {
-                    selectCommand.Parameters.AddWithValue(paramNames[i], idList[i]);
-                }
+        //        string selectCmd =
+        //            $"SELECT * FROM {nameof(DataItems)} " +
+        //            $"WHERE {new DataItems().ID} IN ({placeholders})";
+        //        SqliteCommand selectCommand = new(selectCmd, dbConnection);
+        //        for (int i = 0; i < idList.Count; i++)
+        //        {
+        //            selectCommand.Parameters.AddWithValue(paramNames[i], idList[i]);
+        //        }
 
-                HashSet<DataItem> dataItemsSet = new(new DataItemEqualityComparer());
-                using (SqliteDataReader reader = selectCommand.ExecuteReader())
-                {
-                    // Reuse existing extension to populate DataItem objects
-                    reader.DataItemsAddDataItemsFromReader(ref dataItemsSet, dbConnection, MessageManager);
-                }
+        //        HashSet<DataItem> dataItemsSet = new(new DataItemEqualityComparer());
+        //        using (SqliteDataReader reader = selectCommand.ExecuteReader())
+        //        {
+        //            // Reuse existing extension to populate DataItem objects
+        //            reader.DataItemsAddDataItemsFromReader(ref dataItemsSet, dbConnection, MessageManager);
+        //        }
 
-                return new ObservableCollection<DataItem>(dataItemsSet);
-            }
-            catch (Exception ex)
-            {
-                MessageManager.PushMessage(MessageType.Error, ex.Message);
-            }
-            finally
-            {
-                _lock.Release();
-            }
-            return [];
-        }
+        //        return new ObservableCollection<DataItem>(dataItemsSet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageManager.PushMessage(MessageType.Error, ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        _lock.Release();
+        //    }
+        //    return [];
+        //}
 
         public async Task<ObservableCollection<DataItem>> DataItemsGetChildOfParentItemAsync(long parentDataItemID, bool useLock = true)
         {
@@ -568,6 +571,86 @@ namespace TagFind.Classes.DB
                 }
             }
             );
+        }
+
+        private async IAsyncEnumerable<DataItem> DataItemsGetChildOfParentItemIterativeAsync(long parentDataItemID, SearchAndSortModeInfo sortMode)
+        {
+            SqliteDataReader? SqliteDataReader = null;
+            try
+            {
+                StringBuilder commandBuilder = new();
+                commandBuilder.Append($"SELECT * FROM {nameof(DataItems)} ");
+                if (parentDataItemID != -1)
+                {
+                    commandBuilder.Append($"WHERE {new DataItems().ParentItemID} = @{new DataItems().ParentItemID} ");
+                }
+                commandBuilder.Append($"ORDER BY {Enum.GetName(sortMode.SortMode)} {Enum.GetName(sortMode.SortDirection)}");
+
+                SqliteCommand SqliteCommand = new(commandBuilder.ToString(), dbConnection);
+                if (parentDataItemID != -1)
+                {
+                    SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", parentDataItemID);
+                }
+
+                SqliteDataReader = SqliteCommand.ExecuteReader();
+                await foreach (DataItem dataItem in SqliteDataReader.DataItemsAddDataItemsIterativeFromReader(dbConnection, MessageManager))
+                {
+                    yield return dataItem;
+                }
+            }
+            finally
+            {
+                SqliteDataReader?.DisposeAsync();
+            }
+        }
+
+        private bool DataItemVerifyExists(long ID)
+        {
+            {
+                string command =
+                    $"SELECT * FROM {nameof(DataItem)} " +
+                    $"WHERE {nameof(DataItem.ID)} = @{nameof(DataItem.ID)} " +
+                    $"LIMIT 1";
+                SqliteCommand sqliteCommand = new(command, dbConnection);
+                SqliteDataReader sqliteDataReader = sqliteCommand.ExecuteReader();
+                while (sqliteDataReader.Read())
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        private long DataItemGetParentID(long ID)
+        {
+            string command =
+                $"SELECT * FROM {nameof(DataItems)} " +
+                $"WHERE {nameof(DataItems.ID)} = @{nameof(DataItems.ID)} " +
+                $"LIMIT 1";
+            SqliteCommand sqliteCommand = new(command, dbConnection);
+            sqliteCommand.Parameters.AddWithValue($"@{nameof(DataItems.ID)}", ID);
+            SqliteDataReader sqliteDataReader = sqliteCommand.ExecuteReader();
+            while (sqliteDataReader.Read())
+            {
+                return sqliteDataReader.GetInt64(1);
+            }
+            return -1;
+        }
+
+        private string DataItemGetNameByID(long ID)
+        {
+            string subcommand =
+                $"SELECT * FROM {nameof(DataItemFastSearch)} " +
+                $"WHERE {new DataItemFastSearch().DataItemID} = @{new DataItemFastSearch().DataItemID} " +
+                $"LIMIT 1";
+            SqliteCommand SqliteCommand = new(subcommand, dbConnection);
+            SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", ID);
+            SqliteDataReader SqliteDataReader = SqliteCommand.ExecuteReader();
+            while (SqliteDataReader.Read())
+            {
+                return SqliteDataReader.GetString(1);
+            }
+            return string.Empty;
         }
 
         public async Task<DataItem> DataItemGetByID(long ID)
@@ -821,6 +904,7 @@ namespace TagFind.Classes.DB
                     else
                     {
                         HashSet<long> ancestors = new(await GetAllChildDataItemIDsDFS(dataItemSearchConfig.ParentOrAncestorIDLimit));
+                        ancestors.Add(dataItemSearchConfig.ParentOrAncestorIDLimit);
                         return dataItemsSet.Where(x => ancestors.Contains(x.ParentID)).ToList();
                     }
                 }
@@ -834,6 +918,485 @@ namespace TagFind.Classes.DB
                     _lock.Release();
                 }
             });
+        }
+
+        public async IAsyncEnumerable<DataItem> DataItemSearchViaSearchConditionsIterativeAsync(ObservableCollection<SearchCondition> searchConditions, DataItemSearchConfig dataItemSearchConfig, SearchAndSortModeInfo SearchAndSortMode, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            await _lock.WaitAsync();
+            try
+            {
+                List<DataItem> emptyResult = [];
+
+                //No conditions
+                if (searchConditions == null || searchConditions.Count == 0)
+                {
+                    if (dataItemSearchConfig.SearchMode == SearchModeEnum.Layer)
+                    {
+                        await foreach (DataItem item in DataItemsGetChildOfParentItemIterativeAsync(dataItemSearchConfig.ParentOrAncestorIDLimit, SearchAndSortMode))
+                        {
+                            yield return item;
+                        }
+                    }
+                    else if (dataItemSearchConfig.SearchMode == SearchModeEnum.Folder)
+                    {
+                        emptyResult = (await GetAllChildDataItemsDFS(dataItemSearchConfig.ParentOrAncestorIDLimit)).ToList();
+                        List<DataItem> sortedResult = [];
+                        if (SearchAndSortMode.SortDirection == SortDirectionEnum.ASC)
+                        {
+                            switch (SearchAndSortMode.SortMode)
+                            {
+                                case SortModeEnum.ID:
+                                    sortedResult = emptyResult.OrderBy(x => x.ID).ToList();
+                                    break;
+                                case SortModeEnum.Title:
+                                    sortedResult = emptyResult.OrderBy(x => x.Title).ToList();
+                                    break;
+                                case SortModeEnum.CreatedTime:
+                                    sortedResult = emptyResult.OrderBy(x => x.CreatedTime).ToList();
+                                    break;
+                                case SortModeEnum.ModifiedTime:
+                                    sortedResult = emptyResult.OrderBy(x => x.ModifiedTime).ToList();
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (SearchAndSortMode.SortMode)
+                            {
+                                case SortModeEnum.ID:
+                                    sortedResult = emptyResult.OrderByDescending(x => x.ID).ToList();
+                                    break;
+                                case SortModeEnum.Title:
+                                    sortedResult = emptyResult.OrderByDescending(x => x.Title).ToList();
+                                    break;
+                                case SortModeEnum.CreatedTime:
+                                    sortedResult = emptyResult.OrderByDescending(x => x.CreatedTime).ToList();
+                                    break;
+                                case SortModeEnum.ModifiedTime:
+                                    sortedResult = emptyResult.OrderByDescending(x => x.ModifiedTime).ToList();
+                                    break;
+                            }
+                        }
+
+                        foreach (DataItem item in sortedResult)
+                        {
+                            yield return item;
+                        }
+                    }
+                    else
+                    {
+                        HashSet<DataItem> results = [];
+                        string cmd =
+                            $"SELECT * FROM {nameof(DataItems)} " +
+                            $"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}";
+                        SqliteCommand sqlCmd = new(cmd, dbConnection);
+                        SqliteDataReader reader = sqlCmd.ExecuteReader();
+                        await foreach (DataItem dataItem in reader.DataItemsAddDataItemsIterativeFromReader(dbConnection, MessageManager))
+                        {
+                            yield return dataItem;
+                        }
+                    }
+                    yield break;
+                }
+
+                List<TextCondition> textConditions = searchConditions.OfType<TextCondition>().ToList();
+                List<TagCondition> tagConditions = searchConditions.OfType<TagCondition>().ToList();
+
+                //Dictionaries to count matches per DataItemID
+                Dictionary<long, long> textMatchCounts = new();
+                Dictionary<long, long> tagMatchCounts = new();
+
+                HashSet<long> ancestors = new(await GetAllChildDataItemIDsDFS(dataItemSearchConfig.ParentOrAncestorIDLimit));
+                ancestors.Add(dataItemSearchConfig.ParentOrAncestorIDLimit);
+
+                bool hasText = textConditions.Count > 0;
+                bool hasTag = tagConditions.Count > 0;
+
+                if (hasText && !hasTag)
+                {
+                    //Process text conditions
+                    foreach (TextCondition tcond in textConditions)
+                    {
+                        HashSet<long> matchID = [];
+                        if (SearchAndSortMode.TextMatchMode == TextMatchModeEnum.Fast)
+                        {
+                            StringBuilder _commandBuilder = new();
+                            _commandBuilder.Append($"SELECT DISTINCT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText} ");
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} MATCH @{new DataItemFastSearch().Title} ");
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} MATCH @{new DataItemFastSearch().Description} ");
+                            }
+
+                            SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
+                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", tcond.MainName);
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", tcond.MainName);
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", tcond.MainName);
+                            }
+
+                            using (SqliteDataReader reader = _cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
+                                    if (id == -1) continue;
+                                    if (!textMatchCounts.ContainsKey(id)) textMatchCounts[id] = 0;
+                                    textMatchCounts[id]++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            StringBuilder _commandBuilder = new();
+                            _commandBuilder.Append($"SELECT DISTINCT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} LIKE @{new DataItemFastSearch().SearchText} ");
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} LIKE @{new DataItemFastSearch().Title} ");
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} LIKE @{new DataItemFastSearch().Description} ");
+                            }
+
+                            SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
+                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", $"%{tcond.MainName}%");
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", $"%{tcond.MainName}%");
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", $"%{tcond.MainName}%");
+                            }
+
+                            using (SqliteDataReader reader = _cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
+                                    if (id == -1) continue;
+                                    if (matchID.Contains(id)) continue;
+                                    if (!textMatchCounts.ContainsKey(id))
+                                    {
+                                        textMatchCounts[id] = 0;
+                                        textMatchCounts[id]++;
+                                    }
+                                }
+                            }
+                        }
+                        foreach (var kv in textMatchCounts)
+                        {
+                            if (kv.Value == textConditions.Count) matchID.Add(kv.Key);
+                        }
+
+                        if (dataItemSearchConfig.SearchMode == SearchModeEnum.Global)
+                            foreach (long id in matchID)
+                            {
+                                yield return await DataItemGetByID(id);
+                            }
+                        else if (dataItemSearchConfig.SearchMode == SearchModeEnum.Layer)
+                        {
+                            foreach (long id in matchID)
+                            {
+                                long parentID = DataItemGetParentID(id);
+                                if (parentID != -1 && parentID == dataItemSearchConfig.ParentOrAncestorIDLimit)
+                                {
+                                    yield return await DataItemGetByID(id);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (long id in matchID)
+                            {
+                                long parentID = DataItemGetParentID(id);
+                                if (ancestors.Contains(parentID))
+                                {
+                                    yield return await DataItemGetByID(id);
+                                }
+                            }
+                        }
+                        yield break;
+                    }
+                }
+
+                //Process tag conditions
+                foreach (TagCondition tcond in tagConditions)
+                {
+                    string _command =
+                        $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
+                        $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
+                    SqliteCommand _cmd = new(_command, dbConnection);
+                    _cmd.Parameters.AddWithValue($"@{new ItemTags().TagID}", tcond.TagID);
+                    using (SqliteDataReader reader = _cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
+                            if (id == -1) continue;
+                            if (!tagMatchCounts.ContainsKey(id)) tagMatchCounts[id] = 0;
+                            tagMatchCounts[id]++;
+                        }
+                    }
+                }
+
+                //Determine final set of IDs that satisfy all conditions
+                HashSet<long> finalIDs = new();
+
+                if (hasText)
+                {
+                    if (hasTag)
+                    {
+                        List<long> itemIDsFitTagConditions = [];
+                        foreach (var kv in tagMatchCounts)
+                        {
+                            if (kv.Value == tagConditions.Count) itemIDsFitTagConditions.Add(kv.Key);
+                        }
+                        string[] itemIDPlaceholders = itemIDsFitTagConditions.Select((_, i) => $"@p{i}").ToArray();
+                    }
+                }
+
+                if (hasText)
+                {
+                    List<long> itemIDsFitTagConditions = [];
+                    foreach (var kv in tagMatchCounts)
+                    {
+                        if (kv.Value == tagConditions.Count) itemIDsFitTagConditions.Add(kv.Key);
+                    }
+                    string[] itemIDPlaceholders = itemIDsFitTagConditions.Select((_, i) => $"@p{i}").ToArray();
+                    string itemIDPlaceholderText = string.Join(",", itemIDPlaceholders);
+
+                    foreach (TextCondition tcond in textConditions)
+                    {
+                        HashSet<long> matchID = [];
+                        if (SearchAndSortMode.TextMatchMode == TextMatchModeEnum.Fast)
+                        {
+                            StringBuilder _commandBuilder = new();
+                            _commandBuilder.Append($"SELECT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText} ");
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} MATCH @{new DataItemFastSearch().Title} ");
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} MATCH @{new DataItemFastSearch().Description} ");
+                            }
+                            if (hasTag)
+                            {
+                                _commandBuilder.Append($"AND {nameof(DataItemFastSearch.DataItemID)} IN {itemIDPlaceholderText}");
+                            }
+
+                            SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
+                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", tcond.MainName);
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", tcond.MainName);
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", tcond.MainName);
+                            }
+                            if (hasTag)
+                            {
+                                for (int i = 0; i < itemIDPlaceholders.Count(); i++)
+                                    _cmd.Parameters.AddWithValue(itemIDPlaceholders[i], itemIDsFitTagConditions[i]);
+                            }
+
+                            using (SqliteDataReader subReader = _cmd.ExecuteReader())
+                            {
+                                while (subReader.Read())
+                                {
+                                    long id = subReader.IsDBNull(0) ? -1 : subReader.GetInt64(0);
+                                    if (id == -1) continue;
+                                    if (!textMatchCounts.ContainsKey(id)) textMatchCounts[id] = 0;
+                                    textMatchCounts[id]++;
+                                    if (!matchID.Contains(id))
+                                    {
+                                        matchID.Add(id);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            StringBuilder _commandBuilder = new();
+                            _commandBuilder.Append($"SELECT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} LIKE @{new DataItemFastSearch().SearchText} ");
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} LIKE @{new DataItemFastSearch().Title} ");
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} LIKE @{new DataItemFastSearch().Description} ");
+                            }
+                            if (hasTag)
+                            {
+                                _commandBuilder.Append($"AND {nameof(DataItemFastSearch.DataItemID)} IN {itemIDPlaceholderText}");
+                            }
+
+                            SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
+                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", $"%{tcond.MainName}%");
+                            if (dataItemSearchConfig.SearchTitle)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", $"%{tcond.MainName}%");
+                            }
+                            if (dataItemSearchConfig.SearchDescription)
+                            {
+                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", $"%{tcond.MainName}%");
+                            }
+                            if (hasTag)
+                            {
+                                for (int i = 0; i < itemIDPlaceholders.Count(); i++)
+                                    _cmd.Parameters.AddWithValue(itemIDPlaceholders[i], itemIDsFitTagConditions[i]);
+                            }
+
+                            using (SqliteDataReader subReader = _cmd.ExecuteReader())
+                            {
+                                while (subReader.Read())
+                                {
+                                    long id = subReader.IsDBNull(0) ? -1 : subReader.GetInt64(0);
+                                    if (id == -1) continue;
+                                    if (matchID.Contains(id)) continue;
+                                    if (!textMatchCounts.ContainsKey(id))
+                                    {
+                                        textMatchCounts[id] = 0;
+                                        textMatchCounts[id]++;
+                                    }
+                                    if (!matchID.Contains(id))
+                                    {
+                                        matchID.Add(id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    HashSet<long> textMatchID = [];
+                    foreach (var kv in textMatchCounts)
+                    {
+                        if (kv.Value == textConditions.Count) textMatchID.Add(kv.Key);
+                    }
+                    List<long> pathMatchID = [];
+
+                    if (dataItemSearchConfig.SearchMode == SearchModeEnum.Global)
+                        foreach (long id in textMatchID)
+                        {
+                            pathMatchID.Add(id);
+                        }
+                    else if (dataItemSearchConfig.SearchMode == SearchModeEnum.Layer)
+                    {
+                        foreach (long id in textMatchID)
+                        {
+                            long parentID = DataItemGetParentID(id);
+                            if (parentID != -1 && parentID == dataItemSearchConfig.ParentOrAncestorIDLimit)
+                            {
+                                pathMatchID.Add(id);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (long id in textMatchID)
+                        {
+                            long parentID = DataItemGetParentID(id);
+                            if (ancestors.Contains(parentID))
+                            {
+                                pathMatchID.Add(id);
+                            }
+                        }
+                    }
+
+                    string[] pathMatchIDPlaceHolders = pathMatchID.Select((_, i) => $"@p{i}").ToArray();
+                    string pathMatchIDPlaceHolderText = string.Join(",", pathMatchIDPlaceHolders);
+
+                    string selectCmd =
+                       $"SELECT * FROM {nameof(DataItems)} " +
+                       $"WHERE {nameof(DataItems.ID)} IN ({pathMatchIDPlaceHolderText}) " +
+                       $"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}";
+                    SqliteCommand sqliteCommand = new(selectCmd, dbConnection);
+                    for (int i = 0; i < itemIDPlaceholders.Count(); i++)
+                        sqliteCommand.Parameters.AddWithValue(pathMatchIDPlaceHolders[i], pathMatchID[i]);
+                    SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        yield return await DataItemGetByID(reader.GetInt64(0));
+                    }
+                    yield break;
+                }
+                else
+                {
+                    List<long> itemIDsFitTagConditions = [];
+                    foreach (var kv in tagMatchCounts)
+                    {
+                        if (kv.Value == tagConditions.Count) itemIDsFitTagConditions.Add(kv.Key);
+                    }
+                    string[] itemIDPlaceholders = itemIDsFitTagConditions.Select((_, i) => $"@p{i}").ToArray();
+                    string itemIDPlaceholderText = string.Join(",", itemIDPlaceholders);
+
+                    List<long> pathMatchID = [];
+
+                    if (dataItemSearchConfig.SearchMode == SearchModeEnum.Global)
+                        foreach (long id in itemIDsFitTagConditions)
+                        {
+                            pathMatchID.Add(id);
+                        }
+                    else if (dataItemSearchConfig.SearchMode == SearchModeEnum.Layer)
+                    {
+                        foreach (long id in itemIDsFitTagConditions)
+                        {
+                            long parentID = DataItemGetParentID(id);
+                            if (parentID != -1 && parentID == dataItemSearchConfig.ParentOrAncestorIDLimit)
+                            {
+                                pathMatchID.Add(id);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (long id in itemIDsFitTagConditions)
+                        {
+                            long parentID = DataItemGetParentID(id);
+                            if (ancestors.Contains(parentID))
+                            {
+                                pathMatchID.Add(id);
+                            }
+                        }
+                    }
+
+                    string[] pathMatchIDPlaceHolders = pathMatchID.Select((_, i) => $"@p{i}").ToArray();
+                    string pathMatchIDPlaceHolderText = string.Join(",", pathMatchIDPlaceHolders);
+
+                    StringBuilder selectCmd = new();
+                    selectCmd.Append($"SELECT * FROM {nameof(DataItems)} ");
+                    if (hasTag)
+                        selectCmd.Append($"WHERE {new DataItems().ID} IN ({pathMatchIDPlaceHolderText}) ");
+                    selectCmd.Append($"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}");
+                    SqliteCommand sqliteCommand = new(selectCmd.ToString(), dbConnection);
+                    for (int i = 0; i < itemIDPlaceholders.Count(); i++)
+                        sqliteCommand.Parameters.AddWithValue(pathMatchIDPlaceHolders[i], pathMatchID[i]);
+                    SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        yield return await DataItemGetByID(reader.GetInt64(0));
+                    }
+                }
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
         /// <summary>
@@ -1089,9 +1652,12 @@ namespace TagFind.Classes.DB
             return new ObservableCollection<DataItem>(allChildIds);
         }
 
-        public async Task<ObservableCollection<ExplorerFolder>> GetDataItemPath(long id)
+        public async Task<ObservableCollection<ExplorerFolder>> GetDataItemPath(long id, bool useLock = true)
         {
-            await _lock.WaitAsync();
+            if (useLock)
+            {
+                await _lock.WaitAsync();
+            }
 
             try
             {
@@ -1118,14 +1684,14 @@ namespace TagFind.Classes.DB
                         {
                             // In searching
                             verifier.Add(currentID);
-                            DataItem dataItem = await DataItemGetByID(currentID);
-                            if (dataItem.ID != -1)
+                            string dataItemTitle = DataItemGetNameByID(currentID);
+                            if (DataItemVerifyExists(currentID))
                             {
-                                result.Insert(0, new ExplorerFolder() { ID = dataItem.ID, Name = dataItem.Title });
+                                result.Insert(0, new ExplorerFolder() { ID = currentID, Name = dataItemTitle });
                             }
                             else
                             {
-                                result.Insert(0, new ExplorerFolder() { ID = dataItem.ID, Name = "{No Data}" });
+                                result.Insert(0, new ExplorerFolder() { ID = currentID, Name = "{No Data}" });
                                 return result;
                             }
                         }
@@ -1159,7 +1725,10 @@ namespace TagFind.Classes.DB
             }
             finally
             {
-                _lock.Release();
+                if (useLock)
+                {
+                    _lock.Release();
+                }
             }
         }
 
@@ -2571,6 +3140,102 @@ namespace TagFind.Classes.DB
                     item.ItemTags = itemTagDataSources.ConvertIntoItemTagTree();
 
                     dataItems.Add(item);
+                }
+
+            }
+#if !DEBUG
+            catch (Exception ex)
+            {
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
+            }
+
+#endif
+        }
+
+        public static async IAsyncEnumerable<DataItem> DataItemsAddDataItemsIterativeFromReader(this SqliteDataReader reader,
+            SqliteConnection? dbConnection,
+            MessageManager MessageManager)
+        {
+            Dictionary<long, string> TagNameTempDict = [];
+            Dictionary<long, string> PropertyNameTempDict = [];
+
+#if !DEBUG
+            try
+#endif
+            {
+                if (dbConnection == null) yield break;
+                while (reader.Read())
+                {
+                    DataItem item = new();
+                    item.ID = reader.GetInt64(0);
+                    item.ParentID = reader.GetInt64(1);
+                    item.ItemType = reader.GetString(2);
+                    item.CreatedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(3)).UtcDateTime;
+                    item.ModifiedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(4)).UtcDateTime;
+
+                    // Get DataItem in table DataItems
+                    string command =
+                        $"SELECT * FROM {nameof(DataItemFastSearch)} " +
+                        $"WHERE {new DataItemFastSearch().DataItemID} = @{new DataItemFastSearch().DataItemID} " +
+                        $"LIMIT 1";
+                    SqliteCommand SqliteCommand = new(command, dbConnection);
+                    SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", item.ID);
+                    SqliteDataReader SqliteDataReader = SqliteCommand.ExecuteReader();
+                    while (SqliteDataReader.Read())
+                    {
+                        item.Title = SqliteDataReader.GetString(1);
+                        item.Description = SqliteDataReader.GetString(2);
+                        item.RefPath = SqliteDataReader.GetString(3);
+                        item.SearchText = SqliteDataReader.GetString(4);
+                    }
+
+                    // Get tag data sources
+                    List<ItemTagDataSource> itemTagDataSources = [];
+                    command =
+                        $"SELECT * FROM {nameof(ItemTags)} " +
+                        $"WHERE {new ItemTags().ItemID} = @{new ItemTags().ItemID} ";
+                    SqliteCommand = new(command, dbConnection);
+                    SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ItemID}", item.ID);
+                    SqliteDataReader = SqliteCommand.ExecuteReader();
+                    while (SqliteDataReader.Read())
+                    {
+                        ItemTagDataSource itemTag = new()
+                        {
+                            ID = SqliteDataReader.GetInt64(0),
+                            ParentPropertyID = SqliteDataReader.GetInt64(1),
+                            TagID = SqliteDataReader.GetInt64(2),
+                            ParentTagID = SqliteDataReader.GetInt64(3),
+                        };
+                        if (!TagNameTempDict.ContainsKey(itemTag.TagID))
+                        {
+                            string tagName = string.Empty;
+                            tagName = dbConnection.TagPoolGetTagName(itemTag.TagID);
+                            TagNameTempDict.Add(itemTag.TagID, tagName);
+                            itemTag.TagName = tagName;
+                        }
+                        else
+                        {
+                            itemTag.TagName = TagNameTempDict[itemTag.TagID];
+                        }
+                        if (!PropertyNameTempDict.ContainsKey(itemTag.ParentPropertyID))
+                        {
+                            string propertyName = string.Empty;
+                            propertyName = dbConnection.TagDataGetPropertyName(itemTag.ParentPropertyID);
+                            PropertyNameTempDict.Add(itemTag.ParentPropertyID, propertyName);
+                            itemTag.ParentPropertyName = propertyName;
+                        }
+                        else
+                        {
+                            itemTag.ParentPropertyName = PropertyNameTempDict[itemTag.ParentPropertyID];
+                        }
+
+
+                        itemTagDataSources.Add(itemTag);
+                    }
+
+                    item.ItemTags = itemTagDataSources.ConvertIntoItemTagTree();
+
+                    yield return item;
                 }
 
             }

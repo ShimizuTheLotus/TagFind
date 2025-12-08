@@ -22,6 +22,7 @@ using TagFind.UI.ContentDialogPages;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using WinRT;
+using static TagFind.Classes.Consts.DB.UserDB;
 using static TagFind.Classes.DataTypes.PageNavigateParameter;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -102,12 +103,59 @@ namespace TagFind.Pages
                 SearchTitle = true,
                 SearchDescription = true
             };
-            List<DataItem> results = await ContentManager.DataItemsSearchViaSearchConditionsAsync(searchConditions, config);
+            //List<DataItem> results = await ContentManager.DataItemsSearchViaSearchConditionsAsync(searchConditions, config);
 
+            //DispatcherQueue.TryEnqueue(() =>
+            //{
+            //    DataItemListView.DataItemCollection = new ObservableCollection<DataItem>(results);
+            //    DataItemIsEmptyTextBlock.Visibility = results.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            //});
+            SearchAndSortModeInfo searchAndSortModeInfo = new()
+            {
+                SortDirection = SortDirectionEnum.ASC,
+                SortMode = SortModeEnum.ID,
+                TextMatchMode = TextMatchModeEnum.AllResults
+            };
+
+            DispatcherQueue.TryEnqueue(async () =>
+            {
+                DataItemListView.DataItemCollection.Clear();
+                DataItemIsEmptyTextBlock.Visibility = Visibility.Collapsed;
+            });
+            var batch = new List<DataItem>();
+            int batchSize = 20;// Use batch to avoid animation being interrupted.
+
+            await foreach (DataItem dataItem in ContentManager.DataItemSearchViaSearchConditionsIterativeAsync(searchConditions, config, searchAndSortModeInfo))
+            {
+                batch.Add(dataItem);
+                if (batch.Count >= batchSize)
+                {
+                    DispatcherQueue.TryEnqueue(() =>
+                    {
+                        foreach (var item in batch)
+                        {
+                            DataItemListView.DataItemCollection.Add(item);
+                        }
+                    });
+                    batch.Clear();
+                    await Task.Delay(1);
+                }
+            }
+            if (batch.Count > 0)
+            {
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    foreach (var item in batch)
+                    {
+                        DataItemListView.DataItemCollection.Add(item);
+                    }
+                });
+            }
             DispatcherQueue.TryEnqueue(() =>
             {
-                DataItemListView.DataItemCollection = new ObservableCollection<DataItem>(results);
-                DataItemIsEmptyTextBlock.Visibility = results.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+                DataItemIsEmptyTextBlock.Visibility =
+                    DataItemListView.DataItemCollection.Count == 0 ?
+                    Visibility.Visible : Visibility.Collapsed;
             });
         }
 

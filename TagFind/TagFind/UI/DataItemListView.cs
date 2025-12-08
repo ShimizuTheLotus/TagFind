@@ -36,8 +36,11 @@ namespace TagFind.UI
             }
             set
             {
-                _dataItemCollection = value;
-                UpdateUI();
+                if (_dataItemCollection != value)
+                {
+                    _dataItemCollection = value;
+                    UpdateUI();
+                }
             }
         }
         private ObservableCollection<DataItem> _dataItemCollection = [];
@@ -145,7 +148,6 @@ namespace TagFind.UI
         {
             if (_listView != null)
             {
-                _listView.ItemsSource = null;
                 _listView.ItemsSource = _dataItemCollection;
             }
         }
