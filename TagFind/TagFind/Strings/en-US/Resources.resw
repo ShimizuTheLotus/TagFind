@@ -279,4 +279,28 @@
   <data name="ExitNavigationViewItem.Content" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="LanguageTextBlock.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="TutorialTextBlock.Text" xml:space="preserve">
+    <value>Tutorial</value>
+  </data>
+  <data name="EnterTutorialButton.Content" xml:space="preserve">
+    <value>Enter Totorial</value>
+  </data>
+  <data name="Skip.String" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Close.String" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="TutorialDatabaseOptionsTextBlock.Text" xml:space="preserve">
+    <value>You can create, add database, and remove reference of database in the main page.</value>
+  </data>
+  <data name="TutorialDatabaseClickToOpenTextBlock.Text" xml:space="preserve">
+    <value>Click to open database.</value>
+  </data>
+  <data name="TutorialDataItemExplorerOptionsTextBlock.Text" xml:space="preserve">
+    <value>You can change search mode, add, sort and select items in this page. Items added will be saved in current directory.</value>
+  </data>
 </root>

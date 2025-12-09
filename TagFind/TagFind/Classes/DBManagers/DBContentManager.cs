@@ -3122,11 +3122,10 @@ namespace TagFind.Classes.DB
 
             }
 #if !DEBUG
-            catch (Exception ex)
+            finally
             {
-                MessageManager.PushMessage(MessageType.Error, ex.Message);
-            }
 
+            }
 #endif
         }
 

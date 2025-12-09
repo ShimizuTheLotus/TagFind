@@ -10,7 +10,7 @@
 
     <Grid>
         <RelativePanel>
-            <CommandBar RelativePanel.AlignTopWithPanel="True">
+            <CommandBar x:Name="CommandBar" RelativePanel.AlignTopWithPanel="True">
                 <AppBarButton x:Name="BackButton" x:Uid="BackButton" Icon="Back" Click="BackButton_Click"/>
                 <AppBarButton x:Name="ThirdPartyAttributionButton" x:Uid="ThirdPartyAttributionButton" Click="ThirdPartyAttributionButton_Click">
                     <AppBarButton.Icon>
@@ -18,6 +18,16 @@
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar>
+            <StackPanel Margin="16 0 16 0" Padding="32 16 32 0"
+                        CornerRadius="8 8 0 0"
+                        Background="{ThemeResource CardBackgroundFillColorDefault}"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.Below="CommandBar"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignBottomWithPanel="True">
+                <TextBlock x:Uid="TutorialTextBlock" Style="{StaticResource TitleLargeTextBlockStyle}"/>
+                <Button x:Name="EnterTutorialButton" x:Uid="EnterTutorialButton" Click="EnterTutorialButton_Click"/>
+            </StackPanel>
         </RelativePanel>
     </Grid>
 </Page>

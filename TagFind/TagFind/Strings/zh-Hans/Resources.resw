@@ -259,7 +259,7 @@
     <value>文件夹搜索模式</value>
   </data>
   <data name="CurrentLayerSearchModeMenuFlyoutItem.Text" xml:space="preserve">
-    <value>Current layer search mode</value>
+    <value>层内搜索模式</value>
   </data>
   <data name="OrderByIDMenuFlyoutItem.Text" xml:space="preserve">
     <value>按ID排列</value>
@@ -278,5 +278,29 @@
   </data>
   <data name="ExitNavigationViewItem.Content" xml:space="preserve">
     <value>退出</value>
+  </data>
+  <data name="LanguageTextBlock.Text" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="TutorialTextBlock.Text" xml:space="preserve">
+    <value>教程</value>
+  </data>
+  <data name="EnterTutorialButton.Content" xml:space="preserve">
+    <value>进入教程</value>
+  </data>
+  <data name="Skip.String" xml:space="preserve">
+    <value>跳过</value>
+  </data>
+  <data name="Close.String" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="TutorialDatabaseOptionsTextBlock.Text" xml:space="preserve">
+    <value>在主页，你可以添加、创建数据库，并且可以删除数据库引用。</value>
+  </data>
+  <data name="TutorialDatabaseClickToOpenTextBlock.Text" xml:space="preserve">
+    <value>点击以打开数据库。</value>
+  </data>
+  <data name="TutorialDataItemExplorerOptionsTextBlock.Text" xml:space="preserve">
+    <value>在此页面，你可以切换搜索模式，添加、排序和选择数据项。添加的项目会保存到当前路径。</value>
   </data>
 </root>

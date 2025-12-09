@@ -179,7 +179,7 @@ namespace TagFind.Pages
             }
             else
             {
-                path = this.Path;
+                path = this.Path.Duplicate();
             }
             DataItemDetailPageNavigationParameter parameters = new()
             {

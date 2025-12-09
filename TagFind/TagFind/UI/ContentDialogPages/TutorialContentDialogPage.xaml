@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.UI.ContentDialogPages.TutorialContentDialogPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.UI.ContentDialogPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <FlipView Background="Transparent">
+        <StackPanel>
+            <Image Source="/Assets/Tutorial/TutorialManageDatabase_ver1.0.12.png"/>
+            <TextBlock x:Uid="TutorialDatabaseOptionsTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <Image Source="/Assets/Tutorial/TutorialOpenDatabase_ver1.0.12.png"/>
+            <TextBlock x:Uid="TutorialDatabaseClickToOpenTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <Image Source="/Assets/Tutorial/TTutorialDataItemExplorerOptions_ver1.0.12.png"/>
+            <TextBlock x:Uid="TutorialDataItemExplorerOptionsTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+    </FlipView>
+</Page>

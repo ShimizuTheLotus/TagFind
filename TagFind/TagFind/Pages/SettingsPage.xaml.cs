@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TagFind.UI.ContentDialogPages;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -39,6 +40,31 @@ namespace TagFind.Pages
         private void ThirdPartyAttributionButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(ThirdPartyAttributionPage));
+        }
+
+        private async void EnterTutorialButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog TutorialDialog = new();
+            TutorialDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            TutorialDialog.Title = GetLocalizedString("TutorialTextBlock/Text");
+            TutorialDialog.XamlRoot = this.XamlRoot;
+            TutorialDialog.PrimaryButtonText = GetLocalizedString("Close/String");
+            TutorialDialog.DefaultButton = ContentDialogButton.Primary;
+            TutorialDialog.Content = new TutorialContentDialogPage();
+
+            await TutorialDialog.ShowAsync();
+        }
+        public string GetLocalizedString(string key)
+        {
+            try
+            {
+                var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
+                return resourceLoader.GetString(key);
+            }
+            catch
+            {
+                return "{Resource Load Failed}";
+            }
         }
     }
 }

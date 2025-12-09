@@ -46,11 +46,11 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
         InitializeComponent();
         UpdateDatabaseList();
         DatabaseListView.RequestOpenDatabase += DatabaseListView_RequestOpenDatabase;
-        
     }
 
     private void DatabaseListView_RequestOpenDatabase(object sender, long ID)
     {
+        if (DatabaseInfoList.Count == 0) return;
         string path = DatabaseInfoList.First(x => x.ID == ID).Path;
         if (File.Exists(path))
         {
@@ -89,7 +89,14 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
     {
         DatabaseInfoList = [];
         _listManager.GetList(ref DatabaseInfoList);
-        DatabaseListView.DatabaseList = DatabaseInfoList;
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            try
+            {
+                DatabaseListView.DatabaseList = DatabaseInfoList;
+            }
+            catch { }
+        });
     }
 
     private async void AddDatabaseAppBarButton_Click(object sender, RoutedEventArgs e)
