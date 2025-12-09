@@ -186,7 +186,8 @@ namespace TagFind.Classes.DB
                     $"{new DataItems().ParentItemID} INTEGER NOT NULL," +
                     $"{new DataItems().Type} TEXT NOT NULL," +
                     $"{new DataItems().CreatedTime} INTEGER NOT NULL," +
-                    $"{new DataItems().ModifiedTime} INTEGER NOT NULL" +
+                    $"{new DataItems().ModifiedTime} INTEGER NOT NULL," +
+                    $"{new DataItems().Title} TEXT" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -403,133 +404,6 @@ namespace TagFind.Classes.DB
             }
 #endif
         }
-
-        //public async Task<ObservableCollection<DataItem>> DataItemsSearchViaSearchConditions(List<SearchCondition> searchConditions)
-        //{
-        //    await _lock.WaitAsync();
-        //    try
-        //    {
-        //        HashSet<DataItem> result = new(new DataItemEqualityComparer());
-
-        //        List<TextCondition> textConditions = searchConditions.OfType<TextCondition>().ToList();
-        //        List<TagCondition> tagConditions = searchConditions.OfType<TagCondition>().ToList();
-
-        //        // DataItemID, match counter, for checking if all conditions matched.
-        //        Dictionary<long, long> stringStringMatchCountDictionary = [];
-        //        Dictionary<long, long> tagMatchCountDictionary = [];
-
-        //        foreach (TextCondition textCondition in textConditions)
-        //        {
-        //            string _command =
-        //                $"SELECT * FROM {nameof(DataItemFastSearch)} " +
-        //                $"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText}";
-        //            SqliteCommand _SqliteCommand = new(_command, dbConnection);
-        //            _SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", textCondition.MainName);
-        //            using (SqliteDataReader reader = _SqliteCommand.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
-        //                    if (id == -1) continue;
-        //                    if (!stringStringMatchCountDictionary.ContainsKey(id)) stringStringMatchCountDictionary[id] = 0;
-        //                    stringStringMatchCountDictionary[id]++;
-        //                }
-        //            }
-        //        }
-
-        //        foreach (TagCondition tagCondition in tagConditions)
-        //        {
-        //            string _command =
-        //                $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
-        //                $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
-        //            SqliteCommand _SqliteCommand = new(_command, dbConnection);
-        //            _SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().TagID}", tagCondition.TagID);
-        //            using (SqliteDataReader reader = _SqliteCommand.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
-        //                    if (id == -1) continue;
-        //                    if (!tagMatchCountDictionary.ContainsKey(id)) tagMatchCountDictionary[id] = 0;
-        //                    tagMatchCountDictionary[id]++;
-        //                }
-        //            }
-        //        }
-
-        //        // Determine final set of IDs that satisfy all conditions
-        //        HashSet<long> finalIDs = new();
-
-        //        bool hasText = textConditions.Count > 0;
-        //        bool hasTag = tagConditions.Count > 0;
-
-        //        if (hasText && hasTag)
-        //        {
-        //            // IDs present in both dictionaries and meeting required counts
-        //            foreach (var kv in stringStringMatchCountDictionary)
-        //            {
-        //                long id = kv.Key;
-        //                if (kv.Value == textConditions.Count && tagMatchCountDictionary.TryGetValue(id, out var tagCount) && tagCount == tagConditions.Count)
-        //                {
-        //                    finalIDs.Add(id);
-        //                }
-        //            }
-        //        }
-        //        else if (hasText)
-        //        {
-        //            foreach (var kv in stringStringMatchCountDictionary)
-        //            {
-        //                if (kv.Value == textConditions.Count) finalIDs.Add(kv.Key);
-        //            }
-        //        }
-        //        else if (hasTag)
-        //        {
-        //            foreach (var kv in tagMatchCountDictionary)
-        //            {
-        //                if (kv.Value == tagConditions.Count) finalIDs.Add(kv.Key);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            // No recognizable conditions -> return empty
-        //            return [];
-        //        }
-
-        //        if (finalIDs.Count == 0) return [];
-
-        //        // Retrieve DataItems for the final IDs
-        //        // Build placeholders and parameters
-        //        var idList = finalIDs.ToList();
-        //        string[] paramNames = idList.Select((_, i) => $"@p{i}").ToArray();
-        //        string placeholders = string.Join(",", paramNames);
-
-        //        string selectCmd =
-        //            $"SELECT * FROM {nameof(DataItems)} " +
-        //            $"WHERE {new DataItems().ID} IN ({placeholders})";
-        //        SqliteCommand selectCommand = new(selectCmd, dbConnection);
-        //        for (int i = 0; i < idList.Count; i++)
-        //        {
-        //            selectCommand.Parameters.AddWithValue(paramNames[i], idList[i]);
-        //        }
-
-        //        HashSet<DataItem> dataItemsSet = new(new DataItemEqualityComparer());
-        //        using (SqliteDataReader reader = selectCommand.ExecuteReader())
-        //        {
-        //            // Reuse existing extension to populate DataItem objects
-        //            reader.DataItemsAddDataItemsFromReader(ref dataItemsSet, dbConnection, MessageManager);
-        //        }
-
-        //        return new ObservableCollection<DataItem>(dataItemsSet);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageManager.PushMessage(MessageType.Error, ex.Message);
-        //    }
-        //    finally
-        //    {
-        //        _lock.Release();
-        //    }
-        //    return [];
-        //}
 
         public async Task<ObservableCollection<DataItem>> DataItemsGetChildOfParentItemAsync(long parentDataItemID, bool useLock = true)
         {
@@ -1415,19 +1289,22 @@ namespace TagFind.Classes.DB
                     $"{new DataItems().ParentItemID}," +
                     $"{new DataItems().Type}," +
                     $"{new DataItems().CreatedTime}," +
-                    $"{new DataItems().ModifiedTime}" +
+                    $"{new DataItems().ModifiedTime}," +
+                    $"{new DataItems().Title}" +
                     $")" +
                     $"VALUES (" +
                     $"@{new DataItems().ParentItemID}," +
                     $"@{new DataItems().Type}," +
                     $"@{new DataItems().CreatedTime}," +
-                    $"@{new DataItems().ModifiedTime}" +
+                    $"@{new DataItems().ModifiedTime}," +
+                    $"@{new DataItems().Title}" +
                     $")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", dataItem.ParentID);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", dataItem.ItemType);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().CreatedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Title}", dataItem.Title);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Get data item ID
@@ -1503,13 +1380,15 @@ namespace TagFind.Classes.DB
                     $"SET " +
                     $"{new DataItems().ParentItemID} = @{new DataItems().ParentItemID}," +
                     $"{new DataItems().Type} = @{new DataItems().Type}," +
-                    $"{new DataItems().ModifiedTime} = @{new DataItems().ModifiedTime} " +
+                    $"{new DataItems().ModifiedTime} = @{new DataItems().ModifiedTime}," +
+                    $"{new DataItems().Title} = @{new DataItems().Title} " +
                     $"WHERE {new DataItems().ID} = @{new DataItems().ID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", dataItem.ParentID);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", dataItem.ItemType);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ID}", dataItem.ID);
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Title}", dataItem.Title);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Update tags
@@ -1824,13 +1703,15 @@ namespace TagFind.Classes.DB
                     $"{new DataItems().ParentItemID}," +
                     $"{new DataItems().Type}," +
                     $"{new DataItems().CreatedTime}," +
-                    $"{new DataItems().ModifiedTime}" +
+                    $"{new DataItems().ModifiedTime}," +
+                    $"{new DataItems().Title}" +
                     $")" +
                     $"VALUES (" +
                     $"@{new DataItems().ParentItemID}," +
                     $"@{new DataItems().Type}," +
                     $"@{new DataItems().CreatedTime}," +
-                    $"@{new DataItems().ModifiedTime}" +
+                    $"@{new DataItems().ModifiedTime}," +
+                    $"@{new DataItems().Title}" +
                     ")";
 
                 SqliteCommand SqliteCommand = new(command, dbConnection);
@@ -1838,6 +1719,7 @@ namespace TagFind.Classes.DB
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", sourceDataItem.ItemType);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().CreatedTime}", sourceDataItem.CreatedTime);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", sourceDataItem.ModifiedTime);
+                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Title}", sourceDataItem.Title);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Get data item ID

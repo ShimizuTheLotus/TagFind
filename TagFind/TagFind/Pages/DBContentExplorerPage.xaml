@@ -44,8 +44,38 @@
                         <AppBarButton x:Name="MoveAppBarButton" x:Uid="MoveAppBarButton" Icon="MoveToFolder"
                                   Click="MoveAppBarButton_Click"/>
                         <AppBarButton x:Name="DeleteAppBarButton" x:Uid="DeleteAppBarButton" Icon="Delete" Click="DeleteAppBarButton_Click"/>
-                        <AppBarButton x:Name="SortAppBarButton" x:Uid="SortAppBarButton" Icon="Sort"
-                                  Click="SortAppBarButton_Click"/>
+                        <AppBarButton x:Name="SortDirectionAppBarButton" x:Uid="SortAppBarButton" Click="SortDirectionAppBarButton_Click">
+                            <FontIcon x:Name="SortDirectionFontIcon" Glyph="&#xE74B;"/>
+                        </AppBarButton>
+                        <AppBarButton x:Name="OrderByAppBarButton">
+                            <AppBarButton.Icon>
+                                <FontIcon x:Name="OrderByModeFontIcon" Glyph="&#xE8FD;"/>
+                            </AppBarButton.Icon>
+                            <AppBarButton.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Name="OrderByIDMenuFlyoutItem" x:Uid="OrderByIDMenuFlyoutItem" Click="OrderByIDMenuFlyoutItem_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE8FD;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem x:Name="OrderByNameMenuFlyoutItem" x:Uid="OrderByNameMenuFlyoutItem" Click="OrderByNameMenuFlyoutItem_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xED1E;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem x:Name="OrderByCreatedTimeMenuFlyoutItem" x:Uid="OrderByCreatedTimeMenuFlyoutItem" Click="OrderByCreatedTimeMenuFlyoutItem_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE81C;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem x:Name="OrderByModifiedTimeMenuFlyoutItem" x:Uid="OrderByModifiedTimeMenuFlyoutItem" Click="OrderByModifiedTimeMenuFlyoutItem_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE823;"/>
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
                         <AppBarButton x:Name="SelectAppBarButton" x:Uid="SelectAppBarButton"
                                   Click="SelectAppBarButton_Click">
                             <AppBarButton.Icon>

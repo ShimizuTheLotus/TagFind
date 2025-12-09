@@ -41,6 +41,8 @@ namespace TagFind.Pages
 
         // Do not change the ID to -1, edit page won't allow edit when the path starts with -1.
         public ObservableCollection<ExplorerFolder> Path { get; set; } = [new() { Name = "Root", ID = 0 }];
+        SortDirectionEnum SortDirection { get; set; } = SortDirectionEnum.DESC;
+        SortModeEnum SortMode = SortModeEnum.ID;
 
         public DBContentExplorerPage()
         {
@@ -112,8 +114,8 @@ namespace TagFind.Pages
             //});
             SearchAndSortModeInfo searchAndSortModeInfo = new()
             {
-                SortDirection = SortDirectionEnum.ASC,
-                SortMode = SortModeEnum.ID,
+                SortDirection = SortDirection,
+                SortMode = this.SortMode,
                 TextMatchMode = TextMatchModeEnum.AllResults
             };
 
@@ -192,6 +194,14 @@ namespace TagFind.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            if (SortDirection == SortDirectionEnum.ASC)
+            {
+                SortDirectionFontIcon.Glyph = "\uE74B";
+            }
+            else
+            {
+                SortDirectionFontIcon.Glyph = "\uE74A";
+            }
 
             if (e.Parameter is DBContentManager manager)
             {   
@@ -274,9 +284,25 @@ namespace TagFind.Pages
 
         }
 
-        private void SortAppBarButton_Click(object sender, RoutedEventArgs e)
+        private void SortDirectionAppBarButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (SortDirection == SortDirectionEnum.ASC)
+            {
+                SortDirection = SortDirectionEnum.DESC;
+            }
+            else
+            {
+                SortDirection = SortDirectionEnum.ASC;
+            }
+            if (SortDirection == SortDirectionEnum.ASC)
+            {
+                SortDirectionFontIcon.Glyph = "\uE74B";
+            }
+            else
+            {
+                SortDirectionFontIcon.Glyph = "\uE74A";
+            }
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
         }
 
         private void SelectAppBarButton_Click(object sender, RoutedEventArgs e)
@@ -348,6 +374,34 @@ namespace TagFind.Pages
         {
             searchConditions.Add(condition);
             ConditionTokenizedSuggestBox.ApplyConditions(searchConditions);
+        }
+
+        private void OrderByIDMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            OrderByModeFontIcon.Glyph = "\uE8FD";
+            SortMode = SortModeEnum.ID;
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
+        }
+
+        private void OrderByNameMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            OrderByModeFontIcon.Glyph = "\uED1E";
+            SortMode = SortModeEnum.Title;
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
+        }
+
+        private void OrderByCreatedTimeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            OrderByModeFontIcon.Glyph = "\uE81C";
+            SortMode = SortModeEnum.CreatedTime;
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
+        }
+
+        private void OrderByModifiedTimeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            OrderByModeFontIcon.Glyph = "\uE823";
+            SortMode = SortModeEnum.ModifiedTime;
+            ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
         }
     }
 }

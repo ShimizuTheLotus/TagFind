@@ -261,4 +261,19 @@
   <data name="CurrentLayerSearchModeMenuFlyoutItem.Text" xml:space="preserve">
     <value>Current layer search mode</value>
   </data>
+  <data name="OrderByIDMenuFlyoutItem.Text" xml:space="preserve">
+    <value>按ID排列</value>
+  </data>
+  <data name="OrderByNameMenuFlyoutItem.Text" xml:space="preserve">
+    <value>按名称排列</value>
+  </data>
+  <data name="OrderByCreatedTimeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>按创建时间排列</value>
+  </data>
+  <data name="OrderByModifiedTimeMenuFlyoutItem.Text" xml:space="preserve">
+    <value>按修改时间排列</value>
+  </data>
+  <data name="Ascending.String" xml:space="preserve">
+    <value>升序</value>
+  </data>
 </root>

@@ -36,7 +36,7 @@ namespace TagFind.Classes.DataTypes
         public class TagEditPageNavigationParameter : PageNavigateParameter, IDBContentManagerParameter, ITagParameter
         {
             public DBContentManager? DBContentManager { get; set; }
-            public Tag Tag { get; set; }
+            public Tag Tag { get; set; } = new();
         }
     }
 }
