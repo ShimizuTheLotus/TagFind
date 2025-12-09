@@ -276,4 +276,7 @@
   <data name="Ascending.String" xml:space="preserve">
     <value>升序</value>
   </data>
+  <data name="ExitNavigationViewItem.Content" xml:space="preserve">
+    <value>退出</value>
+  </data>
 </root>

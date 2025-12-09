@@ -54,6 +54,11 @@ namespace TagFind.Pages
                 if (args.SelectedItem is NavigationViewItem selectedItem)
                 {
                     string selectedItemTag = selectedItem?.Tag?.ToString() ?? string.Empty;
+                    if (selectedItemTag == "Exit")
+                    {
+                        Frame.GoBack();
+                        return;
+                    }
                     string pageName = "TagFind.Pages." + selectedItemTag;
                     Type? pageType = Type.GetType(pageName);
                     if (pageType != null)

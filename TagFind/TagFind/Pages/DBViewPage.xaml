@@ -19,6 +19,13 @@
                 <NavigationViewItem x:Uid="DBTagEditPageNavigationViewItem" Icon="Tag" Tag="DBTagPoolPage"/>
                 <!--<NavigationViewItem x:Uid="DBContentEditPageNavigationViewItem" Icon="Edit" Tag="DBContentEditPage"/>-->
             </NavigationView.MenuItems>
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem x:Uid="ExitNavigationViewItem" Tag="Exit">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xF3B1;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
             <Frame x:Name="ContentFrame" IsTabStop="True"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.Below="TitleBarGrid"
