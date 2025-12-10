@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using TagFind.Classes.DataTypes;
 using TagFind.Classes.DB;
 using TagFind.Interfaces.IPageNavigationParameter;
@@ -36,6 +37,13 @@ namespace TagFind.Pages
             InitializeComponent();
             TagSearchAutoSuggestBox.TextChanged += TagSearchAutoSuggestBox_TextChanged;
             TagSearchAutoSuggestBox.QuerySubmitted += TagSearchAutoSuggestBox_QuerySubmitted;
+            this.Loaded += DBTagPoolPage_Loaded;
+        }
+
+        private async void DBTagPoolPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            await Task.Delay(1000);
+            await GetTagList();
         }
 
         private void TagSearchAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -52,17 +60,17 @@ namespace TagFind.Pages
             }
         }
 
-        private void TagSearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private async void TagSearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            GetTagList();
+            await GetTagList();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (ContentManager.Connected)
             {
-                GetTagList();
+                await GetTagList();
             }
             if (e.Parameter is DBContentManager manager)
             {
@@ -71,7 +79,7 @@ namespace TagFind.Pages
                 {
                     manager.OpenDB();
                 }
-                GetTagList();
+                await GetTagList();
             }
             if (e.Parameter is IDBContentManagerParameter dBContentManagerParameter)
             {
@@ -82,12 +90,12 @@ namespace TagFind.Pages
                     {
                         ContentManager.OpenDB();
                     }
-                    GetTagList();
+                    await GetTagList();
                 }
             }
         }
 
-        public async void GetTagList()
+        public async Task GetTagList()
         {
             ObservableCollection<Tag> tagList = [];
             if (ContentManager != null)
@@ -102,7 +110,12 @@ namespace TagFind.Pages
 
             DispatcherQueue.TryEnqueue(() =>
             {
-                TagListListView.ItemsSource = tagList;
+                if (TagListListView == null) return;
+                try
+                {
+                    TagListListView.ItemsSource = tagList;
+                }
+                catch { }
             });
         }
 

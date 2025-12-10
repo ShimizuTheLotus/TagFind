@@ -191,7 +191,7 @@ namespace TagFind.Pages
             Frame.Navigate(typeof(DBContentDetailPage), parameters);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             if (SortDirection == SortDirectionEnum.ASC)
@@ -210,7 +210,7 @@ namespace TagFind.Pages
                 {
                     manager.OpenDB();
                 }
-                UpdateContentList();
+                await UpdateContentList();
             }
             if (e.Parameter is IDBContentManagerParameter dBContentManagerParameter)
             {
@@ -221,7 +221,7 @@ namespace TagFind.Pages
                     {
                         ContentManager.OpenDB();
                     }
-                    UpdateContentList();
+                    await UpdateContentList();
                 }
             }
             if (e.Parameter is ISearchConditionsParameter searchConditionsParameter)
@@ -235,7 +235,7 @@ namespace TagFind.Pages
             }
         }
 
-        private async void UpdateContentList()
+        private async Task UpdateContentList()
         {
             if (ContentManager != null && ContentManager.Connected)
             {
@@ -353,7 +353,7 @@ namespace TagFind.Pages
             if (ContentManager != null)
             {
                 await ContentManager.DataItemBatchDelete(rootIDsToDelete, removeChildItems);
-                UpdateContentList();
+                await UpdateContentList();
             }
         }
 
