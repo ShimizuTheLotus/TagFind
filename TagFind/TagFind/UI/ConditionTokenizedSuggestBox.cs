@@ -122,32 +122,7 @@ namespace TagFind.UI
                     };
                     conditions.Add(textCondition);
                 }
-                //else
-                //{
-                //    if (item != null)
-                //    {
-                //        try
-                //        {
-                //            dynamic dy = item;
-                //            if (dy.Text != null)
-                //            {
-                //                TextCondition textCondition = new()
-                //                {
-                //                    MainName = dy.Text
-                //                };
-                //                conditions.Add(textCondition);
-                //            }
-                //        }
-                //        catch
-                //        {
-                //            TextCondition textCondition = new()
-                //            {
-                //                MainName = item.ToString() ?? string.Empty
-                //            };
-                //            conditions.Add(textCondition);
-                //        }
-                //    }
-                //}
+
             }
             SearchConditions = conditions;
         }
