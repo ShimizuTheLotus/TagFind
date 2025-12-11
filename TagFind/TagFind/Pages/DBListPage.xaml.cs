@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using TagFind.Classes;
@@ -169,6 +170,7 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
         var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
         // DO NOT USE Windows.Storage.Pickers since it cant open without filter
         var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(windowId);
+        picker.FileTypeFilter.Add(".tdb");
 
         PickFileResult file = await picker.PickSingleFileAsync();
         if (file != null)
@@ -187,5 +189,6 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
                 }
             }
         }
+        Marshal.CleanupUnusedObjectsInCurrentContext();
     }
 }

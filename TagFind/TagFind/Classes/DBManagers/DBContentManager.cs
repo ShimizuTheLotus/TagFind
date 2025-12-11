@@ -797,6 +797,7 @@ namespace TagFind.Classes.DB
         public async IAsyncEnumerable<DataItem> DataItemSearchViaSearchConditionsIterativeAsync(ObservableCollection<SearchCondition> searchConditions, DataItemSearchConfig dataItemSearchConfig, SearchAndSortModeInfo SearchAndSortMode, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await _lock.WaitAsync();
+
             try
             {
                 List<DataItem> emptyResult = [];
@@ -1068,7 +1069,7 @@ namespace TagFind.Classes.DB
                             }
                             if (hasTag)
                             {
-                                _commandBuilder.Append($"AND {nameof(DataItemFastSearch.DataItemID)} IN {itemIDPlaceholderText}");
+                                _commandBuilder.Append($"AND {nameof(DataItemFastSearch.DataItemID)} IN ({itemIDPlaceholderText})");
                             }
 
                             SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
@@ -1083,8 +1084,11 @@ namespace TagFind.Classes.DB
                             }
                             if (hasTag)
                             {
-                                for (int i = 0; i < itemIDPlaceholders.Count(); i++)
-                                    _cmd.Parameters.AddWithValue(itemIDPlaceholders[i], itemIDsFitTagConditions[i]);
+                                if (itemIDPlaceholders.Count() > 0)
+                                {
+                                    for (int i = 0; i < itemIDPlaceholders.Count(); i++)
+                                        _cmd.Parameters.AddWithValue(itemIDPlaceholders[i], itemIDsFitTagConditions[i]);
+                                }
                             }
 
                             using (SqliteDataReader subReader = _cmd.ExecuteReader())
@@ -1117,7 +1121,7 @@ namespace TagFind.Classes.DB
                             }
                             if (hasTag)
                             {
-                                _commandBuilder.Append($"AND {nameof(DataItemFastSearch.DataItemID)} IN {itemIDPlaceholderText}");
+                                _commandBuilder.Append($"AND {nameof(DataItemFastSearch.DataItemID)} IN ({itemIDPlaceholderText})");
                             }
 
                             SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
@@ -1132,8 +1136,11 @@ namespace TagFind.Classes.DB
                             }
                             if (hasTag)
                             {
-                                for (int i = 0; i < itemIDPlaceholders.Count(); i++)
-                                    _cmd.Parameters.AddWithValue(itemIDPlaceholders[i], itemIDsFitTagConditions[i]);
+                                if (itemIDPlaceholders.Count() > 0)
+                                {
+                                    for (int i = 0; i < itemIDPlaceholders.Count(); i++)
+                                        _cmd.Parameters.AddWithValue(itemIDPlaceholders[i], itemIDsFitTagConditions[i]);
+                                }
                             }
 
                             using (SqliteDataReader subReader = _cmd.ExecuteReader())
@@ -1200,14 +1207,17 @@ namespace TagFind.Classes.DB
                        $"WHERE {nameof(DataItems.ID)} IN ({pathMatchIDPlaceHolderText}) " +
                        $"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}";
                     SqliteCommand sqliteCommand = new(selectCmd, dbConnection);
-                    for (int i = 0; i < itemIDPlaceholders.Count(); i++)
-                        sqliteCommand.Parameters.AddWithValue(pathMatchIDPlaceHolders[i], pathMatchID[i]);
-                    SqliteDataReader reader = sqliteCommand.ExecuteReader();
-                    while (reader.Read())
+                    if (pathMatchIDPlaceHolders.Count() > 0)
                     {
-                        yield return await DataItemGetByID(reader.GetInt64(0));
+                        for (int i = 0; i < pathMatchIDPlaceHolders.Count(); i++)
+                            sqliteCommand.Parameters.AddWithValue(pathMatchIDPlaceHolders[i], pathMatchID[i]);
+                        SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            yield return await DataItemGetByID(reader.GetInt64(0));
+                        }
+                        yield break;
                     }
-                    yield break;
                 }
                 else
                 {
@@ -1258,12 +1268,15 @@ namespace TagFind.Classes.DB
                         selectCmd.Append($"WHERE {new DataItems().ID} IN ({pathMatchIDPlaceHolderText}) ");
                     selectCmd.Append($"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}");
                     SqliteCommand sqliteCommand = new(selectCmd.ToString(), dbConnection);
-                    for (int i = 0; i < itemIDPlaceholders.Count(); i++)
-                        sqliteCommand.Parameters.AddWithValue(pathMatchIDPlaceHolders[i], pathMatchID[i]);
-                    SqliteDataReader reader = sqliteCommand.ExecuteReader();
-                    while (reader.Read())
+                    if (itemIDPlaceholders.Count() > 0)
                     {
-                        yield return await DataItemGetByID(reader.GetInt64(0));
+                        for (int i = 0; i < itemIDPlaceholders.Count(); i++)
+                            sqliteCommand.Parameters.AddWithValue(pathMatchIDPlaceHolders[i], pathMatchID[i]);
+                        SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            yield return await DataItemGetByID(reader.GetInt64(0));
+                        }
                     }
                 }
             }
