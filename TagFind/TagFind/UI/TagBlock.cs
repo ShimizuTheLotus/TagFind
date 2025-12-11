@@ -94,7 +94,15 @@ namespace TagFind.UI
             this.PointerExited += TagBlock_PointerExited;
             this.PointerPressed += TagBlock_PointerPressed;
             this.PointerReleased += TagBlock_PointerReleased;
+            this.Tapped += TagBlock_Tapped;
         }
+
+        private void TagBlock_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            // Avoid bubble events.
+            e.Handled = true;
+        }
+
         public void Clicked()
         {
             if (_tagID == -1) return;
@@ -124,6 +132,7 @@ namespace TagFind.UI
         {
             VisualStateManager.GoToState(this, "Pressed", true);
             _pointerPressedTime = DateTime.Now;
+            e.Handled = true;
         }
 
         private void TagBlock_PointerExited(object sender, PointerRoutedEventArgs e)

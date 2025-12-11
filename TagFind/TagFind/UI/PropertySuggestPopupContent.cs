@@ -128,9 +128,15 @@ namespace TagFind.UI
         public void FocusAtIndex(int index)
         {
             if (_listView == null) return;
-            var item = _listView.Items[index];
-            var listViewItem = _listView.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
-            listViewItem?.Focus(FocusState.Keyboard);
+            // WPF
+            //var item = _listView.Items[index];
+            //var listViewItem = _listView.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
+            //listViewItem?.Focus(FocusState.Keyboard);
+
+            // WinUI
+            _listView.SelectionChanged -= _listView_SelectionChanged;
+            _listView.SelectedIndex = index;
+            _listView.SelectionChanged += _listView_SelectionChanged;
         }
     }
 }

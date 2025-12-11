@@ -20,7 +20,7 @@ namespace TagFind.Interfaces.IPageNavigationParameter
             ObservableCollection<ExplorerFolder> result = [];
             foreach (var item in stack)
             {
-                result.Append(item);
+                result.Add(item);
             }
             return result;
         }

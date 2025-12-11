@@ -15,7 +15,7 @@
                         SelectionChanged="NavigationView_SelectionChanged"
                         IsPaneOpen="False">
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="DBContentExplorerPageNavigationViewItem" Icon="ShowResults" Tag="DBContentExplorerPage" />
+                <NavigationViewItem x:Uid="DBContentExplorerPageNavigationViewItem" Icon="ShowResults" Tag="DBContentExplorerPage" IsSelected="True"/>
                 <NavigationViewItem x:Uid="DBTagEditPageNavigationViewItem" Icon="Tag" Tag="DBTagPoolPage"/>
                 <!--<NavigationViewItem x:Uid="DBContentEditPageNavigationViewItem" Icon="Edit" Tag="DBContentEditPage"/>-->
             </NavigationView.MenuItems>

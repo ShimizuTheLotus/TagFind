@@ -146,35 +146,44 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:DataItemEditor">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <StackPanel>
-                            <CommandBar>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <RelativePanel>
+                            <CommandBar x:Name="PART_CommandBar"
+                                        RelativePanel.AlignLeftWithPanel="True"
+                                        RelativePanel.AlignTopWithPanel="True"
+                                        RelativePanel.AlignRightWithPanel="True">
                                 <AppBarButton x:Name="PART_SaveContentButton" x:Uid="SaveButton" Icon="Save"/>
                                 <AppBarButton x:Name="PART_NewContentButton" x:Uid="AddAppBarButton" Icon="Add"/>
                             </CommandBar>
-                            <TextBlock x:Uid="TitleTextBlock"
-                                   Style="{StaticResource TitleTextBlockStyle}"
-                                       TextWrapping="WrapWholeWords"/>
-                            <TextBox x:Name="PART_TitleTextBox"/>
-                            <TextBlock x:Uid="DescriptionTextBlock"
-                                   Style="{StaticResource TitleTextBlockStyle}"/>
-                            <TextBox x:Name="PART_DescriptionTextBox"
-                                     AcceptsReturn="True"
-                                     TextWrapping="Wrap"/>
-                            <TextBlock x:Uid="ReferencedFilePathTextBlock"
-                                       Style="{StaticResource TitleTextBlockStyle}"/>
-                            <RelativePanel>
-                                <TextBlock x:Name="PART_ReferencedFilePathTextBlock" TextWrapping="Wrap"/>
-                                <StackPanel RelativePanel.AlignRightWithPanel="True">
-                                    <Button x:Name="PART_SelectFileButton" x:Uid="SelectFileButton"/>
-                                    <Button x:Name="PART_RemoveReferenceButton" x:Uid="RemoveReferenceButton"/>
+                            <ScrollViewer RelativePanel.AlignLeftWithPanel="True"
+                                          RelativePanel.Below="PART_CommandBar"
+                                          RelativePanel.AlignRightWithPanel="True"
+                                          RelativePanel.AlignBottomWithPanel="True">
+                                <StackPanel>
+                                    <TextBlock x:Uid="TitleTextBlock"
+                                               Style="{StaticResource TitleTextBlockStyle}"
+                                               TextWrapping="WrapWholeWords"/>
+                                    <TextBox x:Name="PART_TitleTextBox"/>
+                                    <TextBlock x:Uid="DescriptionTextBlock"
+                                               Style="{StaticResource TitleTextBlockStyle}"/>
+                                    <TextBox x:Name="PART_DescriptionTextBox"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"/>
+                                    <TextBlock x:Uid="ReferencedFilePathTextBlock"
+                                               Style="{StaticResource TitleTextBlockStyle}"/>
+                                    <RelativePanel>
+                                        <TextBlock x:Name="PART_ReferencedFilePathTextBlock" TextWrapping="Wrap"/>
+                                        <StackPanel RelativePanel.AlignRightWithPanel="True">
+                                            <Button x:Name="PART_SelectFileButton" x:Uid="SelectFileButton"/>
+                                            <Button x:Name="PART_RemoveReferenceButton" x:Uid="RemoveReferenceButton"/>
+                                        </StackPanel>
+                                    </RelativePanel>
+                                    <local:DataItemTagListEditor x:Name="PART_TagListEditor"/>
                                 </StackPanel>
-                            </RelativePanel>
-                            <local:DataItemTagListEditor x:Name="PART_TagListEditor"/>
-                        </StackPanel>
+                            </ScrollViewer>
+                        </RelativePanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -404,6 +413,11 @@
     </Style>
 
     <Style TargetType="local:PropertySuggestPopupContent">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ThemeResource ResourceKey="ApplicationPageBackgroundThemeBrush"/>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:PropertySuggestPopupContent">

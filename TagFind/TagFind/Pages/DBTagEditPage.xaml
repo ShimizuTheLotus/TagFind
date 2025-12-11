@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
+    x:Name="Page"
     x:Class="TagFind.Pages.DBTagEditPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,8 +10,11 @@
     xmlns:ui="using:TagFind.UI"
     mc:Ignorable="d">
 
-    <StackPanel Margin="0 48 0 0">
-        <CommandBar>
+    <RelativePanel Margin="0 48 0 0">
+        <CommandBar x:Name="CommandBar"
+                    RelativePanel.AlignLeftWithPanel="True"
+                    RelativePanel.AlignTopWithPanel="True"
+                    RelativePanel.AlignRightWithPanel="True">
             <AppBarButton x:Name="SaveButton"
                               x:Uid="SaveButton"
                               Click="SaveButton_Click"
@@ -24,13 +28,12 @@
                           Click="DeleteButton_Click"
                           Icon="Delete"/>
         </CommandBar>
-        <StackPanel>
-            <StackPanel>
-                <ScrollViewer Padding="16">
-                    <ui:TagEditor x:Name="TagEditor"/>
-                </ScrollViewer>
-
-            </StackPanel>
-        </StackPanel>
-    </StackPanel>
+        <ScrollViewer Padding="16"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.Below="CommandBar"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.AlignBottomWithPanel="True">
+            <ui:TagEditor x:Name="TagEditor"/>
+        </ScrollViewer>
+    </RelativePanel>
 </Page>
