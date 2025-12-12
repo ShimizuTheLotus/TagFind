@@ -77,7 +77,7 @@ namespace TagFind.UI
 
         private void _addDataItemButton_Click(object sender, RoutedEventArgs e)
         {
-            _itemTags.Add(new());
+            ItemTags.Add(new());
             UpdateUI();
         }
 

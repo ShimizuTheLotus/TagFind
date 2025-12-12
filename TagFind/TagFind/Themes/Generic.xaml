@@ -180,6 +180,8 @@
                                             <Button x:Name="PART_RemoveReferenceButton" x:Uid="RemoveReferenceButton"/>
                                         </StackPanel>
                                     </RelativePanel>
+                                    <TextBlock x:Uid="TagsTextBlock"
+                                               Style="{StaticResource TitleTextBlockStyle}"/>
                                     <local:DataItemTagListEditor x:Name="PART_TagListEditor"/>
                                 </StackPanel>
                             </ScrollViewer>

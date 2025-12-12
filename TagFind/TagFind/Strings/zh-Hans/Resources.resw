@@ -303,4 +303,57 @@
   <data name="TutorialDataItemExplorerOptionsTextBlock.Text" xml:space="preserve">
     <value>在此页面，你可以切换搜索模式，添加、排序和选择数据项。添加的项目会保存到当前路径。</value>
   </data>
+  <data name="TutorialDatabaseOptionsTitleTextBlock.Text" xml:space="preserve">
+    <value>管理数据库</value>
+  </data>
+  <data name="TutorialDatabaseClickToOpenTitleTextBlock.Text" xml:space="preserve">
+    <value>打开数据库</value>
+  </data>
+  <data name="TutorialDataItemExplorerOptionsTitleTextBlock.Text" xml:space="preserve">
+    <value>数据浏览页</value>
+  </data>
+  <data name="TutorialSearchModeTitleTextBlock.Text" xml:space="preserve">
+    <value>搜索模式</value>
+  </data>
+  <data name="TutorialSearchModeTextBlock.Text" xml:space="preserve">
+    <value>使用此按钮可以切换搜索模式。搜索模式有三种，全局，文件夹和当前层模式。
+全局搜索模式可以在所有数据项中搜索，包括没有连接到根文件夹的数据项。
+文件夹搜索模式可以在当前路径和当前路径数据项的子项中搜索。
+当前层搜索模式只能在当前的路径中搜索。</value>
+  </data>
+  <data name="TutorialSearchConditionsTitleTextBlock.Text" xml:space="preserve">
+    <value>搜素条件</value>
+  </data>
+  <data name="TutorialSearchConditionsTextBlock.Text" xml:space="preserve">
+    <value>条件搜索利用token搜索数据项。如果你希望搜索标签，在搜索框输入，它会显示匹配的标签。选择标签以添加标签条件。如果你希望搜索文本内容，在搜索框输入文字后按Enter键来将它作为文本条件提交。只有满足所有条件的项目会显示在搜索结果中。</value>
+  </data>
+  <data name="TutorialTagPoolTitleTextBlock.Text" xml:space="preserve">
+    <value>标签池</value>
+  </data>
+  <data name="TutorialTagPoolTextBlock.Text" xml:space="preserve">
+    <value>在标签池你可以管理和搜索标签。点击”新建“按钮可以添加新的标签。点击标签可以查看详细信息，并可以修改和删除它。
+注意：移除标签会同时移除它的所有引用。删除标签之前请三思，此操作不可恢复。</value>
+  </data>
+  <data name="TutorialTagProportiesTitleTextBlock.Text" xml:space="preserve">
+    <value>标签属性</value>
+  </data>
+  <data name="TutorialTagProportiesTextBlock.Text" xml:space="preserve">
+    <value>标签属性描述了一个标签的抽象属性。在编辑数据项时我们可以用具体的标签填充</value>
+  </data>
+  <data name="TutorialTagLogicChainsTitleTextBlock.Text" xml:space="preserve">
+    <value>逻辑链</value>
+  </data>
+  <data name="TutorialTagLogicChainsTextBlock.Text" xml:space="preserve">
+    <value>逻辑链描述了标签和其它标签之间的逻辑关系。
+提示：如果不同的事物有相同的名称，请把它们分成不同的标签，而不是共用一个标签。例如杜鹃（花）和杜鹃（鸟）。</value>
+  </data>
+  <data name="TagsTextBlock.Text" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="TutorialEditDataItemTagsTitleTextBlock.Text" xml:space="preserve">
+    <value>数据项标签</value>
+  </data>
+  <data name="TutorialEditDataItemTagsTextBlock.Text" xml:space="preserve">
+    <value>你可以编辑数据项的标签，并且用其它标签填充它们的空位（这不是必要的）。</value>
+  </data>
 </root>

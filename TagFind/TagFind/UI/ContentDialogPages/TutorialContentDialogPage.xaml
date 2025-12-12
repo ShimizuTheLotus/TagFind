@@ -8,18 +8,56 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <FlipView Background="Transparent">
+    <FlipView Background="Transparent" Padding="16 0 16 0">
         <StackPanel>
+            <TextBlock x:Uid="TutorialDatabaseOptionsTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
             <Image Source="/Assets/Tutorial/TutorialManageDatabase_ver1.0.12.png"/>
             <TextBlock x:Uid="TutorialDatabaseOptionsTextBlock" TextWrapping="WrapWholeWords"/>
         </StackPanel>
         <StackPanel>
+            <TextBlock x:Uid="TutorialDatabaseClickToOpenTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
             <Image Source="/Assets/Tutorial/TutorialOpenDatabase_ver1.0.12.png"/>
             <TextBlock x:Uid="TutorialDatabaseClickToOpenTextBlock" TextWrapping="WrapWholeWords"/>
         </StackPanel>
         <StackPanel>
-            <Image Source="/Assets/Tutorial/TTutorialDataItemExplorerOptions_ver1.0.12.png"/>
+            <TextBlock x:Uid="TutorialDataItemExplorerOptionsTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialDataItemExplorerOptions_ver1.0.12.png"/>
             <TextBlock x:Uid="TutorialDataItemExplorerOptionsTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock x:Uid="TutorialSearchModeTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialSearchMode_ver1.0.37.png"/>
+            <TextBlock x:Uid="TutorialSearchModeTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock x:Uid="TutorialSearchConditionsTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialSearchConditions_1_ver1.0.37.png"/>
+            <TextBlock x:Uid="TutorialSearchConditionsTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock x:Uid="TutorialSearchConditionsTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialSearchConditions_2_ver1.0.37.png"/>
+            <TextBlock x:Uid="TutorialSearchConditionsTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock x:Uid="TutorialTagPoolTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialTagPool_ver1.0.37.png"/>
+            <TextBlock x:Uid="TutorialTagPoolTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock x:Uid="TutorialTagProportiesTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialTagProporties_ver1.0.37.png"/>
+            <TextBlock x:Uid="TutorialTagProportiesTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock x:Uid="TutorialTagLogicChainsTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialLogicChains_ver1.0.37.png"/>
+            <TextBlock x:Uid="TutorialTagLogicChainsTextBlock" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <StackPanel>
+            <TextBlock x:Uid="TutorialEditDataItemTagsTitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 0 0 16" TextWrapping="WrapWholeWords"/>
+            <Image Source="/Assets/Tutorial/TutorialDataItemTags_ver1.0.37.png"/>
+            <TextBlock x:Uid="TutorialEditDataItemTagsTextBlock" TextWrapping="WrapWholeWords"/>
         </StackPanel>
     </FlipView>
 </Page>

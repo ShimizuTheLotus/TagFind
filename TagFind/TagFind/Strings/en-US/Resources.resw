@@ -303,4 +303,57 @@
   <data name="TutorialDataItemExplorerOptionsTextBlock.Text" xml:space="preserve">
     <value>You can change search mode, add, sort and select items in this page. Items added will be saved in current directory.</value>
   </data>
+  <data name="TutorialDatabaseOptionsTitleTextBlock.Text" xml:space="preserve">
+    <value>Manage Databases</value>
+  </data>
+  <data name="TutorialDatabaseClickToOpenTitleTextBlock.Text" xml:space="preserve">
+    <value>Open Database</value>
+  </data>
+  <data name="TutorialDataItemExplorerOptionsTitleTextBlock.Text" xml:space="preserve">
+    <value>Data Item Explorer</value>
+  </data>
+  <data name="TutorialSearchModeTitleTextBlock.Text" xml:space="preserve">
+    <value>Search Mode</value>
+  </data>
+  <data name="TutorialSearchModeTextBlock.Text" xml:space="preserve">
+    <value>The search mode can be changed using this button. There's 3 search modes: global, folder and layer.
+The gobal search mode can search all data items in the database, including the items haven't connected to the root folder.
+The folder search mode can search items in current path and subitems of items in the path.
+The layer search mode can only search in current path.</value>
+  </data>
+  <data name="TutorialSearchConditionsTitleTextBlock.Text" xml:space="preserve">
+    <value>Search Conditions</value>
+  </data>
+  <data name="TutorialSearchConditionsTextBlock.Text" xml:space="preserve">
+    <value>Conditional search uses tokens to search data items. If you want to search a tag, input in the search box and it will show you matched tags. Select a tag to add a tag condition. If you want to search text content, input text and then press Enter key to submit the text as a text condition. Only results match all the results will be shown.</value>
+  </data>
+  <data name="TutorialTagPoolTitleTextBlock.Text" xml:space="preserve">
+    <value>Tag Pool</value>
+  </data>
+  <data name="TutorialTagPoolTextBlock.Text" xml:space="preserve">
+    <value>Tag Pool is where you can manage and search tags. Press add button to add a new tag. Click a tag to view detail, modify and remove it.
+Caution: Remove a tag will remove all its reference. Think twice before you remove a tag. It's irreversible.</value>
+  </data>
+  <data name="TutorialTagProportiesTitleTextBlock.Text" xml:space="preserve">
+    <value>Tag Proporties</value>
+  </data>
+  <data name="TutorialTagProportiesTextBlock.Text" xml:space="preserve">
+    <value>Tag proporties describes an abstract property of a tag. We can use a specific tag to fill it when editing a data item.</value>
+  </data>
+  <data name="TutorialTagLogicChainsTitleTextBlock.Text" xml:space="preserve">
+    <value>Logic Chains</value>
+  </data>
+  <data name="TutorialTagLogicChainsTextBlock.Text" xml:space="preserve">
+    <value>Logic chains describe the logical relation of a tag and other tags.
+Tips: If different things has same name, we recommend separate them into different tagss rather than use one tag to represent them. Such as kiwi(fruit) and kiwi(bird).</value>
+  </data>
+  <data name="TagsTextBlock.Text" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TutorialEditDataItemTagsTitleTextBlock.Text" xml:space="preserve">
+    <value>Data Item Tags</value>
+  </data>
+  <data name="TutorialEditDataItemTagsTextBlock.Text" xml:space="preserve">
+    <value>You can edit tags of a data item using tags and use specific tags to fill their proporty spaces(It's not necessary).</value>
+  </data>
 </root>

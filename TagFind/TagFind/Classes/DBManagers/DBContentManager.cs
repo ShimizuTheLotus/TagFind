@@ -1656,6 +1656,7 @@ namespace TagFind.Classes.DB
                     $"WHERE {new ItemTags().ItemID} = @{new ItemTags().ItemID}";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ItemID}", ID);
+                SqliteCommand.ExecuteNonQuery();
             }
 #if !DEBUG
             catch (Exception ex)

@@ -173,6 +173,7 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
         picker.FileTypeFilter.Add(".tdb");
 
         PickFileResult file = await picker.PickSingleFileAsync();
+        window.Close();
         if (file != null)
         {
             string filePath = file.Path;
@@ -189,6 +190,5 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
                 }
             }
         }
-        Marshal.CleanupUnusedObjectsInCurrentContext();
     }
 }

@@ -43,6 +43,7 @@ namespace TagFind.UI.ContentDialogPages
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
             Microsoft.Windows.Storage.Pickers.FolderPicker folderPicker = new(windowId);
             var result = await folderPicker.PickSingleFolderAsync();
+            window.Close();
             if (result != null)
             {
                 SelectedFolderForCreatingDatabasePath = result.Path;

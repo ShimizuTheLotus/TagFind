@@ -122,6 +122,7 @@ namespace TagFind.UI
             var picker = new Microsoft.Windows.Storage.Pickers.FileOpenPicker(windowId);
 
             PickFileResult file = await picker.PickSingleFileAsync();
+            window.Close();
             if (file != null)
             {
                 _editedDataItem.RefPath = file.Path;

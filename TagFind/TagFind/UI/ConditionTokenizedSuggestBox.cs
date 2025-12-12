@@ -34,8 +34,6 @@ namespace TagFind.UI
     {
         private TokenizingTextBox? _tokenizingTextBox;
 
-        AutoSuggestBox? referencedAutoSuggestBox;
-
         public ObservableCollection<SearchCondition> SearchConditions = [];
 
         ObservableCollection<Tag> suggestedTags = [];
@@ -154,7 +152,6 @@ namespace TagFind.UI
 
         private async void _tokenizingTextBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            referencedAutoSuggestBox = sender;
             DBContentManager? contentManager = GetContentManager();
             if (contentManager != null)
             {

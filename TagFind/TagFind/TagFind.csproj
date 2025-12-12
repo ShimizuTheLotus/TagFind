@@ -34,6 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Assets\Tutorial\TutorialTagProporties_ver1.0.37.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Strings\Neutral\Resources.Designer.cs">
       <DependentUpon>Resources.resw</DependentUpon>
       <DesignTime>True</DesignTime>
