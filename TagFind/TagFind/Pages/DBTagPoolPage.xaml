@@ -36,7 +36,7 @@
                         <Grid>
                             <StackPanel>
                                 <TextBlock Text="{Binding MainName}"/>
-                                <!--<ListView ItemsSource="{Binding LogicChains}" IsHitTestVisible="False">
+                                <ListView ItemsSource="{Binding LogicChains}" IsHitTestVisible="False">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <ui:LogicChainPanel ItemsSource="{Binding LogicChainData}">
@@ -51,7 +51,7 @@
                                             <ui:TagBlock TagName="{Binding}"/>
                                         </DataTemplate>
                                     </ui:TagsWrapPanel.ItemTemplate>
-                                </ui:TagsWrapPanel>-->
+                                </ui:TagsWrapPanel>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
