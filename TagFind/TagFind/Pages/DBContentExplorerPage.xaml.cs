@@ -47,16 +47,37 @@ namespace TagFind.Pages
         public DBContentExplorerPage()
         {
             InitializeComponent();
+
             this.Loaded += DBContentExplorerPage_Loaded;
+
+            BreadcrumbBar.ItemsSource = Path;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+        }
+
+        private void DBContentExplorerPage_Loaded(object sender, RoutedEventArgs e)
+        {
             DataItemListView.RequestOpenDataItemDetail += DataItemListView_RequestOpenDataItemDetail;
             DataItemListView.RequestOpenDataItemAsFolder += DataItemListView_RequestOpenDataItemAsFolder;
             ConditionTokenizedSuggestBox.RequestSearch += ConditionTokenizedSuggestBox_RequestSearch;
-            BreadcrumbBar.ItemsSource = Path;
             BreadcrumbBar.ItemClicked += BreadcrumbBar_ItemClicked;
             SearchModeSwitcher.SearchModeChanged += SearchModeSwitcher_SearchModeChanged;
 
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            UpdateCommandBarState(DataItemListView.AllowSelecting);
+            ConditionTokenizedSuggestBox.ApplyConditions(searchConditions);
         }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            this.Loaded -= DBContentExplorerPage_Loaded;
+            DataItemListView.RequestOpenDataItemDetail -= DataItemListView_RequestOpenDataItemDetail;
+            DataItemListView.RequestOpenDataItemAsFolder -= DataItemListView_RequestOpenDataItemAsFolder;
+            ConditionTokenizedSuggestBox.RequestSearch -= ConditionTokenizedSuggestBox_RequestSearch;
+            BreadcrumbBar.ItemClicked -= BreadcrumbBar_ItemClicked;
+            SearchModeSwitcher.SearchModeChanged -= SearchModeSwitcher_SearchModeChanged;
+        }
+
 
         private void SearchModeSwitcher_SearchModeChanged(object sender, SearchModeEnum searchMode)
         {
@@ -159,12 +180,6 @@ namespace TagFind.Pages
                     DataItemListView.DataItemCollection.Count == 0 ?
                     Visibility.Visible : Visibility.Collapsed;
             });
-        }
-
-        private void DBContentExplorerPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            UpdateCommandBarState(DataItemListView.AllowSelecting);
-            ConditionTokenizedSuggestBox.ApplyConditions(searchConditions); 
         }
 
         private async void DataItemListView_RequestOpenDataItemDetail(object sender, Classes.DataTypes.DataItem dataItem)

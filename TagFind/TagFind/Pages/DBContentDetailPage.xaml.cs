@@ -40,7 +40,21 @@ namespace TagFind.Pages
         public DBContentDetailPage()
         {
             InitializeComponent();
+
+            this.Loaded += DBContentDetailPage_Loaded;
+        }
+
+        private void DBContentDetailPage_Loaded(object sender, RoutedEventArgs e)
+        {
             OpenFileButton.Click += OpenFileButton_Click;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            this.Loaded -= DBContentDetailPage_Loaded;
+            OpenFileButton.Click -= OpenFileButton_Click;
         }
 
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)

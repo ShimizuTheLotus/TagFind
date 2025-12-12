@@ -33,7 +33,20 @@ namespace TagFind.UI.ContentDialogPages
         public CreateDatabaseContentDialogPage()
         {
             InitializeComponent();
+            this.Loaded += CreateDatabaseContentDialogPage_Loaded;
+        }
+
+        private void CreateDatabaseContentDialogPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += CreateDatabaseContentDialogPage_Unloaded;
             SetDatabaseNameTextBox.TextChanged += SetDatabaseNameTextBox_TextChanged;
+        }
+
+        private void CreateDatabaseContentDialogPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= CreateDatabaseContentDialogPage_Loaded;
+            this.Unloaded -= CreateDatabaseContentDialogPage_Unloaded;
+            SetDatabaseNameTextBox.TextChanged -= SetDatabaseNameTextBox_TextChanged;
         }
 
         private async void SelectFolderButton_Click(object sender, RoutedEventArgs e)

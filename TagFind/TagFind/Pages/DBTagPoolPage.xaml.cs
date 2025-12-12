@@ -42,7 +42,13 @@ namespace TagFind.Pages
 
         private async void DBTagPoolPage_Loaded(object sender, RoutedEventArgs e)
         {
-            await Task.Delay(1000);
+            await GetTagList();
+        }
+
+        protected override async void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
             await GetTagList();
         }
 

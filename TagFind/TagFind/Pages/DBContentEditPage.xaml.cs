@@ -37,7 +37,20 @@ namespace TagFind.Pages
         {
             InitializeComponent();
 
+            this.Loaded += DBContentEditPage_Loaded;
+        }
+
+        private void DBContentEditPage_Loaded(object sender, RoutedEventArgs e)
+        {
             DataItemEditor.RequestSaveContent += DataItemEditor_RequestSaveContent;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            this.Loaded -= DBContentEditPage_Loaded;
+            DataItemEditor.RequestSaveContent -= DataItemEditor_RequestSaveContent;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

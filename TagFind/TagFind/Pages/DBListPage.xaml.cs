@@ -46,7 +46,21 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
     {
         InitializeComponent();
         UpdateDatabaseList();
+
+        this.Loaded += DBListPage_Loaded;
+    }
+
+    private void DBListPage_Loaded(object sender, RoutedEventArgs e)
+    {
         DatabaseListView.RequestOpenDatabase += DatabaseListView_RequestOpenDatabase;
+    }
+
+    protected override void OnNavigatedFrom(NavigationEventArgs e)
+    {
+        base.OnNavigatedFrom(e);
+
+        this.Loaded -= DBListPage_Loaded;
+        DatabaseListView.RequestOpenDatabase -= DatabaseListView_RequestOpenDatabase;
     }
 
     private void DatabaseListView_RequestOpenDatabase(object sender, long ID)
