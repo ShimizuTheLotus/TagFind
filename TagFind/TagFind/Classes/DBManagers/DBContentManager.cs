@@ -1268,7 +1268,7 @@ namespace TagFind.Classes.DB
                         selectCmd.Append($"WHERE {new DataItems().ID} IN ({pathMatchIDPlaceHolderText}) ");
                     selectCmd.Append($"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}");
                     SqliteCommand sqliteCommand = new(selectCmd.ToString(), dbConnection);
-                    if (itemIDPlaceholders.Count() > 0)
+                    if (pathMatchIDPlaceHolders.Count() > 0)
                     {
                         for (int i = 0; i < itemIDPlaceholders.Count(); i++)
                             sqliteCommand.Parameters.AddWithValue(pathMatchIDPlaceHolders[i], pathMatchID[i]);
