@@ -67,6 +67,25 @@ namespace TagFind.UI
             DefaultStyleKey = typeof(TagSuggestPopupContent);
             this.Loaded += TagSuggestPopupContent_Loaded;
         }
+        private void TagSuggestPopupContent_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += TagSuggestPopupContent_Unloaded;
+            if (_listView != null)
+            {
+                _listView.PreviewKeyDown += _listView_PreviewKeyDown;
+            }
+        }
+
+        private void TagSuggestPopupContent_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= TagSuggestPopupContent_Loaded;
+            this.Unloaded -= TagSuggestPopupContent_Unloaded;
+            if (_listView != null)
+            {
+                _listView.PreviewKeyDown -= _listView_PreviewKeyDown;
+            }
+        }
+
         private void _listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //var focusedElement = FocusManager.GetFocusedElement();
@@ -80,14 +99,6 @@ namespace TagFind.UI
             Tag tag = _itemsSource.Cast<Tag>().ElementAt(_listView.SelectedIndex);
             TagSelected?.Invoke(this, tag);
             _listView.SelectedIndex = -1;
-        }
-
-        private void TagSuggestPopupContent_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (_listView != null)
-            {
-                _listView.PreviewKeyDown += _listView_PreviewKeyDown;
-            }
         }
 
         private void _listView_PreviewKeyDown(object sender, KeyRoutedEventArgs e)

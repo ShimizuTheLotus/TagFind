@@ -51,16 +51,13 @@ namespace TagFind.UI
         public LogicChainListEditor()
         {
             DefaultStyleKey = typeof(LogicChainListEditor);
+
+            this.Loaded += LogicChainListEditor_Loaded;
         }
 
-        protected override void OnApplyTemplate()
+        private void LogicChainListEditor_Loaded(object sender, RoutedEventArgs e)
         {
-            base.OnApplyTemplate();
-
-            _addLogicChainButton = GetTemplateChild("PART_AddLogicChainButton") as AppBarButton;
-            _removeLogicChainButton = GetTemplateChild("PART_RemoveLogicChainButton") as AppBarButton;
-            _listView = GetTemplateChild("PART_ListView") as ListView;
-
+            this.Unloaded += LogicChainListEditor_Unloaded;
             if (_addLogicChainButton != null)
             {
                 _addLogicChainButton.Click += _addLogicChainButton_Click;
@@ -71,6 +68,29 @@ namespace TagFind.UI
             }
 
             UpdateUI();
+        }
+
+        private void LogicChainListEditor_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= LogicChainListEditor_Loaded;
+            this.Unloaded -= LogicChainListEditor_Unloaded;
+            if (_addLogicChainButton != null)
+            {
+                _addLogicChainButton.Click -= _addLogicChainButton_Click;
+            }
+            if (_removeLogicChainButton != null)
+            {
+                _removeLogicChainButton.Click -= _removeLogicChainButton_Click;
+            }
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _addLogicChainButton = GetTemplateChild("PART_AddLogicChainButton") as AppBarButton;
+            _removeLogicChainButton = GetTemplateChild("PART_RemoveLogicChainButton") as AppBarButton;
+            _listView = GetTemplateChild("PART_ListView") as ListView;
         }
 
         private void _removeLogicChainButton_Click(object sender, RoutedEventArgs e)

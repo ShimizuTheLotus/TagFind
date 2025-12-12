@@ -38,17 +38,13 @@ namespace TagFind.UI
         public SearchModeSwitcher()
         {
             DefaultStyleKey = typeof(SearchModeSwitcher);
+
+            this.Loaded += SearchModeSwitcher_Loaded;
         }
 
-        protected override void OnApplyTemplate()
+        private void SearchModeSwitcher_Loaded(object sender, RoutedEventArgs e)
         {
-            base.OnApplyTemplate();
-
-            _currentSearchModeFontIcon = GetTemplateChild("PART_CurrentSearchModeFontIcon") as FontIcon;
-            _globalSearchModeMenuFlyoutItem = GetTemplateChild("PART_GlobalSearchModeMenuFlyoutItem") as MenuFlyoutItem;
-            _folderSearchModeMenuFlyoutItem = GetTemplateChild("PART_FolderSearchModeMenuFlyoutItem") as MenuFlyoutItem;
-            _currentLayerSearchModeMenuFlyoutItem = GetTemplateChild("PART_CurrentLayerSearchModeMenuFlyoutItem") as MenuFlyoutItem;
-
+            this.Unloaded += SearchModeSwitcher_Unloaded;
             if (_globalSearchModeMenuFlyoutItem != null)
             {
                 _globalSearchModeMenuFlyoutItem.Click += _globalSearchModeMenuFlyoutItem_Click;
@@ -63,6 +59,34 @@ namespace TagFind.UI
             }
 
             UpdateUI();
+        }
+
+        private void SearchModeSwitcher_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= SearchModeSwitcher_Loaded;
+            this.Unloaded -= SearchModeSwitcher_Unloaded;
+            if (_globalSearchModeMenuFlyoutItem != null)
+            {
+                _globalSearchModeMenuFlyoutItem.Click -= _globalSearchModeMenuFlyoutItem_Click;
+            }
+            if (_folderSearchModeMenuFlyoutItem != null)
+            {
+                _folderSearchModeMenuFlyoutItem.Click -= _folderSearchModeMenuFlyoutItem_Click;
+            }
+            if (_currentLayerSearchModeMenuFlyoutItem != null)
+            {
+                _currentLayerSearchModeMenuFlyoutItem.Click -= _currentLayerSearchModeMenuFlyoutItem_Click;
+            }
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _currentSearchModeFontIcon = GetTemplateChild("PART_CurrentSearchModeFontIcon") as FontIcon;
+            _globalSearchModeMenuFlyoutItem = GetTemplateChild("PART_GlobalSearchModeMenuFlyoutItem") as MenuFlyoutItem;
+            _folderSearchModeMenuFlyoutItem = GetTemplateChild("PART_FolderSearchModeMenuFlyoutItem") as MenuFlyoutItem;
+            _currentLayerSearchModeMenuFlyoutItem = GetTemplateChild("PART_CurrentLayerSearchModeMenuFlyoutItem") as MenuFlyoutItem;
         }
 
         private void _currentLayerSearchModeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)

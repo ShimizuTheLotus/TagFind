@@ -56,7 +56,52 @@ namespace TagFind.UI
         public LogicChainEditor()
         {
             DefaultStyleKey = typeof(LogicChainEditor);
+
+            this.Loaded += LogicChainEditor_Loaded;
         }
+
+        private void LogicChainEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += LogicChainEditor_Unloaded;
+
+            if (_inputTextBox != null)
+            {
+                _inputTextBox.TextChanged += _inputAutoSuggestBox_TextChanged;
+                _inputTextBox.PreviewKeyDown += _inputAutoSuggestBox_KeyDown;
+            }
+            if (_tagSuggestPopup != null)
+            {
+                _tagSuggestPopup.TagSelected += _tagSuggestPopup_TagSelected;
+            }
+            if (_propertySuggestPopup != null)
+            {
+                _propertySuggestPopup.PropertySelected += _propertySuggestPopup_PropertySelected;
+            }
+
+            UpdateUI();
+        }
+
+        private void LogicChainEditor_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= LogicChainEditor_Loaded;
+            this.Unloaded -= LogicChainEditor_Unloaded;
+            if (_inputTextBox != null)
+            {
+                _inputTextBox.TextChanged -= _inputAutoSuggestBox_TextChanged;
+                _inputTextBox.PreviewKeyDown -= _inputAutoSuggestBox_KeyDown;
+            }
+            if (_tagSuggestPopup != null)
+            {
+                _tagSuggestPopup.TagSelected -= _tagSuggestPopup_TagSelected;
+            }
+            if (_propertySuggestPopup != null)
+            {
+                _propertySuggestPopup.PropertySelected -= _propertySuggestPopup_PropertySelected;
+            }
+
+            UpdateUI();
+        }
+
         ~LogicChainEditor()
         {
             DisposeTagSuggestPopup();
@@ -70,22 +115,6 @@ namespace TagFind.UI
             _wrapPanel = GetTemplateChild("PART_LogicChainWrapPanel") as WrapPanel;
             _inputTextBox = GetTemplateChild("PART_InputTextBox") as TextBox;
             _popup = (GetTemplateChild("PART_SuggestPopup") as Popup)!;
-            if (_inputTextBox != null)
-            {
-                _inputTextBox.TextChanged += _inputAutoSuggestBox_TextChanged;
-                _inputTextBox.PreviewKeyDown += _inputAutoSuggestBox_KeyDown;
-            }
-
-            if (_tagSuggestPopup != null)
-            {
-                _tagSuggestPopup.TagSelected += _tagSuggestPopup_TagSelected;
-            }
-            if (_propertySuggestPopup != null)
-            {
-                _propertySuggestPopup.PropertySelected += _propertySuggestPopup_PropertySelected;
-            }
-
-            UpdateUI();
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)

@@ -76,6 +76,35 @@ namespace TagFind.UI
         public DataItemListView()
         {
             DefaultStyleKey = typeof(DataItemListView);
+
+            this.Loaded += DataItemListView_Loaded;
+        }
+
+        private void DataItemListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += DataItemListView_Unloaded;
+            if (_listView != null)
+            {
+                _listView.ItemClick += _listView_ItemClick;
+                _listView.DoubleTapped += _listView_DoubleTapped;
+                _listView.Tapped += _listView_Tapped;
+                _listView.RightTapped += _listView_RightTapped;
+            }
+
+            UpdateUI();
+        }
+
+        private void DataItemListView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_listView != null)
+            {
+                _listView.ItemClick -= _listView_ItemClick;
+                _listView.DoubleTapped -= _listView_DoubleTapped;
+                _listView.Tapped -= _listView_Tapped;
+                _listView.RightTapped -= _listView_RightTapped;
+            }
+            this.Loaded -= DataItemListView_Loaded;
+            this.Unloaded -= DataItemListView_Unloaded;
         }
 
         protected override void OnApplyTemplate()
@@ -87,15 +116,9 @@ namespace TagFind.UI
             {
                 _listView.IsItemClickEnabled = true;
                 _listView.SelectionMode = ListViewSelectionMode.None;
-                _listView.ItemClick += _listView_ItemClick;
-                _listView.DoubleTapped += _listView_DoubleTapped;
-                _listView.Tapped += _listView_Tapped;
-                _listView.RightTapped += _listView_RightTapped;
                 _listView.IsDoubleTapEnabled = true;
                 _listView.IsTapEnabled = true;
             }
-
-            UpdateUI();
         }
 
         private void _listView_RightTapped(object sender, RightTappedRoutedEventArgs e)

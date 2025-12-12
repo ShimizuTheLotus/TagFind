@@ -46,7 +46,20 @@ namespace TagFind.UI
         public LogicChainArrow()
         {
             DefaultStyleKey = typeof(LogicChainArrow);
+            this.Loaded += LogicChainArrow_Loaded;
+        }
+
+        private void LogicChainArrow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += LogicChainArrow_Unloaded;
             this.ActualThemeChanged += LogicChainArrow_ActualThemeChanged;
+        }
+
+        private void LogicChainArrow_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= LogicChainArrow_Loaded;
+            this.Unloaded -= LogicChainArrow_Unloaded;
+            this.ActualThemeChanged -= LogicChainArrow_ActualThemeChanged;
         }
 
         private void LogicChainArrow_ActualThemeChanged(FrameworkElement sender, object args)

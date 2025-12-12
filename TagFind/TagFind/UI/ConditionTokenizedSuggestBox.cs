@@ -44,6 +44,36 @@ namespace TagFind.UI
         public ConditionTokenizedSuggestBox()
         {
             DefaultStyleKey = typeof(ConditionTokenizedSuggestBox);
+
+            this.Loaded += ConditionTokenizedSuggestBox_Loaded;
+        }
+
+        private void ConditionTokenizedSuggestBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += ConditionTokenizedSuggestBox_Unloaded;
+            if (_tokenizingTextBox != null)
+            {
+                _tokenizingTextBox.TokenDelimiter = "\r\n";
+                _tokenizingTextBox.KeyDown += _tokenizingTextBox_KeyDown;
+                _tokenizingTextBox.TextChanged += _tokenizingTextBox_TextChanged;
+                _tokenizingTextBox.TokenItemAdding += _tokenizingTextBox_TokenItemAdding;
+                _tokenizingTextBox.QuerySubmitted += _tokenizingTextBox_QuerySubmitted;
+                _tokenizingTextBox.TokenItemRemoved += _tokenizingTextBox_TokenItemRemoved;
+            }
+        }
+
+        private void ConditionTokenizedSuggestBox_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_tokenizingTextBox != null)
+            {
+                _tokenizingTextBox.KeyDown -= _tokenizingTextBox_KeyDown;
+                _tokenizingTextBox.TextChanged -= _tokenizingTextBox_TextChanged;
+                _tokenizingTextBox.TokenItemAdding -= _tokenizingTextBox_TokenItemAdding;
+                _tokenizingTextBox.QuerySubmitted -= _tokenizingTextBox_QuerySubmitted;
+                _tokenizingTextBox.TokenItemRemoved -= _tokenizingTextBox_TokenItemRemoved;
+            }
+            this.Loaded -= ConditionTokenizedSuggestBox_Loaded;
+            this.Unloaded -= ConditionTokenizedSuggestBox_Unloaded;
         }
 
         protected override void OnApplyTemplate()
@@ -51,16 +81,6 @@ namespace TagFind.UI
             base.OnApplyTemplate();
 
             _tokenizingTextBox = GetTemplateChild("PART_TokenizingTextBox") as TokenizingTextBox;
-
-            if (_tokenizingTextBox != null)
-            {
-                _tokenizingTextBox.KeyDown += _tokenizingTextBox_KeyDown;
-                _tokenizingTextBox.TextChanged += _tokenizingTextBox_TextChanged;
-                _tokenizingTextBox.TokenDelimiter = "\r\n";
-                _tokenizingTextBox.TokenItemAdding += _tokenizingTextBox_TokenItemAdding;
-                _tokenizingTextBox.QuerySubmitted += _tokenizingTextBox_QuerySubmitted;
-                _tokenizingTextBox.TokenItemRemoved += _tokenizingTextBox_TokenItemRemoved;
-            }
         }
 
         private void _tokenizingTextBox_TokenItemRemoved(TokenizingTextBox sender, object args)

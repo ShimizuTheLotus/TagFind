@@ -52,6 +52,30 @@ namespace TagFind.UI
         public DatabaseListView()
         {
             DefaultStyleKey = typeof(DatabaseListView);
+
+            this.Loaded += DatabaseListView_Loaded;
+        }
+
+        private void DatabaseListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += DatabaseListView_Unloaded;
+            if (_listView != null)
+            {
+                _listView.ItemsSource = DatabaseList;
+                _listView.IsItemClickEnabled = true;
+                _listView.SelectionMode = ListViewSelectionMode.None;
+                _listView.ItemClick += _listView_ItemClick;
+            }
+        }
+
+        private void DatabaseListView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_listView != null)
+            {
+                _listView.ItemClick -= _listView_ItemClick;
+            }
+            this.Loaded -= DatabaseListView_Loaded;
+            this.Unloaded -= DatabaseListView_Unloaded;
         }
 
         protected override void OnApplyTemplate()
@@ -64,7 +88,6 @@ namespace TagFind.UI
             {
                 _listView.ItemsSource = DatabaseList;
                 _listView.IsItemClickEnabled = true;
-                _listView.ItemClick += _listView_ItemClick;
                 _listView.SelectionMode = ListViewSelectionMode.None;
             }
         }

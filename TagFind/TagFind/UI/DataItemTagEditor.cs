@@ -57,6 +57,54 @@ namespace TagFind.UI
         public DataItemTagEditor()
         {
             DefaultStyleKey = typeof(DataItemTagEditor);
+
+            this.Loaded += DataItemTagEditor_Loaded;
+        }
+
+        private void DataItemTagEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += DataItemTagEditor_Unloaded;
+            if (_thisTagTagBlock != null)
+            {
+                _thisTagTagBlock.PointerPressed += _thisTagTagBlock_MouseDown;
+            }
+            if (_tagInputTextBox != null)
+            {
+                _tagInputTextBox.TextChanged += _tagInputTextBox_TextChanged;
+                _tagInputTextBox.PreviewKeyDown += _tagInputTextBox_PreviewKeyDown;
+                _tagInputTextBox.LostFocus += _tagInputTextBox_LostFocus;
+            }
+            if (_tagSuggestPopup != null)
+            {
+                _tagSuggestPopup.IsOpen = false;
+            }
+
+            UpdateUI();
+        }
+
+        private void DataItemTagEditor_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_thisTagTagBlock != null)
+            {
+                _thisTagTagBlock.PointerPressed -= _thisTagTagBlock_MouseDown;
+            }
+            if (_tagInputTextBox != null)
+            {
+                _tagInputTextBox.TextChanged -= _tagInputTextBox_TextChanged;
+                _tagInputTextBox.PreviewKeyDown -= _tagInputTextBox_PreviewKeyDown;
+                _tagInputTextBox.LostFocus -= _tagInputTextBox_LostFocus;
+
+            }
+            if (_tagSuggestPopup != null)
+            {
+                _tagSuggestPopup.IsOpen = false;
+            }
+            if (_tagSuggestPopupSource != null)
+            {
+                _tagSuggestPopupSource.TagSelected -= TagSuggestPopup_TagSelected;
+            }
+            this.Loaded -= DataItemTagEditor_Loaded;
+            this.Unloaded -= DataItemTagEditor_Unloaded;
         }
 
         protected override void OnApplyTemplate()
@@ -67,22 +115,11 @@ namespace TagFind.UI
             _tagInputTextBox = GetTemplateChild("PART_InputTextBox") as TextBox;
             _listView = GetTemplateChild("PART_StackPanel") as DataItemTagPropertyListEditor;
             _tagSuggestPopup = GetTemplateChild("PART_TagSuggestPopup") as Popup;
-            if (_thisTagTagBlock != null)
-            {
-                _thisTagTagBlock.PointerPressed += _thisTagTagBlock_MouseDown;
-            }
+
             if (_tagInputTextBox != null)
             {
-                _tagInputTextBox.TextChanged += _tagInputTextBox_TextChanged;
-                _tagInputTextBox.PreviewKeyDown += _tagInputTextBox_PreviewKeyDown;
-                _tagInputTextBox.LostFocus += _tagInputTextBox_LostFocus;
                 _tagInputTextBox.Visibility = Visibility.Collapsed;
             }
-            if (_tagSuggestPopup != null)
-            {
-                _tagSuggestPopup.IsOpen = false;
-            }
-            UpdateUI();
         }
 
         private void _tagInputTextBox_LostFocus(object sender, RoutedEventArgs e)

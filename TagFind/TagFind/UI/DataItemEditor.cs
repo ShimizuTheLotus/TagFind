@@ -57,6 +57,70 @@ namespace TagFind.UI
         public DataItemEditor()
         {
             DefaultStyleKey = typeof(DataItemEditor);
+
+            this.Loaded += DataItemEditor_Loaded;
+        }
+
+        private void DataItemEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_newContentButton != null)
+            {
+                _newContentButton.Click += _newContentButton_Click;
+            }
+            if (_saveContentButton != null)
+            {
+                _saveContentButton.Click += _saveContentButton_Click;
+            }
+            if (_titleTextBox != null)
+            {
+                _titleTextBox.TextChanged += _titleTextBox_TextChanged;
+            }
+            if (_descriptionTextBox != null)
+            {
+                _descriptionTextBox.TextChanged += _descriptionTextBox_TextChanged;
+            }
+            if (_selectReferencedFileButton != null)
+            {
+                _selectReferencedFileButton.Click += _selectReferencedFileButton_Click;
+            }
+            if (_removeReferenceButton != null)
+            {
+                _removeReferenceButton.Click += _removeReferenceButton_Click;
+            }
+
+            this.Unloaded += DataItemEditor_Unloaded;
+
+            UpdateUI();
+        }
+
+        private void DataItemEditor_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_newContentButton != null)
+            {
+                _newContentButton.Click -= _newContentButton_Click;
+            }
+            if (_saveContentButton != null)
+            {
+                _saveContentButton.Click -= _saveContentButton_Click;
+            }
+            if (_titleTextBox != null)
+            {
+                _titleTextBox.TextChanged -= _titleTextBox_TextChanged;
+            }
+            if (_descriptionTextBox != null)
+            {
+                _descriptionTextBox.TextChanged -= _descriptionTextBox_TextChanged;
+            }
+            if (_selectReferencedFileButton != null)
+            {
+                _selectReferencedFileButton.Click -= _selectReferencedFileButton_Click;
+            }
+            if (_removeReferenceButton != null)
+            {
+                _removeReferenceButton.Click -= _removeReferenceButton_Click;
+            }
+            this.Loaded -= DataItemEditor_Loaded;
+            this.Unloaded -= DataItemEditor_Unloaded;
         }
 
         protected override void OnApplyTemplate()
@@ -72,36 +136,10 @@ namespace TagFind.UI
             _selectReferencedFileButton = GetTemplateChild("PART_SelectFileButton") as Button;
             _removeReferenceButton = GetTemplateChild("PART_RemoveReferenceButton") as Button;
 
-            if (_newContentButton != null)
+            if (_saveContentButton != null && _titleTextBox != null)
             {
-                _newContentButton.Click += _newContentButton_Click;
+                _saveContentButton.IsEnabled = _titleTextBox.Text.Length > 0;
             }
-            if (_saveContentButton != null)
-            {
-                _saveContentButton.Click += _saveContentButton_Click;
-            }
-            if (_titleTextBox != null)
-            {
-                _titleTextBox.TextChanged += _titleTextBox_TextChanged;
-                if (_saveContentButton != null)
-                {
-                    _saveContentButton.IsEnabled = _titleTextBox.Text.Length > 0;
-                }
-            }
-            if (_descriptionTextBox != null)
-            {
-                _descriptionTextBox.TextChanged += _descriptionTextBox_TextChanged;
-            }
-            if (_selectReferencedFileButton != null)
-            {
-                _selectReferencedFileButton.Click += _selectReferencedFileButton_Click;
-            }
-            if (_removeReferenceButton != null)
-            {
-                _removeReferenceButton.Click += _removeReferenceButton_Click;
-            }
-
-            UpdateUI();
         }
 
         private void _removeReferenceButton_Click(object sender, RoutedEventArgs e)

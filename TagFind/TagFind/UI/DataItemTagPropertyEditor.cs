@@ -37,6 +37,29 @@ namespace TagFind.UI
         public DataItemTagPropertyEditor()
         {
             DefaultStyleKey = typeof(DataItemTagPropertyEditor);
+
+            this.Loaded += DataItemTagPropertyEditor_Loaded;
+        }
+
+        private void DataItemTagPropertyEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += DataItemTagPropertyEditor_Unloaded;
+            if (_stackPanel != null)
+            {
+                _stackPanel.GotFocus += DataItemTagPropertyEditor_GotFocus;
+            }
+
+            UpdateUI();
+        }
+
+        private void DataItemTagPropertyEditor_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= DataItemTagPropertyEditor_Loaded;
+            this.Unloaded -= DataItemTagPropertyEditor_Unloaded;
+            if (_stackPanel != null)
+            {
+                _stackPanel.GotFocus -= DataItemTagPropertyEditor_GotFocus;
+            }
         }
 
         private void DataItemTagPropertyEditor_GotFocus(object sender, RoutedEventArgs e)
@@ -54,12 +77,6 @@ namespace TagFind.UI
             _stackPanel = GetTemplateChild("PART_StackPanel") as StackPanel;
             _propertyNameTextBlock = GetTemplateChild("PART_PropertyNameTextBlock") as TextBlock;
             _propertyValueTagGroupEditor = GetTemplateChild("PART_PropertyValueTagGroupEditor") as DataItemTagGroupEditor;
-
-            if (_stackPanel != null)
-            {
-                _stackPanel.GotFocus += DataItemTagPropertyEditor_GotFocus;
-            }
-            UpdateUI();
         }
 
         public void UpdateUI()

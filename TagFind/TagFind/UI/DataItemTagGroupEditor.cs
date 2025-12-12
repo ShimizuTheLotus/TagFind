@@ -61,8 +61,39 @@ namespace TagFind.UI
         public DataItemTagGroupEditor()
         {
             DefaultStyleKey = typeof(DataItemTagGroupEditor);
+
+            this.Loaded += DataItemTagGroupEditor_Loaded;
+        }
+
+        private void DataItemTagGroupEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += DataItemTagGroupEditor_Unloaded;
             _tagSuggestPopup.TagSelected += _tagSuggestPopup_TagSelected;
-            _suggestPopup.IsOpen = false;
+            if (_wrapPanel != null)
+            {
+                _wrapPanel.PointerPressed += _wrapPanel_MouseDown;
+                _wrapPanel.LostFocus += _wrapPanel_LostFocus;
+            }
+            _editingTextBox.TextChanged += _editingTextBox_TextChanged;
+            _editingTextBox.PreviewKeyDown += _editingTextBox_PreviewKeyDown;
+
+
+            UpdateRestrictionLogicChains();
+            UpdateUI();
+        }
+
+        private void DataItemTagGroupEditor_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _tagSuggestPopup.TagSelected -= _tagSuggestPopup_TagSelected;
+            if (_wrapPanel != null)
+            {
+                _wrapPanel.PointerPressed -= _wrapPanel_MouseDown;
+                _wrapPanel.LostFocus -= _wrapPanel_LostFocus;
+            }
+            _editingTextBox.TextChanged -= _editingTextBox_TextChanged;
+            _editingTextBox.PreviewKeyDown -= _editingTextBox_PreviewKeyDown;
+            this.Loaded -= DataItemTagGroupEditor_Loaded;
+            this.Unloaded -= DataItemTagGroupEditor_Unloaded;
         }
 
         private void _tagSuggestPopup_TagSelected(object sender, Tag selectedTag)
@@ -121,16 +152,9 @@ namespace TagFind.UI
             base.OnApplyTemplate();
 
             _wrapPanel = GetTemplateChild("PART_WrapPanel") as WrapPanel;
-            if (_wrapPanel != null)
-            {
-                _wrapPanel.PointerPressed += _wrapPanel_MouseDown;
-                _wrapPanel.LostFocus += _wrapPanel_LostFocus;
-            }
-            _editingTextBox.TextChanged += _editingTextBox_TextChanged;
-            _editingTextBox.PreviewKeyDown += _editingTextBox_PreviewKeyDown;
+
             _suggestPopup = new();
-            UpdateRestrictionLogicChains();
-            UpdateUI();
+            _suggestPopup.IsOpen = false;
         }
 
         private void _editingTextBox_PreviewKeyDown(object sender, KeyRoutedEventArgs e)

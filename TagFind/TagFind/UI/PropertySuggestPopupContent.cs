@@ -57,6 +57,27 @@ namespace TagFind.UI
         public PropertySuggestPopupContent()
         {
             DefaultStyleKey = typeof(PropertySuggestPopupContent);
+
+            this.Loaded += PropertySuggestPopupContent_Loaded;
+        }
+
+        private void PropertySuggestPopupContent_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += PropertySuggestPopupContent_Unloaded;
+            if (_listView != null)
+            {
+                _listView.SelectionChanged += _listView_SelectionChanged;
+            }
+        }
+
+        private void PropertySuggestPopupContent_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= PropertySuggestPopupContent_Loaded;
+            this.Unloaded -= PropertySuggestPopupContent_Unloaded;
+            if (_listView != null)
+            {
+                _listView.SelectionChanged -= _listView_SelectionChanged;
+            }
         }
 
         private void _listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -97,9 +118,9 @@ namespace TagFind.UI
         {
             base.OnApplyTemplate();
             _listView = GetTemplateChild("PART_ListView") as ListView;
+
             if (_listView != null)
             {
-                _listView.SelectionChanged += _listView_SelectionChanged;
                 _listView.ItemsSource = _itemsSource;
             }
         }

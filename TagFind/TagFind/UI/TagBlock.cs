@@ -90,11 +90,28 @@ namespace TagFind.UI
         public TagBlock()
         {
             DefaultStyleKey = typeof(TagBlock);
+            this.Loaded += TagBlock_Loaded;
+        }
+
+        private void TagBlock_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += TagBlock_Unloaded;
             this.PointerEntered += TagBlock_PointerEntered;
             this.PointerExited += TagBlock_PointerExited;
             this.PointerPressed += TagBlock_PointerPressed;
             this.PointerReleased += TagBlock_PointerReleased;
             this.Tapped += TagBlock_Tapped;
+        }
+
+        private void TagBlock_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= TagBlock_Loaded;
+            this.Unloaded -= TagBlock_Unloaded;
+            this.PointerEntered -= TagBlock_PointerEntered;
+            this.PointerExited -= TagBlock_PointerExited;
+            this.PointerPressed -= TagBlock_PointerPressed;
+            this.PointerReleased -= TagBlock_PointerReleased;
+            this.Tapped -= TagBlock_Tapped;
         }
 
         private void TagBlock_Tapped(object sender, TappedRoutedEventArgs e)

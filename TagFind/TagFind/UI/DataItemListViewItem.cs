@@ -39,6 +39,31 @@ namespace TagFind.UI
         public DataItemListViewItem()
         {
             DefaultStyleKey = typeof(DataItemListViewItem);
+
+            this.Loaded += DataItemListViewItem_Loaded;
+        }
+
+        private void DataItemListViewItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Unloaded += DataItemListViewItem_Unloaded;
+            if (_thumbnailImage != null)
+            {
+                _thumbnailImage.PointerEntered += _thumbnailImage_PointerEntered;
+                _thumbnailImage.PointerExited += _thumbnailImage_PointerExited;
+            }
+
+            UpdateUI();
+        }
+
+        private void DataItemListViewItem_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_thumbnailImage != null)
+            {
+                _thumbnailImage.PointerEntered -= _thumbnailImage_PointerEntered;
+                _thumbnailImage.PointerExited -= _thumbnailImage_PointerExited;
+            }
+            this.Loaded -= DataItemListViewItem_Loaded;
+            this.Unloaded -= DataItemListViewItem_Unloaded;
         }
 
         protected override void OnApplyTemplate()
@@ -48,13 +73,6 @@ namespace TagFind.UI
             _thumbnailImage = GetTemplateChild("PART_Image") as Image;
             _tagsWrapPanel = GetTemplateChild("PART_TagsWrapPanel") as TagsWrapPanel;
             _thumbnailImageOverlay = GetTemplateChild("PART_ImageOverlay") as Grid;
-
-            if (_thumbnailImage != null)
-            {
-                _thumbnailImage.PointerEntered += _thumbnailImage_PointerEntered;
-                _thumbnailImage.PointerExited += _thumbnailImage_PointerExited;
-            }
-            UpdateUI();
         }
 
         private void _thumbnailImage_PointerExited(object sender, PointerRoutedEventArgs e)
