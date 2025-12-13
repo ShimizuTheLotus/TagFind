@@ -3004,8 +3004,8 @@ namespace TagFind.Classes.DB
                     tag.ID = reader.GetInt64(0);
                     tag.MainName = reader.GetString(1);
                     tag.Description = reader.GetString(2);
-                    tag.CreatedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(3)).DateTime;
-                    tag.ModifiedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(4)).DateTime;
+                    tag.CreatedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(3)).DateTime.ToLocalTime();
+                    tag.ModifiedTime = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(4)).DateTime.ToLocalTime();
 
                     // Get surnames
                     string subcommand =
