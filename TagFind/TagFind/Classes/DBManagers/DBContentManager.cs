@@ -2387,7 +2387,7 @@ namespace TagFind.Classes.DB
                     // Property item is edited
                     if (originalTag.PropertyItems.ContainsPropertyItem(property))
                     {
-                        TagDataUpdatePropertyItemSeq(property.ID, property.Seq, property.IsContainsRelation);
+                        TagDataUpdatePropertyItemSeq(property.ID, property.Seq, property.PropertyName, property.IsContainsRelation);
                         // Update RestrictionLogicChains
                         TagDataRemoveRestrictionLogicChainsOfPropertyItem(tagInfo.ID, property.ID);
 
@@ -2856,15 +2856,17 @@ namespace TagFind.Classes.DB
                 chainID++;
             }
         }
-        private void TagDataUpdatePropertyItemSeq(long PropertyID, long newSeq, bool isContainRelation)
+        private void TagDataUpdatePropertyItemSeq(long PropertyID, long newSeq, string newName, bool isContainRelation)
         {
             string command =
                 $"UPDATE {nameof(TagData)} " +
-                $"SET {new TagData().Seq} = @{new TagData().Seq} " +
-                $"WHERE {new TagData().ID} = @{new TagData().ID}";
+                $"SET {nameof(TagData.Seq)} = @{nameof(TagData.Seq)}," +
+                $"{nameof(TagData.Value)} = @{nameof(TagData.Value)} " +
+                $"WHERE {nameof(TagData.ID)} = @{nameof(TagData.ID)}";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", $"{newSeq.ToString()} {(isContainRelation ? 1 : 0)}");
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().ID}", PropertyID);
+            SqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.Seq)}", $"{newSeq.ToString()} {(isContainRelation ? 1 : 0)}");
+            SqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.Value)}", newName);
+            SqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.ID)}", PropertyID);
             SqliteCommand.ExecuteNonQuery();
         }
         private void TagDataRemovePropertyItem(long PropertyTagID, PropertyItem Property)
