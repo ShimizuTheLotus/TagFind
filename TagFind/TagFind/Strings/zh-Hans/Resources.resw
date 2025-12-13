@@ -362,4 +362,22 @@
   <data name="IsContainRelationToggleSwitch.OffContent" xml:space="preserve">
     <value>不是包含关系</value>
   </data>
+  <data name="TagNotExists.String" xml:space="preserve">
+    <value>标签不存在</value>
+  </data>
+  <data name="DoYouWantToCreateThisTagNow.String" xml:space="preserve">
+    <value>你想现在创建这个标签吗？</value>
+  </data>
+  <data name="Create.String" xml:space="preserve">
+    <value>创建</value>
+  </data>
+  <data name="AreYouSureYouWantToRemoveThisTag.String" xml:space="preserve">
+    <value>你确定要删除这个标签吗？</value>
+  </data>
+  <data name="AllReferencesWillBeRemovedAlong.String" xml:space="preserve">
+    <value>所有引用会被一并删除。</value>
+  </data>
+  <data name="Remove.String" xml:space="preserve">
+    <value>移除</value>
+  </data>
 </root>

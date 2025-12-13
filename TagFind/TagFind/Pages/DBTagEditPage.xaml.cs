@@ -57,9 +57,9 @@ namespace TagFind.Pages
             {
                 TagEditor.EditedTag = tagParameter.Tag;
             }
+
+            DeleteButton.IsEnabled = TagEditor.EditedTag.ID != -1;
         }
-
-
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -82,12 +82,40 @@ namespace TagFind.Pages
             TagEditor.EditedTag = new() { ID = -1 };
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog deleteTagDialog = new();
+            deleteTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            deleteTagDialog.Title = GetLocalizedString("AreYouSureYouWantToRemoveThisTag/String");
+            deleteTagDialog.Content = GetLocalizedString("AllReferencesWillBeRemovedAlong/String");
+            deleteTagDialog.XamlRoot = this.XamlRoot;
+            deleteTagDialog.PrimaryButtonText = GetLocalizedString("Remove/String");
+            deleteTagDialog.SecondaryButtonText = GetLocalizedString("Cancel/String");
+            deleteTagDialog.DefaultButton = ContentDialogButton.Secondary;
+            deleteTagDialog.PrimaryButtonClick += DeleteTagDialog_PrimaryButtonClick; ;
+            await deleteTagDialog.ShowAsync();
+            deleteTagDialog.PrimaryButtonClick -= DeleteTagDialog_PrimaryButtonClick;
+        }
+
+        private void DeleteTagDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             ContentManager?.TagPoolRemoveTagByID(TagEditor.EditedTag.ID);
             if (Frame.CanGoBack)
             {
                 Frame.GoBack();
+            }
+        }
+
+        public string GetLocalizedString(string key)
+        {
+            try
+            {
+                var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
+                return resourceLoader.GetString(key);
+            }
+            catch
+            {
+                return "{Resource Load Failed}";
             }
         }
     }

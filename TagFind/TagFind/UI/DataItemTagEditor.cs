@@ -7,12 +7,14 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using TagFind.Classes.DataTypes;
 using TagFind.Classes.DB;
 using TagFind.Interfaces;
+using Windows.ApplicationModel.Contacts;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -101,6 +103,7 @@ namespace TagFind.UI
             }
             if (_tagSuggestPopupSource != null)
             {
+                _tagSuggestPopupSource.PointerExited -= _tagSuggestPopup_PointerExited;
                 _tagSuggestPopupSource.TagSelected -= TagSuggestPopup_TagSelected;
             }
             //this.Loaded -= DataItemTagEditor_Loaded;
@@ -139,11 +142,12 @@ namespace TagFind.UI
             FocusInputBox();
         }
 
-        private void _tagInputTextBox_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
+        private async void _tagInputTextBox_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Escape)
             {
                 _tagInputTextBox_LostFocus(this, e);
+                DisposeTagSuggestPopup();
                 e.Handled = true;
             }
             if (e.Key == Windows.System.VirtualKey.Tab)
@@ -167,6 +171,38 @@ namespace TagFind.UI
                 }
                 e.Handled = true;
             }
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                DBContentManager? contentManager = GetContentManager();
+                string searchString = string.Empty;
+                if (_tagInputTextBox != null && _tagInputTextBox.Text.Trim() != string.Empty)
+                {
+                    searchString = _tagInputTextBox.Text.Trim();
+                }
+                ObservableCollection<Tag> searchResults = [];
+                if (contentManager != null)
+                    searchResults = await contentManager.TagPoolGetTagList(searchString);
+                if (searchResults.Count > 0)
+                {
+                    TagSuggestPopup_TagSelected(this, searchResults[0]);
+                }
+                // Has no tag matched, ask if user want to create a new one
+                else
+                {
+                    ContentDialog createTagDialog = new();
+                    createTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+                    createTagDialog.Title = GetLocalizedString("TagNotExists/String");
+                    createTagDialog.Content = GetLocalizedString("DoYouWantToCreateThisTagNow/String");
+                    createTagDialog.XamlRoot = this.XamlRoot;
+                    createTagDialog.PrimaryButtonText = GetLocalizedString("Create/String");
+                    createTagDialog.SecondaryButtonText = GetLocalizedString("Cancel/String");
+                    createTagDialog.DefaultButton = ContentDialogButton.Primary;
+                    createTagDialog.PrimaryButtonClick += CreateTagDialog_PrimaryButtonClick;
+                    await createTagDialog.ShowAsync();
+                    createTagDialog.PrimaryButtonClick -= CreateTagDialog_PrimaryButtonClick;
+                }
+                e.Handled = true;
+            }
             else if (e.Key == Windows.System.VirtualKey.Down)
             {
                 if (_tagSuggestPopup != null
@@ -182,6 +218,18 @@ namespace TagFind.UI
                     });
                     e.Handled = true;
                 }
+            }
+        }
+
+        private async void CreateTagDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            DBContentManager? contentManager = GetContentManager();
+
+            if (contentManager != null && _tagInputTextBox != null && _tagInputTextBox.Text.Trim() != string.Empty)
+            {
+                Tag tag = new() { MainName = _tagInputTextBox.Text.Trim() };
+                tag.ID = await contentManager.TagPoolAddUniqueTag(tag);
+                TagSuggestPopup_TagSelected(this, tag);
             }
         }
 
@@ -214,9 +262,15 @@ namespace TagFind.UI
                 _tagSuggestPopup.PlacementTarget = _tagInputTextBox;
                 _tagSuggestPopup.DesiredPlacement = PopupPlacementMode.BottomEdgeAlignedLeft;
                 _tagSuggestPopupSource.TagSelected += TagSuggestPopup_TagSelected;
+                _tagSuggestPopupSource.PointerExited += _tagSuggestPopup_PointerExited;
                 _tagSuggestPopup.Child = _tagSuggestPopupSource;
                 _tagSuggestPopup.IsOpen = true;
             }
+        }
+
+        private void _tagSuggestPopup_PointerExited(object sender, RoutedEventArgs e)
+        {
+            DisposeTagSuggestPopup();
         }
 
         private void TagSuggestPopup_TagSelected(object sender, Tag selectedTag)
@@ -263,6 +317,7 @@ namespace TagFind.UI
                 _tagSuggestPopup.IsOpen = false;
                 if (_tagSuggestPopupSource != null)
                 {
+                    _tagSuggestPopupSource.PointerExited -= _tagSuggestPopup_PointerExited;
                     _tagSuggestPopupSource.TagSelected -= TagSuggestPopup_TagSelected;
                     _tagSuggestPopupSource = null;
                 }
@@ -327,6 +382,19 @@ namespace TagFind.UI
                 return _currentPage.ContentManager;
             }
             return null;
+        }
+
+        public string GetLocalizedString(string key)
+        {
+            try
+            {
+                var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
+                return resourceLoader.GetString(key);
+            }
+            catch
+            {
+                return "{Resource Load Failed}";
+            }
         }
     }
 }

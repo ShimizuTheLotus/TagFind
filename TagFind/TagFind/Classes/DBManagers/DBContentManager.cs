@@ -2270,8 +2270,7 @@ namespace TagFind.Classes.DB
             }
             if (tags.Count == 0) return new();
             return tags.First();
-        }
-        
+        }        
 
         /// <summary>
         /// Add a unique tag to tag pool.

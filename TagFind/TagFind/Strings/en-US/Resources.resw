@@ -362,4 +362,22 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="IsContainRelationToggleSwitch.OffContent" xml:space="preserve">
     <value>is not a superset-subset relation</value>
   </data>
+  <data name="TagNotExists.String" xml:space="preserve">
+    <value>Tag Not Exists</value>
+  </data>
+  <data name="DoYouWantToCreateThisTagNow.String" xml:space="preserve">
+    <value>Do you want to create this tag now?</value>
+  </data>
+  <data name="Create.String" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="AreYouSureYouWantToRemoveThisTag.String" xml:space="preserve">
+    <value>Are You Sure You Want To Remove This Tag?</value>
+  </data>
+  <data name="AllReferencesWillBeRemovedAlong.String" xml:space="preserve">
+    <value>All references will be removed alone.</value>
+  </data>
+  <data name="Remove.String" xml:space="preserve">
+    <value>Remove</value>
+  </data>
 </root>
