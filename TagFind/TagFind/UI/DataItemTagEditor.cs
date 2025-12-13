@@ -103,7 +103,7 @@ namespace TagFind.UI
             {
                 _tagSuggestPopupSource.TagSelected -= TagSuggestPopup_TagSelected;
             }
-            this.Loaded -= DataItemTagEditor_Loaded;
+            //this.Loaded -= DataItemTagEditor_Loaded;
             this.Unloaded -= DataItemTagEditor_Unloaded;
         }
 

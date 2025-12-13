@@ -103,7 +103,7 @@ namespace TagFind.UI
                 _listView.Tapped -= _listView_Tapped;
                 _listView.RightTapped -= _listView_RightTapped;
             }
-            this.Loaded -= DataItemListView_Loaded;
+            //this.Loaded -= DataItemListView_Loaded;
             this.Unloaded -= DataItemListView_Unloaded;
         }
 

@@ -19,6 +19,7 @@ namespace TagFind.UI
     {
         private TextBox? _inputTextBox;
         private LogicChainListEditor? _logicChainListEditor;
+        private ToggleSwitch? _isContainRelationToggleSwitch;
 
         public PropertyItem EditedPropertyItem
         {
@@ -41,6 +42,11 @@ namespace TagFind.UI
                     item = new();
                     _editedPropertyItem = item;
                 }
+                if (_isContainRelationToggleSwitch != null)
+                {
+                    _editedPropertyItem.IsContainsRelation = _isContainRelationToggleSwitch.IsOn;
+                }
+
                 UpdateUI();
                 return item;
             }
@@ -65,6 +71,7 @@ namespace TagFind.UI
 
             _inputTextBox = GetTemplateChild("PART_PropertyNameTextBox") as TextBox;
             _logicChainListEditor = GetTemplateChild("PART_LogicChainListEditor") as LogicChainListEditor;
+            _isContainRelationToggleSwitch = GetTemplateChild("PART_IsContainRelationToggleSwitch") as ToggleSwitch;
             UpdateUI();
         }
 
@@ -74,6 +81,8 @@ namespace TagFind.UI
                 _inputTextBox.Text = _editedPropertyItem.PropertyName;
             if (_logicChainListEditor != null)
                 _logicChainListEditor.EditedLogicChainList = _editedPropertyItem.RestrictedTagLogicChains;
+            if (_isContainRelationToggleSwitch != null)
+                _isContainRelationToggleSwitch.IsOn = _editedPropertyItem.IsContainsRelation;
         }
     }
 }

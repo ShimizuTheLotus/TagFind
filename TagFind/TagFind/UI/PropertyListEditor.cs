@@ -72,7 +72,7 @@ namespace TagFind.UI
 
         private void PropertyListEditor_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= PropertyItemEditorListView_Loaded;
+            //this.Loaded -= PropertyItemEditorListView_Loaded;
             this.Unloaded -= PropertyListEditor_Unloaded;
         }
 

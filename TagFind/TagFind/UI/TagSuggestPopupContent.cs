@@ -78,12 +78,12 @@ namespace TagFind.UI
 
         private void TagSuggestPopupContent_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= TagSuggestPopupContent_Loaded;
-            this.Unloaded -= TagSuggestPopupContent_Unloaded;
             if (_listView != null)
             {
                 _listView.PreviewKeyDown -= _listView_PreviewKeyDown;
             }
+            //this.Loaded -= TagSuggestPopupContent_Loaded;
+            this.Unloaded -= TagSuggestPopupContent_Unloaded;
         }
 
         private void _listView_SelectionChanged(object sender, SelectionChangedEventArgs e)

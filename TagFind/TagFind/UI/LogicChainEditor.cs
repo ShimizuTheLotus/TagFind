@@ -83,8 +83,6 @@ namespace TagFind.UI
 
         private void LogicChainEditor_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= LogicChainEditor_Loaded;
-            this.Unloaded -= LogicChainEditor_Unloaded;
             if (_inputTextBox != null)
             {
                 _inputTextBox.TextChanged -= _inputAutoSuggestBox_TextChanged;
@@ -98,8 +96,8 @@ namespace TagFind.UI
             {
                 _propertySuggestPopup.PropertySelected -= _propertySuggestPopup_PropertySelected;
             }
-
-            UpdateUI();
+            //this.Loaded -= LogicChainEditor_Loaded;
+            this.Unloaded -= LogicChainEditor_Unloaded;
         }
 
         ~LogicChainEditor()

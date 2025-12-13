@@ -73,6 +73,7 @@ namespace TagFind.UI
             {
                 _deleteDataItemButton.Click -= _deleteDataItemButton_Click;
             }
+            this.Unloaded -= DataItemTagListEditor_Unloaded;
         }
 
         protected override void OnApplyTemplate()

@@ -57,7 +57,7 @@ namespace TagFind.UI
 
         private void LogicChainArrow_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= LogicChainArrow_Loaded;
+            //this.Loaded -= LogicChainArrow_Loaded;
             this.Unloaded -= LogicChainArrow_Unloaded;
             this.ActualThemeChanged -= LogicChainArrow_ActualThemeChanged;
         }

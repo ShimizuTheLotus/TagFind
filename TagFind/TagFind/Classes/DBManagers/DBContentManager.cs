@@ -482,10 +482,11 @@ namespace TagFind.Classes.DB
         {
             {
                 string command =
-                    $"SELECT * FROM {nameof(DataItem)} " +
-                    $"WHERE {nameof(DataItem.ID)} = @{nameof(DataItem.ID)} " +
+                    $"SELECT * FROM {nameof(DataItems)} " +
+                    $"WHERE {nameof(DataItems.ID)} = @{nameof(DataItems.ID)} " +
                     $"LIMIT 1";
                 SqliteCommand sqliteCommand = new(command, dbConnection);
+                sqliteCommand.Parameters.AddWithValue($"@{nameof(DataItems.ID)}", ID);
                 SqliteDataReader sqliteDataReader = sqliteCommand.ExecuteReader();
                 while (sqliteDataReader.Read())
                 {
@@ -794,12 +795,204 @@ namespace TagFind.Classes.DB
             });
         }
 
+        private async Task DataItemGetChildSetsIterative(long tagID, List<long> EqualValueList, HashSet<long> matchIDHashSet)
+        {
+            Tag tag = await TagPoolGetTagByID(tagID);
+            foreach (PropertyItem propertyItem in tag.PropertyItems)
+            {
+                if (propertyItem.IsContainsRelation)
+                {
+                    // Try get subItems.
+
+                    // Find tag that contains this propertyItem in its logic chains
+                    HashSet<long> tagIDsOfContainPropertyItem = [];
+                    string seq = $"% % {propertyItem.ID}";
+                    string command =
+                        $"SELECT * FROM {nameof(TagData)} " +
+                        $"WHERE {nameof(TagData.Seq)} LIKE @{nameof(TagData.Seq)} " +
+                        $"AND {nameof(TagData.Type)} = @{nameof(TagData.Type)}";
+                    SqliteCommand sqliteCommand = new(command, dbConnection);
+                    sqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.Seq)}", seq);
+                    sqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.Type)}", nameof(TagData.LogicChainItem));
+                    SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        tagIDsOfContainPropertyItem.Add(reader.GetInt64(1));
+                    }
+
+
+                    foreach (long id in tagIDsOfContainPropertyItem)
+                    {
+                        if (EqualValueList.Contains(id)) continue;
+                        Tag _tag = await TagPoolGetTagByID(id);
+                        if (matchIDHashSet.Contains(id)) return;
+                        List<LogicChain> logicChains = _tag.LogicChains.Where(x => x.LogicChainData.Any(y => y.ParentPropertyItemID == propertyItem.ID)).ToList();
+                        foreach (LogicChain logicChain in logicChains)
+                        {
+                            bool getStartNode = false;
+                            foreach (LogicChainItem logicChainItem in logicChain.LogicChainData)
+                            {
+                                if (logicChainItem.ParentPropertyItemID == propertyItem.ID)
+                                {
+                                    getStartNode = true;
+                                }
+                                if (getStartNode)
+                                {
+                                    // Set condition haven't spread to the tag on this chain.
+                                    if (!PropertyItemGetIsContainRelationByID(logicChainItem.ParentPropertyItemID))
+                                        break;
+                                    // Set relation still true.
+                                    if (logicChainItem.OnChainTagID == _tag.ID
+                                        || logicChainItem.OnChainTagID == -1)
+                                    {
+                                        matchIDHashSet.Add(id);
+                                        EqualValueList.Add(id);
+                                        await DataItemGetChildSetsIterative(id, EqualValueList, matchIDHashSet);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private async Task DataItemSearchHelperGetChildSets(HashSet<long> matchIDHashSet, List<long> EqualValueList, HashSet<long> tagIDsOfContainPropertyItem, long startPropertyID)
+        {
+            // Find property items having the property ID in their logic chains.
+            foreach (long id in tagIDsOfContainPropertyItem)
+            {
+                if (matchIDHashSet.Contains(id)) continue;
+                Tag _tag = await TagPoolGetTagByID(id);
+                List<LogicChain> logicChains = _tag.LogicChains.Where(x => x.LogicChainData.Any(y => y.ParentPropertyItemID == startPropertyID)).ToList();
+                foreach (LogicChain logicChain in logicChains)
+                {
+                    bool getStartNode = false;
+                    foreach (LogicChainItem logicChainItem in logicChain.LogicChainData)
+                    {
+                        if (logicChainItem.ParentPropertyItemID == startPropertyID)
+                        {
+                            getStartNode = true;
+                        }
+                        if (getStartNode)
+                        {
+                            // Set condition haven't spread to the tag on this chain.
+                            if (!PropertyItemGetIsContainRelationByID(logicChainItem.ParentPropertyItemID))
+                                break;
+                            // Set relation still true.
+                            if (logicChainItem.OnChainTagID == _tag.ID
+                                || logicChainItem.OnChainTagID == -1)
+                            {
+
+                                if (!matchIDHashSet.Contains(id))
+                                {
+                                    matchIDHashSet.Add(id);
+                                    EqualValueList.Add(id);
+                                    await DataItemGetChildSetsIterative(id, EqualValueList, matchIDHashSet);
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public async IAsyncEnumerable<DataItem> DataItemSearchViaSearchConditionsIterativeAsync(ObservableCollection<SearchCondition> searchConditions, DataItemSearchConfig dataItemSearchConfig, SearchAndSortModeInfo SearchAndSortMode, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await _lock.WaitAsync();
 
             try
             {
+                if (dataItemSearchConfig.SetSearch)
+                {
+                    foreach (SearchCondition condition in searchConditions)
+                    {
+                        if (condition is TagCondition tagCondition)
+                        {
+                            tagCondition.EqualValueList.Clear();
+                            tagCondition.EqualValueList.Add(tagCondition.TagID);
+                            // Get properties with "contains" relation.
+                            Tag tag = await TagPoolGetTagByID(tagCondition.TagID);
+                            // Examine properties in the tag
+                            foreach (PropertyItem propertyItem in tag.PropertyItems)
+                            {
+                                if (propertyItem.IsContainsRelation)
+                                {
+                                    // Try get subItems.
+
+                                    // Find tag that contains this propertyItem in its logic chains
+                                    HashSet<long> tagIDsOfContainPropertyItem = [];
+                                    string seq = $"% % {propertyItem.ID}";
+                                    string command =
+                                        $"SELECT * FROM {nameof(TagData)} " +
+                                        $"WHERE {nameof(TagData.Seq)} LIKE @{nameof(TagData.Seq)} " +
+                                        $"AND {nameof(TagData.Type)} = @{nameof(TagData.Type)}";
+                                    SqliteCommand sqliteCommand = new(command, dbConnection);
+                                    sqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.Seq)}", seq);
+                                    sqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.Type)}", nameof(TagData.LogicChainItem));
+                                    SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                                    while (reader.Read())
+                                    {
+                                        tagIDsOfContainPropertyItem.Add(reader.GetInt64(1));
+                                    }
+
+                                    // Try find the tags that is truly a subset.
+                                    if (dataItemSearchConfig.FindSetStoredIndifferentTags)
+                                    {
+                                        HashSet<long> _matchIDs = [];
+                                        await DataItemSearchHelperGetChildSets(_matchIDs, tagCondition.EqualValueList, tagIDsOfContainPropertyItem, propertyItem.ID);
+
+                                    }
+                                    else
+                                    {
+                                        foreach (long id in tagIDsOfContainPropertyItem)
+                                        {
+                                            if (tagCondition.EqualValueList.Contains(id)) continue;
+                                            Tag _tag = await TagPoolGetTagByID(id);
+                                            List<LogicChain> logicChains = _tag.LogicChains.Where(x => x.LogicChainData.Any(y => y.ParentPropertyItemID == propertyItem.ID)).ToList();
+                                            bool isSubset = false;
+                                            foreach (LogicChain logicChain in logicChains)
+                                            {
+                                                bool getStartNode = false;
+                                                foreach (LogicChainItem logicChainItem in logicChain.LogicChainData)
+                                                {
+                                                    if (logicChainItem.ParentPropertyItemID == propertyItem.ID)
+                                                    {
+                                                        getStartNode = true;
+                                                    }
+                                                    if (getStartNode)
+                                                    {
+                                                        // Set condition haven't spread to the tag on this chain.
+                                                        if (!PropertyItemGetIsContainRelationByID(logicChainItem.ParentPropertyItemID))
+                                                            break;
+                                                        // Set relation still true.
+                                                        if (logicChainItem.OnChainTagID == _tag.ID
+                                                            || logicChainItem.OnChainTagID == -1)
+                                                        {
+                                                            isSubset = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                if (isSubset)
+                                                {
+                                                    tagCondition.EqualValueList.Add(id);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 List<DataItem> emptyResult = [];
 
                 //No conditions
@@ -1008,19 +1201,45 @@ namespace TagFind.Classes.DB
                 //Process tag conditions
                 foreach (TagCondition tcond in tagConditions)
                 {
-                    string _command =
-                        $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
-                        $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
-                    SqliteCommand _cmd = new(_command, dbConnection);
-                    _cmd.Parameters.AddWithValue($"@{new ItemTags().TagID}", tcond.TagID);
-                    using (SqliteDataReader reader = _cmd.ExecuteReader())
+                    if (dataItemSearchConfig.SetSearch)
                     {
-                        while (reader.Read())
+                        StringBuilder command = new();
+                        command.Append($"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} ");
+                        string[] tagIDInListPlaceHolders = tcond.EqualValueList.Select((_, i) => $"@p{i}").ToArray();
+                        string tagIDInListPlaceHolderText = string.Join(",", tagIDInListPlaceHolders);
+                        command.Append($"WHERE {nameof(ItemTags.TagID)} IN ({tagIDInListPlaceHolderText})");
+                        SqliteCommand sqliteCommand = new(command.ToString(), dbConnection);
+                        if (tagIDInListPlaceHolders.Count() > 0)
                         {
-                            long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
-                            if (id == -1) continue;
-                            if (!tagMatchCounts.ContainsKey(id)) tagMatchCounts[id] = 0;
-                            tagMatchCounts[id]++;
+                            for (int i = 0; i < tagIDInListPlaceHolders.Count(); i++)
+                                sqliteCommand.Parameters.AddWithValue(tagIDInListPlaceHolders[i], tcond.EqualValueList[i]);
+                            SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
+                                if (id == -1) continue;
+                                if (!tagMatchCounts.ContainsKey(id)) tagMatchCounts[id] = 0;
+                                tagMatchCounts[id]++;
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        string _command =
+                            $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
+                            $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
+                        SqliteCommand _cmd = new(_command, dbConnection);
+                        _cmd.Parameters.AddWithValue($"@{new ItemTags().TagID}", tcond.TagID);
+                        using (SqliteDataReader reader = _cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                long id = reader.IsDBNull(0) ? -1 : reader.GetInt64(0);
+                                if (id == -1) continue;
+                                if (!tagMatchCounts.ContainsKey(id)) tagMatchCounts[id] = 0;
+                                tagMatchCounts[id]++;
+                            }
                         }
                     }
                 }
@@ -1576,7 +1795,8 @@ namespace TagFind.Classes.DB
                         {
                             // In searching
                             verifier.Add(currentID);
-                            string dataItemTitle = DataItemGetNameByID(currentID);
+                            string dataItemTitle = reader.GetString(5); // DataItemGetNameByID(currentID);
+
                             if (DataItemVerifyExists(currentID))
                             {
                                 result.Insert(0, new ExplorerFolder() { ID = currentID, Name = dataItemTitle });
@@ -2167,7 +2387,7 @@ namespace TagFind.Classes.DB
                     // Property item is edited
                     if (originalTag.PropertyItems.ContainsPropertyItem(property))
                     {
-                        TagDataUpdatePropertyItemSeq(property.ID, property.Seq);
+                        TagDataUpdatePropertyItemSeq(property.ID, property.Seq, property.IsContainsRelation);
                         // Update RestrictionLogicChains
                         TagDataRemoveRestrictionLogicChainsOfPropertyItem(tagInfo.ID, property.ID);
 
@@ -2300,8 +2520,10 @@ namespace TagFind.Classes.DB
 
         private void TagDataAddLogicChains(long TagID, List<LogicChain> LogicChains)
         {
+            long chainID = 0;
             foreach (LogicChain chain in LogicChains)
             {
+                chain.ChainID = chainID;
                 if (chain.LogicChainData.Count > 0)
                 {
                     chain.LogicChainData[^1].OnChainTagID = TagID;
@@ -2313,9 +2535,11 @@ namespace TagFind.Classes.DB
                 long parentDataItemID = -1;
                 foreach (LogicChainItem item in chain.LogicChainData)
                 {
+                    item.ChainID = chain.ChainID;
                     item.ParentDataItemID = parentDataItemID;
                     parentDataItemID = TagDataAddLogicChainItem(TagID, item);
                 }
+                chainID++;
             }
         }
         private long TagDataAddLogicChainItem(long TagID, LogicChainItem Item)
@@ -2349,6 +2573,7 @@ namespace TagFind.Classes.DB
                 command = "SELECT last_insert_rowid()";
                 SqliteCommand = new(command, dbConnection);
                 Item.ID = (long)(SqliteCommand.ExecuteScalar() ?? -1);
+                SqliteCommand.ExecuteNonQuery();
             }
 #if !DEBUG
             catch (Exception ex)
@@ -2601,7 +2826,7 @@ namespace TagFind.Classes.DB
                 ")";
             SqliteCommand SqliteCommand = new(command, dbConnection);
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", PropertyItem.Seq.ToString());
+            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", $"{PropertyItem.Seq.ToString()} {(PropertyItem.IsContainsRelation ? 1 : 0)}");
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().PropertyItem);
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().Value}", PropertyItem.PropertyName);
             SqliteCommand.ExecuteNonQuery();
@@ -2631,15 +2856,16 @@ namespace TagFind.Classes.DB
                 chainID++;
             }
         }
-        private void TagDataUpdatePropertyItemSeq(long PropertyID, long NewSeq)
+        private void TagDataUpdatePropertyItemSeq(long PropertyID, long newSeq, bool isContainRelation)
         {
             string command =
                 $"UPDATE {nameof(TagData)} " +
                 $"SET {new TagData().Seq} = @{new TagData().Seq} " +
                 $"WHERE {new TagData().ID} = @{new TagData().ID}";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", NewSeq);
+            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", $"{newSeq.ToString()} {(isContainRelation ? 1 : 0)}");
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().ID}", PropertyID);
+            SqliteCommand.ExecuteNonQuery();
         }
         private void TagDataRemovePropertyItem(long PropertyTagID, PropertyItem Property)
         {
@@ -2728,6 +2954,31 @@ namespace TagFind.Classes.DB
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().ID}", Property.ID);
             SqliteCommand.ExecuteNonQuery();
         }
+
+        private bool PropertyItemGetIsContainRelationByID(long ID)
+        {
+            string command =
+                $"SELECT * FROM {nameof(TagData)} " +
+                $"WHERE {nameof(TagData.Type)} = @{nameof(TagData.Type)} " +
+                $"AND {nameof(TagData.ID)} = {nameof(TagData.ID)} " +
+                $"LIMIT 1";
+            SqliteCommand sqliteCommand = new(command, dbConnection);
+            sqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.Type)}", nameof(TagData.PropertyItem));
+            sqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.ID)}", ID);
+            SqliteDataReader reader = sqliteCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                string rawSeq = reader.GetString(2);
+                int[] intArray = rawSeq.Split(' ')
+                                       .Select(int.Parse)
+                                       .ToArray();
+                if (intArray.Length >= 2) // TDB version 0.0.1, for compatibility
+                {
+                    return intArray[1] == 1;
+                }
+            }
+            return false;
+        }
     }
 
     public static class DBContentManagerExtension
@@ -2787,7 +3038,18 @@ namespace TagFind.Classes.DB
                         PropertyItem propertyItem = new();
                         propertyItem.ID = subReader.GetInt64(0);
                         propertyItem.TagID = subReader.GetInt64(1);
-                        propertyItem.Seq = long.Parse(subReader.GetString(2));
+                        string rawSeq = subReader.GetString(2);
+                        int[] intArray = rawSeq.Split(' ')
+                                               .Select(int.Parse)
+                                               .ToArray();
+                        if (intArray.Length >= 2) // TDB version 0.0.1, for compatibility
+                        {
+                            propertyItem.IsContainsRelation = intArray[1] == 1;
+                        }
+                        if (intArray.Length >= 1)// TDB version 0.0.0
+                        {
+                            propertyItem.Seq = intArray[0];
+                        }
                         propertyItem.PropertyName = subReader.GetString(4);
                         tag.PropertyItems.Add(propertyItem);
                     }
@@ -3380,4 +3642,3 @@ namespace TagFind.Classes.DB
         }
     }
 }
-  

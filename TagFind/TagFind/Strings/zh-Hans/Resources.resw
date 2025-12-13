@@ -356,4 +356,10 @@
   <data name="TutorialEditDataItemTagsTextBlock.Text" xml:space="preserve">
     <value>你可以编辑数据项的标签，并且用其它标签填充它们的空位（这不是必要的）。</value>
   </data>
+  <data name="IsContainRelationToggleSwitch.OnContent" xml:space="preserve">
+    <value>是包含关系</value>
+  </data>
+  <data name="IsContainRelationToggleSwitch.OffContent" xml:space="preserve">
+    <value>不是包含关系</value>
+  </data>
 </root>

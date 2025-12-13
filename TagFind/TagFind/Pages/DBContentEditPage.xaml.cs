@@ -49,7 +49,6 @@ namespace TagFind.Pages
         {
             base.OnNavigatedFrom(e);
 
-            this.Loaded -= DBContentEditPage_Loaded;
             DataItemEditor.RequestSaveContent -= DataItemEditor_RequestSaveContent;
         }
 

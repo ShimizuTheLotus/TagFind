@@ -356,4 +356,10 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="TutorialEditDataItemTagsTextBlock.Text" xml:space="preserve">
     <value>You can edit tags of a data item using tags and use specific tags to fill their proporty spaces(It's not necessary).</value>
   </data>
+  <data name="IsContainRelationToggleSwitch.OnContent" xml:space="preserve">
+    <value>Is a superset-subset relation</value>
+  </data>
+  <data name="IsContainRelationToggleSwitch.OffContent" xml:space="preserve">
+    <value>is not a superset-subset relation</value>
+  </data>
 </root>

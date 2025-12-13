@@ -72,7 +72,7 @@ namespace TagFind.UI
                 _tokenizingTextBox.QuerySubmitted -= _tokenizingTextBox_QuerySubmitted;
                 _tokenizingTextBox.TokenItemRemoved -= _tokenizingTextBox_TokenItemRemoved;
             }
-            this.Loaded -= ConditionTokenizedSuggestBox_Loaded;
+            //this.Loaded -= ConditionTokenizedSuggestBox_Loaded;
             this.Unloaded -= ConditionTokenizedSuggestBox_Unloaded;
         }
 

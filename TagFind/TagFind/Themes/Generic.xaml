@@ -361,6 +361,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <StackPanel>
                             <TextBox x:Name="PART_PropertyNameTextBox"/>
+                            <ToggleSwitch x:Name="PART_IsContainRelationToggleSwitch" x:Uid="IsContainRelationToggleSwitch"/>
                             <local:LogicChainListEditor x:Name="PART_LogicChainListEditor"/>
                         </StackPanel>
                     </Border>

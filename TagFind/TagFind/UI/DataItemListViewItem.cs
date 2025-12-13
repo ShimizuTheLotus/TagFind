@@ -62,7 +62,7 @@ namespace TagFind.UI
                 _thumbnailImage.PointerEntered -= _thumbnailImage_PointerEntered;
                 _thumbnailImage.PointerExited -= _thumbnailImage_PointerExited;
             }
-            this.Loaded -= DataItemListViewItem_Loaded;
+            //this.Loaded -= DataItemListViewItem_Loaded;
             this.Unloaded -= DataItemListViewItem_Unloaded;
         }
 

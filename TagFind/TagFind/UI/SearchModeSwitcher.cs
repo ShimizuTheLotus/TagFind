@@ -63,8 +63,6 @@ namespace TagFind.UI
 
         private void SearchModeSwitcher_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= SearchModeSwitcher_Loaded;
-            this.Unloaded -= SearchModeSwitcher_Unloaded;
             if (_globalSearchModeMenuFlyoutItem != null)
             {
                 _globalSearchModeMenuFlyoutItem.Click -= _globalSearchModeMenuFlyoutItem_Click;
@@ -77,6 +75,8 @@ namespace TagFind.UI
             {
                 _currentLayerSearchModeMenuFlyoutItem.Click -= _currentLayerSearchModeMenuFlyoutItem_Click;
             }
+            //this.Loaded -= SearchModeSwitcher_Loaded;
+            this.Unloaded -= SearchModeSwitcher_Unloaded;
         }
 
         protected override void OnApplyTemplate()

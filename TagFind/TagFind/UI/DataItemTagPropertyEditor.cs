@@ -54,12 +54,12 @@ namespace TagFind.UI
 
         private void DataItemTagPropertyEditor_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= DataItemTagPropertyEditor_Loaded;
-            this.Unloaded -= DataItemTagPropertyEditor_Unloaded;
             if (_stackPanel != null)
             {
                 _stackPanel.GotFocus -= DataItemTagPropertyEditor_GotFocus;
             }
+            //this.Loaded -= DataItemTagPropertyEditor_Loaded;
+            this.Unloaded -= DataItemTagPropertyEditor_Unloaded;
         }
 
         private void DataItemTagPropertyEditor_GotFocus(object sender, RoutedEventArgs e)

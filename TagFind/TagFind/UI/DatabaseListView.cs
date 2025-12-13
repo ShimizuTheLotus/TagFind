@@ -74,7 +74,7 @@ namespace TagFind.UI
             {
                 _listView.ItemClick -= _listView_ItemClick;
             }
-            this.Loaded -= DatabaseListView_Loaded;
+            //this.Loaded -= DatabaseListView_Loaded;
             this.Unloaded -= DatabaseListView_Unloaded;
         }
 

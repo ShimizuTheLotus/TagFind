@@ -19,6 +19,7 @@ namespace TagFind.Classes.DataTypes
         public class TagCondition : SearchCondition
         {
             public long TagID { get; set; } = -1;
+            public List<long> EqualValueList { get; set; } = [];// For searching in set search mode. They can be used to replace each other.
             public string TagName { get; set; } = string.Empty;
 
             public string MainName { get => TagName; set => TagName = value; }

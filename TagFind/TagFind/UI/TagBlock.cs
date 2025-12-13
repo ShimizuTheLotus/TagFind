@@ -105,13 +105,13 @@ namespace TagFind.UI
 
         private void TagBlock_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= TagBlock_Loaded;
-            this.Unloaded -= TagBlock_Unloaded;
             this.PointerEntered -= TagBlock_PointerEntered;
             this.PointerExited -= TagBlock_PointerExited;
             this.PointerPressed -= TagBlock_PointerPressed;
             this.PointerReleased -= TagBlock_PointerReleased;
             this.Tapped -= TagBlock_Tapped;
+            //this.Loaded -= TagBlock_Loaded;
+            this.Unloaded -= TagBlock_Unloaded;
         }
 
         private void TagBlock_Tapped(object sender, TappedRoutedEventArgs e)

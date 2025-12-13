@@ -53,7 +53,6 @@ namespace TagFind.Pages
         {
             base.OnNavigatedFrom(e);
 
-            this.Loaded -= DBContentDetailPage_Loaded;
             OpenFileButton.Click -= OpenFileButton_Click;
         }
 

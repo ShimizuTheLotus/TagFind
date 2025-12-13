@@ -46,16 +46,17 @@ namespace TagFind
             }
         }
 
-        private void Current_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+        private async void Current_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
         {
-            ContentDialog CreateDatabaseDialog = new();
-            CreateDatabaseDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            CreateDatabaseDialog.Title = "Unhandled Exception:";
-            CreateDatabaseDialog.Content = e.Message;
-            CreateDatabaseDialog.XamlRoot = this.Content.XamlRoot;
-            CreateDatabaseDialog.PrimaryButtonText = "OK";
-            CreateDatabaseDialog.DefaultButton = ContentDialogButton.Primary;
-            CreateDatabaseDialog.IsPrimaryButtonEnabled = false;
+            ContentDialog unhandledExceptionMessageDialog = new();
+            unhandledExceptionMessageDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            unhandledExceptionMessageDialog.Title = "Unhandled Exception:";
+            unhandledExceptionMessageDialog.Content = e.Message;
+            unhandledExceptionMessageDialog.XamlRoot = this.Content.XamlRoot;
+            unhandledExceptionMessageDialog.PrimaryButtonText = "OK";
+            unhandledExceptionMessageDialog.DefaultButton = ContentDialogButton.Primary;
+            unhandledExceptionMessageDialog.IsPrimaryButtonEnabled = false;
+            await unhandledExceptionMessageDialog.ShowAsync();
         }
 
         public void ClearMessage()

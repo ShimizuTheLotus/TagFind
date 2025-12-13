@@ -12,6 +12,11 @@ namespace TagFind.Classes.DataTypes
         public long TagID { get; set; }
         public string PropertyName { get; set; } = string.Empty;
         public long Seq { get; set; }
+        /// <summary>
+        /// Is "contains" relation means the child tag using this property to attach the parent tag in its logic chains, the child tag is a subset of the parent tag.
+        /// When "set" search mode was enabled, the search results can include subsets of the searched tag.
+        /// </summary>
+        public bool IsContainsRelation { get; set; } = false;
         public List<LogicChain> RestrictedTagLogicChains { get; set; } = [];
 
         public PropertyItem()

@@ -59,7 +59,6 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
     {
         base.OnNavigatedFrom(e);
 
-        this.Loaded -= DBListPage_Loaded;
         DatabaseListView.RequestOpenDatabase -= DatabaseListView_RequestOpenDatabase;
     }
 
@@ -88,7 +87,7 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
                     if (_contentManager.Connected)
                     {
                         _contentManager.InitializeDB();
-                        await _contentManager.EditMeta("TDBVersion", "0.0.0");
+                        await _contentManager.EditMeta("TDBVersion", "0.0.1");
                         await _contentManager.EditMeta("Description", content.Description);
                         _listManager.Add(filePath, content.Description);
                         _contentManager.CloseDB();

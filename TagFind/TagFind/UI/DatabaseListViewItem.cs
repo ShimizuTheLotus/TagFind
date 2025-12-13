@@ -70,7 +70,7 @@ namespace TagFind.UI
             {
                 _removeReferenceAppBarButton.Click -= _removeReferenceAppBarButton_Click;
             }
-            this.Loaded -= DatabaseListViewItem_Loaded;
+            //this.Loaded -= DatabaseListViewItem_Loaded;
             this.Unloaded -= DatabaseListViewItem_Unloaded;
         }
 

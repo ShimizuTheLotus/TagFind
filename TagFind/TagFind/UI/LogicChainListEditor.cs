@@ -72,8 +72,6 @@ namespace TagFind.UI
 
         private void LogicChainListEditor_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= LogicChainListEditor_Loaded;
-            this.Unloaded -= LogicChainListEditor_Unloaded;
             if (_addLogicChainButton != null)
             {
                 _addLogicChainButton.Click -= _addLogicChainButton_Click;
@@ -82,6 +80,8 @@ namespace TagFind.UI
             {
                 _removeLogicChainButton.Click -= _removeLogicChainButton_Click;
             }
+            //this.Loaded -= LogicChainListEditor_Loaded;
+            this.Unloaded -= LogicChainListEditor_Unloaded;
         }
 
         protected override void OnApplyTemplate()

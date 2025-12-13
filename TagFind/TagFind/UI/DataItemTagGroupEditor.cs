@@ -92,7 +92,7 @@ namespace TagFind.UI
             }
             _editingTextBox.TextChanged -= _editingTextBox_TextChanged;
             _editingTextBox.PreviewKeyDown -= _editingTextBox_PreviewKeyDown;
-            this.Loaded -= DataItemTagGroupEditor_Loaded;
+            //this.Loaded -= DataItemTagGroupEditor_Loaded;
             this.Unloaded -= DataItemTagGroupEditor_Unloaded;
         }
 

@@ -70,7 +70,6 @@ namespace TagFind.Pages
         {
             base.OnNavigatedFrom(e);
 
-            this.Loaded -= DBContentExplorerPage_Loaded;
             DataItemListView.RequestOpenDataItemDetail -= DataItemListView_RequestOpenDataItemDetail;
             DataItemListView.RequestOpenDataItemAsFolder -= DataItemListView_RequestOpenDataItemAsFolder;
             ConditionTokenizedSuggestBox.RequestSearch -= ConditionTokenizedSuggestBox_RequestSearch;
