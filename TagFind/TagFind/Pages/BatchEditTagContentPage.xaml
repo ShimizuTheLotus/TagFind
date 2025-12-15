@@ -9,13 +9,17 @@
     xmlns:ui="using:TagFind.UI"
     mc:Ignorable="d">
 
-    <StackPanel>
-        <TextBlock x:Uid="DeleteTagIfHaveTextBlock"/>
-        <TextBlock x:Uid="TagsToBeAddedTextBlock"/>
-        <ui:DataItemTagListEditor x:Name="TagsToBeAddedEditor"/>
-        <TextBlock x:Uid="TagsToBeDeletedTextBlock"/>
-        <ui:DataItemTagListEditor x:Name="TagsToBeDeletedEditor"/>
-        <CheckBox x:Name="ApplyToSubitemsCheckBox" x:Uid="ApplyToSubitemsCheckBox"/>
-        <Button x:Name="ApplyChangeButton" Content="Apply" Click="ApplyChangeButton_Click"/>
-    </StackPanel>
+    <ScrollViewer Margin="16 48 16 0" Padding="16" CornerRadius="8 8 0 0"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+        <StackPanel>
+            <TextBlock x:Uid="TagsToBeAddedTextBlock" Style="{StaticResource TitleTextBlockStyle}"/>
+            <TextBlock x:Uid="BatchAddTagDescriptionTextBlock"/>
+            <ui:DataItemTagListEditor x:Name="TagsToBeAddedEditor"/>
+            <TextBlock x:Uid="TagsToBeDeletedTextBlock" Style="{StaticResource TitleTextBlockStyle}"/>
+            <TextBlock x:Uid="BatchDeleteTagIfHaveDescriptionTextBlock"/>
+            <ui:DataItemTagListEditor x:Name="TagsToBeDeletedEditor"/>
+            <CheckBox x:Name="ApplyToSubitemsCheckBox" x:Uid="ApplyToSubitemsCheckBox"/>
+            <Button x:Name="ApplyChangeButton" Content="Apply" Click="ApplyChangeButton_Click"/>
+        </StackPanel>
+    </ScrollViewer>
 </Page>

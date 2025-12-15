@@ -386,9 +386,6 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Apply.String" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="BatchEditTagsDialogTitle.String" xml:space="preserve">
-    <value>Batch Edit Tags</value>
-  </data>
   <data name="ApplyToSubitemsTextBlock.Text" xml:space="preserve">
     <value>Apply to subitems</value>
   </data>
@@ -400,5 +397,11 @@ Tips: If different things has same name, we recommend separate them into differe
   </data>
   <data name="ApplyToSubitemsCheckBox.Content" xml:space="preserve">
     <value>Apply to subitems</value>
+  </data>
+  <data name="BatchAddTagDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Tags will be added by this pattern. The program will add the tags doesn't exists or not at target places.</value>
+  </data>
+  <data name="BatchDeleteTagIfHaveDescriptionTextBlock.Text" xml:space="preserve">
+    <value>Tags of selected items will be deleted if they exists. If you filled the properties of the tags, only the tags as leaf nodes will be deleted if they match the path.</value>
   </data>
 </root>

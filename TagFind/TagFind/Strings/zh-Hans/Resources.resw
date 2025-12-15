@@ -386,9 +386,6 @@
   <data name="Apply.String" xml:space="preserve">
     <value>应用</value>
   </data>
-  <data name="BatchEditTagsDialogTitle.String" xml:space="preserve">
-    <value>批量编辑标签</value>
-  </data>
   <data name="ApplyToSubitemsTextBlock.Text" xml:space="preserve">
     <value>应用到子项</value>
   </data>
@@ -400,5 +397,11 @@
   </data>
   <data name="ApplyToSubitemsCheckBox.Content" xml:space="preserve">
     <value>应用到子项</value>
+  </data>
+  <data name="BatchAddTagDescriptionTextBlock.Text" xml:space="preserve">
+    <value>标签将会以这种方式被添加。如果标签不存在，或者不在指定的位置上，程序将会添加标签。</value>
+  </data>
+  <data name="BatchDeleteTagIfHaveDescriptionTextBlock.Text" xml:space="preserve">
+    <value>被选中项的标签如果存在，将会被删除。如果你在属性内填充了标签，只有在叶子节点且符合路径条件的标签会被移除。</value>
   </data>
 </root>
