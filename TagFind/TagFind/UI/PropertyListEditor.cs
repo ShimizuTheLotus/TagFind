@@ -67,7 +67,6 @@ namespace TagFind.UI
         private void PropertyItemEditorListView_Loaded(object sender, RoutedEventArgs e)
         {
             this.Unloaded += PropertyListEditor_Unloaded;
-            UpdateUI();
         }
 
         private void PropertyListEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -90,6 +89,8 @@ namespace TagFind.UI
             {
                 _deletePropertyItemButton.Click += _deletePropertyItemButton_Click;
             }
+
+            UpdateUI();
         }
 
         private void _deletePropertyItemButton_Click(object sender, RoutedEventArgs e)

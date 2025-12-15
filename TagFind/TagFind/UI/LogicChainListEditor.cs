@@ -66,8 +66,6 @@ namespace TagFind.UI
             {
                 _removeLogicChainButton.Click += _removeLogicChainButton_Click;
             }
-
-            UpdateUI();
         }
 
         private void LogicChainListEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -91,6 +89,8 @@ namespace TagFind.UI
             _addLogicChainButton = GetTemplateChild("PART_AddLogicChainButton") as AppBarButton;
             _removeLogicChainButton = GetTemplateChild("PART_RemoveLogicChainButton") as AppBarButton;
             _listView = GetTemplateChild("PART_ListView") as ListView;
+
+            UpdateUI();
         }
 
         private void _removeLogicChainButton_Click(object sender, RoutedEventArgs e)

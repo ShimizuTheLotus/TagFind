@@ -12,6 +12,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Pages\BatchEditTagContentPage.xaml" />
     <None Remove="Pages\DBTagPoolPage.xaml" />
     <None Remove="UI\ContentDialogPages\TutorialContentDialogPage.xaml" />
   </ItemGroup>
@@ -43,6 +44,18 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\BatchEditTagContentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="UI\ContentDialogPages\BatchEditTagContentDialogPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

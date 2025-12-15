@@ -48,8 +48,6 @@ namespace TagFind.UI
             {
                 _stackPanel.GotFocus += DataItemTagPropertyEditor_GotFocus;
             }
-
-            UpdateUI();
         }
 
         private void DataItemTagPropertyEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -77,6 +75,8 @@ namespace TagFind.UI
             _stackPanel = GetTemplateChild("PART_StackPanel") as StackPanel;
             _propertyNameTextBlock = GetTemplateChild("PART_PropertyNameTextBlock") as TextBlock;
             _propertyValueTagGroupEditor = GetTemplateChild("PART_PropertyValueTagGroupEditor") as DataItemTagGroupEditor;
+            UpdateUI();
+
         }
 
         public void UpdateUI()

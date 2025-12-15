@@ -80,8 +80,6 @@ namespace TagFind.UI
             {
                 _tagSuggestPopup.IsOpen = false;
             }
-
-            UpdateUI();
         }
 
         private void DataItemTagEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -123,6 +121,8 @@ namespace TagFind.UI
             {
                 _tagInputTextBox.Visibility = Visibility.Collapsed;
             }
+
+            UpdateUI();
         }
 
         private void _tagInputTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -184,7 +184,8 @@ namespace TagFind.UI
                     searchResults = await contentManager.TagPoolGetTagList(searchString);
                 if (searchResults.Count > 0)
                 {
-                    TagSuggestPopup_TagSelected(this, searchResults[0]);
+                    if(searchResults[0].MainName == _tagInputTextBox?.Text.Trim())
+                        TagSuggestPopup_TagSelected(this, searchResults[0]);
                 }
                 // Has no tag matched, ask if user want to create a new one
                 else

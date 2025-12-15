@@ -1738,7 +1738,7 @@ namespace TagFind.Classes.DB
             return allChildIds;
         }
 
-        private async Task<ObservableCollection<DataItem>> GetAllChildDataItemsDFS(long parentID)
+        public async Task<ObservableCollection<DataItem>> GetAllChildDataItemsDFS(long parentID)
         {
             var allChildIds = new List<DataItem>();
             var queue = new Queue<DataItem>();
@@ -3613,6 +3613,8 @@ namespace TagFind.Classes.DB
 
         public static void SaveDataItemTagTreeRecursive(this SqliteConnection? dbConnection, long ItemID, long PropertyID, long ParentTagID, ItemTagTreeItem itemTagTreeItem)
         {
+            if (itemTagTreeItem.MarkedToDelete) return; // Remove branch marked
+            if (itemTagTreeItem.TagID == -1) return; // Avoid add empty tag
             if (dbConnection == null) return;
             string command =
                 $"INSERT INTO {nameof(ItemTags)} (" +

@@ -90,8 +90,6 @@ namespace TagFind.UI
                 _listView.Tapped += _listView_Tapped;
                 _listView.RightTapped += _listView_RightTapped;
             }
-
-            UpdateUI();
         }
 
         private void DataItemListView_Unloaded(object sender, RoutedEventArgs e)
@@ -119,6 +117,8 @@ namespace TagFind.UI
                 _listView.IsDoubleTapEnabled = true;
                 _listView.IsTapEnabled = true;
             }
+
+            UpdateUI();
         }
 
         private void _listView_RightTapped(object sender, RightTappedRoutedEventArgs e)

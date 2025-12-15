@@ -89,8 +89,6 @@ namespace TagFind.UI
             }
 
             this.Unloaded += DataItemEditor_Unloaded;
-
-            UpdateUI();
         }
 
         private void DataItemEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -140,6 +138,8 @@ namespace TagFind.UI
             {
                 _saveContentButton.IsEnabled = _titleTextBox.Text.Length > 0;
             }
+
+            UpdateUI();
         }
 
         private void _removeReferenceButton_Click(object sender, RoutedEventArgs e)

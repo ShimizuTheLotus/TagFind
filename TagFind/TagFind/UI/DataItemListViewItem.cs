@@ -51,8 +51,6 @@ namespace TagFind.UI
                 _thumbnailImage.PointerEntered += _thumbnailImage_PointerEntered;
                 _thumbnailImage.PointerExited += _thumbnailImage_PointerExited;
             }
-
-            UpdateUI();
         }
 
         private void DataItemListViewItem_Unloaded(object sender, RoutedEventArgs e)
@@ -73,6 +71,8 @@ namespace TagFind.UI
             _thumbnailImage = GetTemplateChild("PART_Image") as Image;
             _tagsWrapPanel = GetTemplateChild("PART_TagsWrapPanel") as TagsWrapPanel;
             _thumbnailImageOverlay = GetTemplateChild("PART_ImageOverlay") as Grid;
+
+            UpdateUI();
         }
 
         private void _thumbnailImage_PointerExited(object sender, PointerRoutedEventArgs e)

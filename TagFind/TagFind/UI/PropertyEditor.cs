@@ -72,6 +72,7 @@ namespace TagFind.UI
             _inputTextBox = GetTemplateChild("PART_PropertyNameTextBox") as TextBox;
             _logicChainListEditor = GetTemplateChild("PART_LogicChainListEditor") as LogicChainListEditor;
             _isContainRelationToggleSwitch = GetTemplateChild("PART_IsContainRelationToggleSwitch") as ToggleSwitch;
+
             UpdateUI();
         }
 

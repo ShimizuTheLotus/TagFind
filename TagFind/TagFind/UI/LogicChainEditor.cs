@@ -77,8 +77,6 @@ namespace TagFind.UI
             {
                 _propertySuggestPopup.PropertySelected += _propertySuggestPopup_PropertySelected;
             }
-
-            UpdateUI();
         }
 
         private void LogicChainEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -113,6 +111,8 @@ namespace TagFind.UI
             _wrapPanel = GetTemplateChild("PART_LogicChainWrapPanel") as WrapPanel;
             _inputTextBox = GetTemplateChild("PART_InputTextBox") as TextBox;
             _popup = (GetTemplateChild("PART_SuggestPopup") as Popup)!;
+
+            UpdateUI();
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)

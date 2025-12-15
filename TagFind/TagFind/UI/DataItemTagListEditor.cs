@@ -59,8 +59,6 @@ namespace TagFind.UI
             {
                 _deleteDataItemButton.Click += _deleteDataItemButton_Click;
             }
-
-            UpdateUI();
         }
 
         private void DataItemTagListEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -83,6 +81,9 @@ namespace TagFind.UI
             _listView = GetTemplateChild("PART_ListView") as ListView;
             _addDataItemButton = GetTemplateChild("PART_AddDataItemButton") as AppBarButton;
             _deleteDataItemButton = GetTemplateChild("PART_DeleteDataItemButton") as AppBarButton;
+
+            UpdateUI();
+
         }
 
         private void _deleteDataItemButton_Click(object sender, RoutedEventArgs e)

@@ -43,7 +43,8 @@
                                   Click="AddAppBarButton_Click"/>
                         <AppBarButton x:Name="MoveAppBarButton" x:Uid="MoveAppBarButton" Icon="MoveToFolder"
                                   Click="MoveAppBarButton_Click"/>
-                        <AppBarButton x:Name="DeleteAppBarButton" x:Uid="DeleteAppBarButton" Icon="Delete" Click="DeleteAppBarButton_Click"/>
+                        <AppBarButton x:Name="DeleteAppBarButton" x:Uid="DeleteAppBarButton" Icon="Delete" Click="DeleteAppBarButton_Click" Foreground="Red"/>
+                        <AppBarButton x:Name="BatchEditTagsAppBarButton" x:Uid="BatchEditsTagAppBarButton" Icon="Tag" Click="AddTagAppBarButton_Click"/>
                         <AppBarButton x:Name="SortDirectionAppBarButton" x:Uid="SortAppBarButton" Click="SortDirectionAppBarButton_Click">
                             <FontIcon x:Name="SortDirectionFontIcon" Glyph="&#xE74B;"/>
                         </AppBarButton>

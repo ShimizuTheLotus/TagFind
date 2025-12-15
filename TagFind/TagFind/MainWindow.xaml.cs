@@ -55,7 +55,6 @@ namespace TagFind
             unhandledExceptionMessageDialog.XamlRoot = this.Content.XamlRoot;
             unhandledExceptionMessageDialog.PrimaryButtonText = "OK";
             unhandledExceptionMessageDialog.DefaultButton = ContentDialogButton.Primary;
-            unhandledExceptionMessageDialog.IsPrimaryButtonEnabled = false;
             await unhandledExceptionMessageDialog.ShowAsync();
         }
 

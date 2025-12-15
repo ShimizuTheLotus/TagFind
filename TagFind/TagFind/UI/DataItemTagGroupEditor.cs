@@ -79,7 +79,6 @@ namespace TagFind.UI
 
 
             UpdateRestrictionLogicChains();
-            UpdateUI();
         }
 
         private void DataItemTagGroupEditor_Unloaded(object sender, RoutedEventArgs e)
@@ -155,6 +154,8 @@ namespace TagFind.UI
 
             _suggestPopup = new();
             _suggestPopup.IsOpen = false;
+
+            UpdateUI();
         }
 
         private void _editingTextBox_PreviewKeyDown(object sender, KeyRoutedEventArgs e)

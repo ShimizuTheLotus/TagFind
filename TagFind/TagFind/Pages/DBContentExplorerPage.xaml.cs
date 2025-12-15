@@ -218,7 +218,7 @@ namespace TagFind.Pages
             }
 
             if (e.Parameter is DBContentManager manager)
-            {   
+            {
                 ContentManager = manager;
                 if (!manager.Connected)
                 {
@@ -269,6 +269,7 @@ namespace TagFind.Pages
                 AddAppBarButton.Visibility = Visibility.Collapsed;
                 // Temporarily hide because now I'll upload the app to Microsoft Store and this button have no function now.
                 //MoveAppBarButton.Visibility = Visibility.Visible;
+                BatchEditTagsAppBarButton.Visibility = Visibility.Visible;
                 SelectAppBarButtonFontIcon.Glyph = "\xE73D";
                 DeleteAppBarButton.Visibility = Visibility.Visible;
             }
@@ -276,6 +277,7 @@ namespace TagFind.Pages
             {
                 AddAppBarButton.Visibility = Visibility.Visible;
                 MoveAppBarButton.Visibility = Visibility.Collapsed;
+                BatchEditTagsAppBarButton.Visibility = Visibility.Collapsed;
                 SelectAppBarButtonFontIcon.Glyph = "\xE73A";
                 DeleteAppBarButton.Visibility = Visibility.Collapsed;
             }
@@ -416,6 +418,28 @@ namespace TagFind.Pages
             OrderByModeFontIcon.Glyph = "\uE823";
             SortMode = SortModeEnum.ModifiedTime;
             ConditionTokenizedSuggestBox_RequestSearch(this, ConditionTokenizedSuggestBox.SearchConditions);
+        }
+
+        private async void AddTagAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            var raw = DataItemListView.SelectedItems;
+            List<DataItem> selectedDataItem = [];
+            if (raw is IList<object> rawD)
+            {
+                foreach (var d in rawD)
+                {
+                    if (d is DataItem dataItem)
+                        selectedDataItem.Add(dataItem);
+                }
+                
+            }
+            BatchEditDataItemTagsNavigationParameter parameters = new()
+            {
+                DBContentManager = this.ContentManager,
+                DataItemList = selectedDataItem,
+            };
+
+            Frame.Navigate(typeof(BatchEditTagContentPage), parameters);
         }
     }
 }

@@ -38,5 +38,11 @@ namespace TagFind.Classes.DataTypes
             public DBContentManager? DBContentManager { get; set; }
             public Tag Tag { get; set; } = new();
         }
+
+        public class BatchEditDataItemTagsNavigationParameter : PageNavigateParameter, IDBContentManagerParameter, IDataItemListParameter
+        {
+            public DBContentManager? DBContentManager { get; set; }
+            public List<DataItem> DataItemList { get; set; } = [];
+        }
     }
 }

@@ -380,4 +380,25 @@
   <data name="Remove.String" xml:space="preserve">
     <value>移除</value>
   </data>
+  <data name="BatchEditTagsAppBarButton.Label" xml:space="preserve">
+    <value>批量编辑标签</value>
+  </data>
+  <data name="Apply.String" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="BatchEditTagsDialogTitle.String" xml:space="preserve">
+    <value>批量编辑标签</value>
+  </data>
+  <data name="ApplyToSubitemsTextBlock.Text" xml:space="preserve">
+    <value>应用到子项</value>
+  </data>
+  <data name="TagsToBeAddedTextBlock.Text" xml:space="preserve">
+    <value>要增加的标签</value>
+  </data>
+  <data name="TagsToBeDeletedTextBlock.Text" xml:space="preserve">
+    <value>要删除的标签</value>
+  </data>
+  <data name="ApplyToSubitemsCheckBox.Content" xml:space="preserve">
+    <value>应用到子项</value>
+  </data>
 </root>

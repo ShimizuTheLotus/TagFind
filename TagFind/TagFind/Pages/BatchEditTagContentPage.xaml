@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.BatchEditTagContentPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:TagFind.UI"
+    mc:Ignorable="d">
+
+    <StackPanel>
+        <TextBlock x:Uid="DeleteTagIfHaveTextBlock"/>
+        <TextBlock x:Uid="TagsToBeAddedTextBlock"/>
+        <ui:DataItemTagListEditor x:Name="TagsToBeAddedEditor"/>
+        <TextBlock x:Uid="TagsToBeDeletedTextBlock"/>
+        <ui:DataItemTagListEditor x:Name="TagsToBeDeletedEditor"/>
+        <CheckBox x:Name="ApplyToSubitemsCheckBox" x:Uid="ApplyToSubitemsCheckBox"/>
+        <Button x:Name="ApplyChangeButton" Content="Apply" Click="ApplyChangeButton_Click"/>
+    </StackPanel>
+</Page>

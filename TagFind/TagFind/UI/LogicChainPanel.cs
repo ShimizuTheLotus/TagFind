@@ -59,6 +59,7 @@ namespace TagFind.UI
         {
             base.OnApplyTemplate();
             _wrapPanel = GetTemplateChild("PART_WrapPanel") as WrapPanel;
+
             UpdateUI();
         }
 

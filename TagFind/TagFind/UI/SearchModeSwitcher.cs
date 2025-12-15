@@ -57,8 +57,6 @@ namespace TagFind.UI
             {
                 _currentLayerSearchModeMenuFlyoutItem.Click += _currentLayerSearchModeMenuFlyoutItem_Click;
             }
-
-            UpdateUI();
         }
 
         private void SearchModeSwitcher_Unloaded(object sender, RoutedEventArgs e)
@@ -87,6 +85,8 @@ namespace TagFind.UI
             _globalSearchModeMenuFlyoutItem = GetTemplateChild("PART_GlobalSearchModeMenuFlyoutItem") as MenuFlyoutItem;
             _folderSearchModeMenuFlyoutItem = GetTemplateChild("PART_FolderSearchModeMenuFlyoutItem") as MenuFlyoutItem;
             _currentLayerSearchModeMenuFlyoutItem = GetTemplateChild("PART_CurrentLayerSearchModeMenuFlyoutItem") as MenuFlyoutItem;
+
+            UpdateUI();
         }
 
         private void _currentLayerSearchModeMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
