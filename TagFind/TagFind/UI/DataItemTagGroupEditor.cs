@@ -408,6 +408,7 @@ namespace TagFind.UI
             if (dBContentManager == null) return;
             RestrictionLogicChains = await dBContentManager.TagDataGetRestrictionLogicChainsOfPropertyItem(PropertyID, _parentTagID);
         }
+
         private static T? FindVisualParent<T>(DependencyObject child) where T : DependencyObject
         {
             while (child != null)

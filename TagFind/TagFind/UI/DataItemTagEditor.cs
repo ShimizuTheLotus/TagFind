@@ -190,17 +190,20 @@ namespace TagFind.UI
                 // Has no tag matched, ask if user want to create a new one
                 else
                 {
-                    ContentDialog createTagDialog = new();
-                    createTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-                    createTagDialog.Title = GetLocalizedString("TagNotExists/String");
-                    createTagDialog.Content = GetLocalizedString("DoYouWantToCreateThisTagNow/String");
-                    createTagDialog.XamlRoot = this.XamlRoot;
-                    createTagDialog.PrimaryButtonText = GetLocalizedString("Create/String");
-                    createTagDialog.SecondaryButtonText = GetLocalizedString("Cancel/String");
-                    createTagDialog.DefaultButton = ContentDialogButton.Primary;
-                    createTagDialog.PrimaryButtonClick += CreateTagDialog_PrimaryButtonClick;
-                    await createTagDialog.ShowAsync();
-                    createTagDialog.PrimaryButtonClick -= CreateTagDialog_PrimaryButtonClick;
+                    if (AllowCreateTag())
+                    {
+                        ContentDialog createTagDialog = new();
+                        createTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+                        createTagDialog.Title = GetLocalizedString("TagNotExists/String");
+                        createTagDialog.Content = GetLocalizedString("DoYouWantToCreateThisTagNow/String");
+                        createTagDialog.XamlRoot = this.XamlRoot;
+                        createTagDialog.PrimaryButtonText = GetLocalizedString("Create/String");
+                        createTagDialog.SecondaryButtonText = GetLocalizedString("Cancel/String");
+                        createTagDialog.DefaultButton = ContentDialogButton.Primary;
+                        createTagDialog.PrimaryButtonClick += CreateTagDialog_PrimaryButtonClick;
+                        await createTagDialog.ShowAsync();
+                        createTagDialog.PrimaryButtonClick -= CreateTagDialog_PrimaryButtonClick;
+                    }
                 }
                 e.Handled = true;
             }
@@ -369,6 +372,20 @@ namespace TagFind.UI
                 child = VisualTreeHelper.GetParent(child);
             }
             return null;
+        }
+
+        private bool AllowCreateTag()
+        {
+            Page? currentPage = FindVisualParent<Page>(this);
+            if (currentPage == null)
+            {
+                return false;
+            }
+            if (currentPage is IAllowAddNewTagUsingDataItemTagEditorPage)
+            {
+                return true;
+            }
+            return false;
         }
 
         private DBContentManager? GetContentManager()
