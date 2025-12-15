@@ -10,7 +10,7 @@
   <Identity
     Name="ShimizuTheLotus.TagFind"
     Publisher="CN=ShimizuTheLotus"
-    Version="1.0.40.0" />
+    Version="1.0.41.0" />
 
   <mp:PhoneIdentity PhoneProductId="f1ebefd1-6bc6-47a7-8f7f-bcc246ecc99d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
