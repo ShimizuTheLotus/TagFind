@@ -1,3 +1,5 @@
+# Download
+You can get it from [releases](https://github.com/ShimizuTheLotus/TagFind/releases/) and also [Microsoft Store](https://apps.microsoft.com/detail/9MX4QFHG3B1R)
 # Thanks List
 - [Harry Vo](https://learn.microsoft.com/users/na/?userid=338e6b79-eb42-425d-a440-a4b1dbc608f5)
   - Helping to solve the problem about packing
