@@ -16,7 +16,8 @@
                         IsPaneOpen="False">
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="DBContentExplorerPageNavigationViewItem" Icon="ShowResults" Tag="DBContentExplorerPage" IsSelected="True"/>
-                <NavigationViewItem x:Uid="DBTagEditPageNavigationViewItem" Icon="Tag" Tag="DBTagPoolPage"/>
+                <NavigationViewItem x:Uid="DBTagPoolPageNavigationViewItem" Icon="Tag" Tag="DBTagPoolPage"/>
+                <NavigationViewItem x:Uid="DBWildItemsManagePageNavigationViewItem" Icon="Preview" Tag="DBWildItemsManagePage"/>
                 <!--<NavigationViewItem x:Uid="DBContentEditPageNavigationViewItem" Icon="Edit" Tag="DBContentEditPage"/>-->
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>

@@ -1505,6 +1505,29 @@ namespace TagFind.Classes.DB
             }
         }
 
+        public async IAsyncEnumerable<DataItem> DataItemGetWildItems()
+        {
+            await _lock.WaitAsync();
+            try
+            {
+                string command =
+                    $"SELECT main.* FROM {nameof(DataItems)} AS main " +
+                    $"WHERE main.{nameof(DataItems.ParentItemID)} != 0 " +
+                    $"AND NOT EXISTS " +
+                    $"(" +
+                    $"SELECT 1 FROM {nameof(DataItems)} AS _data " +
+                    $"WHERE _data.{nameof(DataItems.ID)} = main.{nameof(DataItems.ParentItemID)}" +
+                    $")";
+                SqliteCommand sqliteCommand = new(command, dbConnection);
+                SqliteDataReader reader = sqliteCommand.ExecuteReader();
+                await foreach (DataItem dataItem in reader.DataItemsAddDataItemsIterativeFromReader(dbConnection, MessageManager))
+                {
+                    yield return dataItem;
+                }
+            }
+            finally { _lock.Release(); }
+        }
+
         /// <summary>
         /// Add new data item.
         /// </summary>

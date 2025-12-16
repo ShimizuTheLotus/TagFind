@@ -92,9 +92,7 @@
                   RelativePanel.AlignRightWithPanel="True"
                   RelativePanel.AlignBottomWithPanel="True">
                 <TextBlock x:Name="DataItemIsEmptyTextBlock" x:Uid="DataItemIsEmptyTextBlock" Margin="0 0 0 32" Opacity="0.6" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource DisplayTextBlockStyle}"/>
-                <ScrollView>
-                    <ui:DataItemListView x:Name="DataItemListView"/>
-                </ScrollView>
+                <ui:DataItemListView x:Name="DataItemListView"/>
             </Grid>
         </RelativePanel>
     </Grid>

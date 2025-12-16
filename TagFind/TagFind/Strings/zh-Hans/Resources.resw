@@ -237,7 +237,7 @@
   <data name="DBContentExplorerPageNavigationViewItem.Content" xml:space="preserve">
     <value>浏览</value>
   </data>
-  <data name="DBTagEditPageNavigationViewItem.Content" xml:space="preserve">
+  <data name="DBTagPoolPageNavigationViewItem.Content" xml:space="preserve">
     <value>标签</value>
   </data>
   <data name="RemoveReferenceAppBarButton.Label" xml:space="preserve">
@@ -386,6 +386,9 @@
   <data name="Apply.String" xml:space="preserve">
     <value>应用</value>
   </data>
+  <data name="ApplyButton.Content" xml:space="preserve">
+    <value>应用</value>
+  </data>
   <data name="ApplyToSubitemsTextBlock.Text" xml:space="preserve">
     <value>应用到子项</value>
   </data>
@@ -403,5 +406,8 @@
   </data>
   <data name="BatchDeleteTagIfHaveDescriptionTextBlock.Text" xml:space="preserve">
     <value>被选中项的标签如果存在，将会被删除。如果你在属性内填充了标签，只有在叶子节点且符合路径条件的标签会被移除。</value>
+  </data>
+  <data name="DBWildItemsManagePageNavigationViewItem.Content" xml:space="preserve">
+    <value>失联项</value>
   </data>
 </root>

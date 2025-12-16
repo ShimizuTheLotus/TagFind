@@ -19,7 +19,7 @@
             <TextBlock x:Uid="BatchDeleteTagIfHaveDescriptionTextBlock"/>
             <ui:DataItemTagListEditor x:Name="TagsToBeDeletedEditor"/>
             <CheckBox x:Name="ApplyToSubitemsCheckBox" x:Uid="ApplyToSubitemsCheckBox"/>
-            <Button x:Name="ApplyChangeButton" Content="Apply" Click="ApplyChangeButton_Click"/>
+            <Button x:Name="ApplyChangeButton" x:Uid="ApplyButton" Click="ApplyChangeButton_Click"/>
         </StackPanel>
     </ScrollViewer>
 </Page>

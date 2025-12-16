@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.DBWildItemsManagePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:TagFind.UI"
+    mc:Ignorable="d">
+
+    <Grid Margin="0 48 0 0">
+        <RelativePanel>
+            <Grid Margin="16 0 16 0" CornerRadius="8 8 0 0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.AlignTopWithPanel="True"
+                  RelativePanel.AlignRightWithPanel="True"
+                  RelativePanel.AlignBottomWithPanel="True">
+                <TextBlock x:Name="DataItemIsEmptyTextBlock" x:Uid="DataItemIsEmptyTextBlock" Margin="0 0 0 32" Opacity="0.6" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource DisplayTextBlockStyle}"/>
+                <ui:DataItemListView x:Name="DataItemListView"/>
+            </Grid>
+        </RelativePanel>
+    </Grid>
+</Page>

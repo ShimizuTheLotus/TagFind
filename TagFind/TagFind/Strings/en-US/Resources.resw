@@ -237,7 +237,7 @@
   <data name="DBContentExplorerPageNavigationViewItem.Content" xml:space="preserve">
     <value>Explore</value>
   </data>
-  <data name="DBTagEditPageNavigationViewItem.Content" xml:space="preserve">
+  <data name="DBTagPoolPageNavigationViewItem.Content" xml:space="preserve">
     <value>Tags</value>
   </data>
   <data name="RemoveReferenceAppBarButton.Label" xml:space="preserve">
@@ -386,6 +386,9 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Apply.String" xml:space="preserve">
     <value>Apply</value>
   </data>
+  <data name="ApplyButton.Content" xml:space="preserve">
+    <value>Apply</value>
+  </data>
   <data name="ApplyToSubitemsTextBlock.Text" xml:space="preserve">
     <value>Apply to subitems</value>
   </data>
@@ -403,5 +406,8 @@ Tips: If different things has same name, we recommend separate them into differe
   </data>
   <data name="BatchDeleteTagIfHaveDescriptionTextBlock.Text" xml:space="preserve">
     <value>Tags of selected items will be deleted if they exists. If you filled the properties of the tags, only the tags as leaf nodes will be deleted if they match the path.</value>
+  </data>
+  <data name="DBWildItemsManagePageNavigationViewItem.Content" xml:space="preserve">
+    <value>Wild Items</value>
   </data>
 </root>
