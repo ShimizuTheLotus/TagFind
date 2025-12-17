@@ -16,6 +16,7 @@ using TagFind.Classes.DB;
 using TagFind.Interfaces;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using static TagFind.Classes.DataTypes.PageNavigateParameter;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -99,6 +100,23 @@ namespace TagFind.Pages
                         Visibility.Visible : Visibility.Collapsed;
                 });
             }
+        }
+
+        private void DataItemListView_RequestOpenDataItemAsFolder(object sender, DataItem dataItem)
+        {
+            
+        }
+
+        private async void DataItemListView_RequestOpenDataItemDetail(object sender, DataItem dataItem)
+        {
+            DataItemDetailPageNavigationParameter parameters = new()
+            {
+                DBContentManager = ContentManager,
+                DataItem = dataItem,
+                Path = await ContentManager.GetDataItemPath(dataItem.ID)
+            };
+
+            Frame.Navigate(typeof(DBContentDetailPage), parameters);
         }
     }
 }

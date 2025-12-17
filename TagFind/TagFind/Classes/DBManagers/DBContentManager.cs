@@ -1918,7 +1918,7 @@ namespace TagFind.Classes.DB
         /// </summary>
         /// <param name="dataItemID">ID of data item being moved.</param>
         /// <param name="newParentID">ID of target parent.</param>
-        public async Task DataItemMoveTo(long dataItemID, int newParentID)
+        public async Task DataItemMoveTo(long dataItemID, long newParentID)
         {
             await _lock.WaitAsync();
 #if !DEBUG

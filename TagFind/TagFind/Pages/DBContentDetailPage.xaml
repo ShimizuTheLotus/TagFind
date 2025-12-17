@@ -14,6 +14,7 @@
                     HorizontalScrollMode="Disabled">
             <StackPanel Margin="16">
                 <CommandBar>
+                    <AppBarButton x:Name="MoveToAppBarButton" x:Uid="MoveToAppBarButton" Click="MoveToAppBarButton_Click" Icon="MoveToFolder"/>
                     <AppBarButton x:Name="EditAppBarButton" x:Uid="EditAppBarButton" Click="EditAppBarButton_Click" Icon="Edit"/>
                 </CommandBar>
                 <RelativePanel Margin="16 0 0 0">
@@ -34,6 +35,24 @@
                                 RelativePanel.AlignTopWithPanel="True"
                                 RelativePanel.AlignRightWithPanel="True">
                         <TextBlock x:Name="TitleTextBlock" Style="{StaticResource TitleLargeTextBlockStyle}"/>
+                        <TextBlock x:Uid="PathTextBlock" Margin="0 8 0 4" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        <Grid Padding="8" CornerRadius="8"
+                              Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                            <BreadcrumbBar x:Name="BreadcrumbBar" Grid.Column="0" VerticalAlignment="Center">
+                                <BreadcrumbBar.ItemTemplate>
+                                    <DataTemplate>
+                                        <BreadcrumbBarItem Content="{Binding}" AutomationProperties.Name="{Binding Name}">
+                                            <BreadcrumbBarItem.ContentTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                                </DataTemplate>
+                                            </BreadcrumbBarItem.ContentTemplate>
+                                        </BreadcrumbBarItem>
+                                    </DataTemplate>
+                                </BreadcrumbBar.ItemTemplate>
+                            </BreadcrumbBar>
+                        </Grid>
+                        <TextBlock x:Uid="DescriptionTextBlock" Margin="0 8 0 4" Style="{StaticResource SubtitleTextBlockStyle}"/>
                         <TextBlock x:Name="DescriptionTextBlock" TextWrapping="Wrap" Margin="0 48 0 0"/>
                     </StackPanel>
                     <ui:TagsWrapPanel x:Name="TagsWrapPanel"

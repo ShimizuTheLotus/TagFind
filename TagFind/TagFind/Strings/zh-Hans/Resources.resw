@@ -410,4 +410,10 @@
   <data name="DBWildItemsManagePageNavigationViewItem.Content" xml:space="preserve">
     <value>失联项</value>
   </data>
+  <data name="PathTextBlock.Text" xml:space="preserve">
+    <value>路径</value>
+  </data>
+  <data name="PasteAppBarButton.Label" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
 </root>

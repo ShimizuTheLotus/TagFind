@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TagFind.Pages.DBContentMoveToPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TagFind.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:TagFind.UI"
+    mc:Ignorable="d">
+
+    <Grid Margin="16 48 16 0">
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ui:SearchModeSwitcher x:Name="SearchModeSwitcher" Grid.Column="0" Margin="16 10 16 0" VerticalAlignment="Center"/>
+                <ui:ConditionTokenizedSuggestBox x:Name="ConditionTokenizedSuggestBox" Grid.Column="1" Margin="0 0 16 0" RequestSearch="ConditionTokenizedSuggestBox_RequestSearch"/>
+            </Grid>
+            <Grid x:Name="CommandBarGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <BreadcrumbBar x:Name="BreadcrumbBar" Grid.Column="0" Margin="16 0 16 0" VerticalAlignment="Center" >
+                    <BreadcrumbBar.ItemTemplate>
+                        <DataTemplate>
+                            <BreadcrumbBarItem Content="{Binding}" AutomationProperties.Name="{Binding Name}">
+                                <BreadcrumbBarItem.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                    </DataTemplate>
+                                </BreadcrumbBarItem.ContentTemplate>
+                            </BreadcrumbBarItem>
+                        </DataTemplate>
+                    </BreadcrumbBar.ItemTemplate>
+                </BreadcrumbBar>
+                <CommandBar x:Name="CommandBar"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignTopWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True">
+                    <AppBarButton x:Name="PasteAppBarButton" x:Uid="PasteAppBarButton" Click="PasteAppBarButton_Click" Icon="Paste"/>
+                </CommandBar>
+            </Grid>
+            <Grid Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.Below="CommandBarGrid"
+                  RelativePanel.AlignRightWithPanel="True"
+                  RelativePanel.AlignBottomWithPanel="True">
+                <TextBlock x:Name="DataItemIsEmptyTextBlock" x:Uid="DataItemIsEmptyTextBlock" Margin="0 0 0 32" Opacity="0.6" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource DisplayTextBlockStyle}"/>
+                <ui:DataItemListView x:Name="DataItemListView" RequestOpenDataItemAsFolder="DataItemListView_RequestOpenDataItemAsFolder"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>

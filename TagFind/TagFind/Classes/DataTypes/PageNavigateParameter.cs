@@ -44,5 +44,11 @@ namespace TagFind.Classes.DataTypes
             public DBContentManager? DBContentManager { get; set; }
             public List<DataItem> DataItemList { get; set; } = [];
         }
+
+        public class MoveToPageNavigationParameter : PageNavigateParameter, IDBContentManagerParameter, IDataItemListParameter
+        {
+            public DBContentManager? DBContentManager { get; set; }
+            public List<DataItem> DataItemList { get; set; } = [];
+        }
     }
 }

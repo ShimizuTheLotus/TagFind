@@ -13,6 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Pages\BatchEditTagContentPage.xaml" />
+    <None Remove="Pages\DBContentMoveToPage.xaml" />
     <None Remove="Pages\DBTagPoolPage.xaml" />
     <None Remove="Pages\DBWildItemsManagePage.xaml" />
     <None Remove="UI\ContentDialogPages\TutorialContentDialogPage.xaml" />
@@ -45,6 +46,12 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\DBContentMoveToPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

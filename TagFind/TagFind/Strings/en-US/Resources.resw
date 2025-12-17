@@ -410,4 +410,10 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="DBWildItemsManagePageNavigationViewItem.Content" xml:space="preserve">
     <value>Wild Items</value>
   </data>
+  <data name="PathTextBlock.Text" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="PasteAppBarButton.Label" xml:space="preserve">
+    <value>Paste</value>
+  </data>
 </root>

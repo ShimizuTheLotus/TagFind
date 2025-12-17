@@ -87,6 +87,7 @@ namespace TagFind.Pages
             if (e.Parameter is IExplorerPathParameter expParameter)
             {
                 Path = expParameter.Path;
+                BreadcrumbBar.ItemsSource = Path;
             }
             // Navigated using GoBack
             if(e.NavigationMode == NavigationMode.Back)
@@ -158,6 +159,17 @@ namespace TagFind.Pages
                 Path = this.Path
             };
             Frame.Navigate(typeof(DBContentEditPage), parameters);
+        }
+
+        private void MoveToAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoveToPageNavigationParameter parameters = new()
+            {
+                DBContentManager = _dbContentManager,
+                DataItemList = [this._dataItem]
+            };
+
+            Frame.Navigate(typeof(DBContentMoveToPage), parameters);
         }
     }
 }

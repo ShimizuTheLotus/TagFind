@@ -260,6 +260,12 @@ namespace TagFind.Pages
                     DataItemListView.DataItemCollection = value;
                 });
             }
+                        DispatcherQueue.TryEnqueue(() =>
+            {
+                DataItemIsEmptyTextBlock.Visibility =
+                    DataItemListView.DataItemCollection.Count == 0 ?
+                    Visibility.Visible : Visibility.Collapsed;
+            });
         }
 
         private void UpdateCommandBarState(bool selectionState)
@@ -297,7 +303,27 @@ namespace TagFind.Pages
 
         private void MoveAppBarButton_Click(object sender, RoutedEventArgs e)
         {
+            List<DataItem> dataItemsBeingMoved = [];
+            if (DataItemListView.SelectedItems is IList<object> sourceList)
+            {
+                foreach (var items in sourceList)
+                {
+                    if (items is DataItem dataItem)
+                    {
+                        dataItemsBeingMoved.Add(dataItem);
+                    }
+                }
+            }
+            if (dataItemsBeingMoved.Count > 0)
+            {
+                MoveToPageNavigationParameter parameters = new()
+                {
+                    DBContentManager = ContentManager,
+                    DataItemList = dataItemsBeingMoved
+                };
 
+                Frame.Navigate(typeof(DBContentMoveToPage), parameters);
+            }
         }
 
         private void SortDirectionAppBarButton_Click(object sender, RoutedEventArgs e)
