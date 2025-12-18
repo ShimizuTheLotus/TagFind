@@ -273,8 +273,7 @@ namespace TagFind.Pages
             if (selectionState)
             {
                 AddAppBarButton.Visibility = Visibility.Collapsed;
-                // Temporarily hide because now I'll upload the app to Microsoft Store and this button have no function now.
-                //MoveAppBarButton.Visibility = Visibility.Visible;
+                MoveAppBarButton.Visibility = Visibility.Visible;
                 BatchEditTagsAppBarButton.Visibility = Visibility.Visible;
                 SelectAppBarButtonFontIcon.Glyph = "\xE73D";
                 DeleteAppBarButton.Visibility = Visibility.Visible;
