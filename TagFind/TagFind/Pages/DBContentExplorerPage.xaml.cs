@@ -273,6 +273,7 @@ namespace TagFind.Pages
             if (selectionState)
             {
                 AddAppBarButton.Visibility = Visibility.Collapsed;
+                DuplicateAppBarButton.Visibility = Visibility.Visible;
                 MoveAppBarButton.Visibility = Visibility.Visible;
                 BatchEditTagsAppBarButton.Visibility = Visibility.Visible;
                 SelectAppBarButtonFontIcon.Glyph = "\xE73D";
@@ -281,6 +282,7 @@ namespace TagFind.Pages
             else
             {
                 AddAppBarButton.Visibility = Visibility.Visible;
+                DuplicateAppBarButton.Visibility = Visibility.Collapsed;
                 MoveAppBarButton.Visibility = Visibility.Collapsed;
                 BatchEditTagsAppBarButton.Visibility = Visibility.Collapsed;
                 SelectAppBarButtonFontIcon.Glyph = "\xE73A";
@@ -465,6 +467,31 @@ namespace TagFind.Pages
             };
 
             Frame.Navigate(typeof(BatchEditTagContentPage), parameters);
+        }
+
+        private async void DuplicateAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            var raw = DataItemListView.SelectedItems;
+            List<DataItem> selectedDataItem = [];
+            if (raw is IList<object> rawD)
+            {
+                foreach (var d in rawD)
+                {
+                    if (d is DataItem dataItem)
+                        selectedDataItem.Add(dataItem);
+                }
+            }
+
+            if (ContentManager.Connected)
+            {
+                foreach (DataItem item in selectedDataItem)
+                {
+                    DataItem dataItem = await ContentManager.DataItemGetByID(item.ID);
+                    dataItem.ID = -1;
+                    ContentManager.DataItemAdd(dataItem);
+                }
+                await UpdateContentList();
+            }
         }
     }
 }

@@ -416,4 +416,7 @@
   <data name="PasteAppBarButton.Label" xml:space="preserve">
     <value>粘贴</value>
   </data>
+  <data name="DuplicateAppBarButton.Label" xml:space="preserve">
+    <value>在此处复制</value>
+  </data>
 </root>

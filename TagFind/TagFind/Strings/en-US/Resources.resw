@@ -416,4 +416,7 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="PasteAppBarButton.Label" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="DuplicateAppBarButton.Label" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
 </root>
