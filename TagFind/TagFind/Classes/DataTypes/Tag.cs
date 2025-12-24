@@ -90,6 +90,23 @@ namespace TagFind.Classes.DataTypes
         }
         private List<PropertyItem> _propertyItems = [];
 
+        /// <summary>
+        /// This tag refers to a same entity as the tags in other tag sources in this list.
+        /// The tag source name cannot contain ":" character.
+        /// The format of each string is "TagSource:TagID".
+        /// TagID can be any string.
+        /// </summary>
+        public List<string> SameTagList
+        {
+            get => _sameTagList;
+            set
+            {
+                _sameTagList = value;
+                PropertyChanged?.Invoke(this, new(nameof(SameTagList)));
+            }
+        }
+        private List<string> _sameTagList = [];
+
         public Tag(int ID, string MainName)
         {
             this.ID = ID;

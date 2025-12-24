@@ -23,6 +23,7 @@ namespace TagFind.UI
         private TextBox? _tagSurnamesTextBox;
         private TextBlock? _createdTimeTextBlock;
         private TextBlock? _modifiedTimeTextBlock;
+        private SameTagEditor? _sameTagEditor;
         private LogicChainListEditor? _logicChainListEditor;
         private PropertyListEditor? _propertyListEditor;
 
@@ -75,6 +76,7 @@ namespace TagFind.UI
             _tagSurnamesTextBox = GetTemplateChild("PART_SurnamesTextBox") as TextBox;
             _createdTimeTextBlock = GetTemplateChild("PART_CreatedTimeTextBlock") as TextBlock;
             _modifiedTimeTextBlock = GetTemplateChild("PART_ModifiedTimeTextBlock") as TextBlock;
+            _sameTagEditor = GetTemplateChild("PART_SameTagEditor") as SameTagEditor;
             _logicChainListEditor = GetTemplateChild("PART_LogicChainListEditor") as LogicChainListEditor;
             _propertyListEditor = GetTemplateChild("PART_PropertyListEditor") as PropertyListEditor;
 

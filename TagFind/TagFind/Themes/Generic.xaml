@@ -214,6 +214,7 @@
                             <TextBlock x:Name="PART_CreatedTimeTextBlock"/>
                             <TextBlock x:Uid="ModifiedTimeTextBlock"/>
                             <TextBlock x:Name="PART_ModifiedTimeTextBlock"/>
+                            <local:SameTagEditor x:Name="PART_SameTagEditor"/>
                             <TextBlock x:Uid="LogicChainsTextBlock"
                                        Style="{StaticResource TitleTextBlockStyle}"/>
                             <local:LogicChainListEditor x:Name="PART_LogicChainListEditor"/>
@@ -668,6 +669,37 @@
                                     </MenuFlyout>
                                 </DropDownButton.Flyout>
                             </DropDownButton>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:SameTagEditor">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:SameTagEditor">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <AppBarButton x:Name="PART_AddTagButton" x:Uid="AddAppBarButton" Icon="Add"/>
+                                <AppBarButton x:Name="PART_RemoveTagButton" x:Uid="RemoveAppBarButton" Icon="Remove"/>
+                            </StackPanel>
+                            <ListView x:Name="PART_TagListView">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding ID}"/>
+                                            <TextBlock Text="{Binding Label}"/>
+                                            <TextBlock Text="{Binding Description}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                     </Border>
                 </ControlTemplate>
