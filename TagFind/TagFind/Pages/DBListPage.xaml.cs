@@ -87,8 +87,9 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
                     if (_contentManager.Connected)
                     {
                         _contentManager.InitializeDB();
-                        await _contentManager.EditMeta("TDBVersion", "0.0.1");
+                        await _contentManager.EditMeta("TDBVersion", "0.1.0");
                         await _contentManager.EditMeta("Description", content.Description);
+                        await _contentManager.EditMeta("Guid", Guid.NewGuid().ToString("B"));
                         _listManager.Add(filePath, content.Description);
                         _contentManager.CloseDB();
                         UpdateDatabaseList();

@@ -10,13 +10,14 @@ namespace TagFind.Classes.DataTypes
     public class UniTag
     {
         /// <summary>
+        /// The Guid was generated when the database created, or signed by the publisher so its not always a Guid.
+        /// It can also be string.
+        /// </summary>
+        public string UniTagSourceGUID { get; set; } = string.Empty;
+        /// <summary>
         /// Unique ID is unique in the UniqueUniTagSource context.
         /// </summary>
         public string UniqueID { get; set; } = string.Empty;
-        /// <summary>
-        /// The source can identify the context in which the UniqueID is unique.
-        /// </summary>
-        public string UniqueUniTagSource { get; set; } = string.Empty;
         /// <summary>
         /// Gets or sets the collection of language and main name pairs associated with the entity.
         /// Key: Language (e.g., "en", "fr")

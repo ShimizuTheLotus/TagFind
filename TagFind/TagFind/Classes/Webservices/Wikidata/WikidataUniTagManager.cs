@@ -62,11 +62,9 @@ namespace TagFind.Classes.Webservices.Wikidata
                     {
                         try
                         {
-                            // 方法1：直接读取页面文本（JSON页面就是纯文本）
                             var json = await webView.ExecuteScriptAsync(
                                 "document.body.innerText");
 
-                            // 移除JSON字符串的引号
                             tcs.TrySetResult(json);
                         }
                         catch (Exception ex)
@@ -80,6 +78,13 @@ namespace TagFind.Classes.Webservices.Wikidata
                     }
                 };
                 webView.NavigationCompleted += navigationCompletedHandler;
+                var timeoutTask = Task.Delay(15 * 1000)
+                    .ContinueWith(_ =>
+                    {
+                        webView.CoreWebView2.WebMessageReceived -= webMessageReceivedHandler;
+                        webView.NavigationCompleted -= navigationCompletedHandler;
+                        tcs.SetException(new TimeoutException($"WebTimeOut"));
+                    });
                 if (failed)
                 {
                     webView.CoreWebView2.WebMessageReceived -= webMessageReceivedHandler;
@@ -88,6 +93,11 @@ namespace TagFind.Classes.Webservices.Wikidata
                 }
                 try
                 {
+                    await Task.WhenAny(tcs.Task, timeoutTask);
+                    if (!tcs.Task.IsCompleted)
+                    {
+                        return null;
+                    }
                     string content = await tcs.Task;
                     content = UnescapeJsonString(content);
 

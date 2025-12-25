@@ -83,6 +83,15 @@ namespace TagFind.UI
             UpdateDataContext();
         }
 
+        public string GetEditedMainName()
+        {
+            if (_tagNameTextBox != null)
+            {
+                return _tagNameTextBox.Text;
+            }
+            return string.Empty;
+        }
+
         private void UpdateDataContext()
         {
             this.DataContext = _editedTag;

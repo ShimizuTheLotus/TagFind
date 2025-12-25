@@ -689,17 +689,34 @@
                                 <AppBarButton x:Name="PART_AddTagButton" x:Uid="AddAppBarButton" Icon="Add"/>
                                 <AppBarButton x:Name="PART_RemoveTagButton" x:Uid="RemoveAppBarButton" Icon="Remove"/>
                             </StackPanel>
-                            <ListView x:Name="PART_TagListView">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding ID}"/>
-                                            <TextBlock Text="{Binding Label}"/>
-                                            <TextBlock Text="{Binding Description}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                            <Expander x:Name="PART_Expander"
+                                      HorizontalAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch">
+                                <Expander.Content>
+                                    <Grid>
+                                        <ListView x:Name="PART_TagListView">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Label}" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 0 8 0"/>
+                                                            <Grid Background="{ThemeResource SystemAccentColor}"
+                                                      Padding="8 4 8 4"
+                                                      CornerRadius="8"
+                                                      HorizontalAlignment="Left">
+                                                                <TextBlock Text="{Binding ID}"/>
+                                                            </Grid>
+                                                        </StackPanel>
+                                                        <TextBlock Text="{Binding Description}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                        <ProgressRing x:Name="PART_SearchProgressRing" Visibility="Collapsed"/>
+                                        <TextBlock x:Name="PART_SearchResultExceptionTextBlock"/>
+                                    </Grid>
+                                </Expander.Content>
+                            </Expander>
                         </StackPanel>
                     </Border>
                 </ControlTemplate>
