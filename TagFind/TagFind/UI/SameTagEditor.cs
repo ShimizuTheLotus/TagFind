@@ -25,6 +25,7 @@ public sealed partial class SameTagEditor : Control
     private ListView? _listView;
     private ProgressRing? _searchProgressRing;
     private TextBlock? _searchResultExceptionTextBlock;
+    private ListView? _uniTagListView;
 
     public string SearchString = string.Empty;
     public ObservableCollection<UniTag> SameUnitags = [];
@@ -81,6 +82,12 @@ public sealed partial class SameTagEditor : Control
         _listView = GetTemplateChild("PART_TagListView") as ListView;
         _searchProgressRing = GetTemplateChild("PART_SearchProgressRing") as ProgressRing;
         _searchResultExceptionTextBlock = GetTemplateChild("PART_SearchResultExceptionTextBlock") as TextBlock;
+        _uniTagListView = GetTemplateChild("PART_UniTagInfoListView") as ListView;
+
+        if (_uniTagListView != null)
+        {
+            _uniTagListView.ItemsSource = SameUnitags;
+        }
     }
 
     private void _removeAppBarButton_Click(object sender, RoutedEventArgs e)
@@ -160,7 +167,7 @@ public sealed partial class SameTagEditor : Control
                 };
                 AddUnitagInfo(uniTag);
             }
-            _listView.Items.Clear();
+            _listView.ItemsSource = null;
         }
     }
 

@@ -717,6 +717,25 @@
                                     </Grid>
                                 </Expander.Content>
                             </Expander>
+                            <ListView x:Name="PART_UniTagInfoListView">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding UniTagSourceGUID}" Grid.Column="0" VerticalAlignment="Center"/>
+                                            <TextBlock Text=":" Margin="8 0 8 0" Grid.Column="1" VerticalAlignment="Center"/>
+                                            <Grid Grid.Column="2" Padding="8 4 8 4" CornerRadius="8"
+                                                  Background="{ThemeResource SystemAccentColor}">
+                                                <TextBlock Text="{Binding UniqueID}"/>
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                     </Border>
                 </ControlTemplate>
