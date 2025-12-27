@@ -22,6 +22,9 @@ public sealed partial class SameTagEditor : Control
     private AppBarButton? _addAppBarButton;
     private AppBarButton? _removeAppBarButton;
     private Expander? _expander;
+    private TextBox? _tagSourceGuidTextBox;
+    private TextBox? _tagIDTextBox;
+    private Button? _addFromInputButton;
     private ListView? _listView;
     private ProgressRing? _searchProgressRing;
     private TextBlock? _searchResultExceptionTextBlock;
@@ -46,7 +49,11 @@ public sealed partial class SameTagEditor : Control
         }
         if(_removeAppBarButton != null)
         {
-            _removeAppBarButton.Click += _removeAppBarButton_Click; ;
+            _removeAppBarButton.Click += _removeAppBarButton_Click;
+        }
+        if (_addFromInputButton != null)
+        {
+            _addFromInputButton.Click += _addFromInputButton_Click;
         }
         if (_listView != null)
         {
@@ -66,6 +73,10 @@ public sealed partial class SameTagEditor : Control
         {
             _removeAppBarButton.Click -= _removeAppBarButton_Click;
         }
+        if (_addFromInputButton != null)
+        {
+            _addFromInputButton.Click -= _addFromInputButton_Click;
+        }
         if (_listView != null)
         {
             _listView.SelectionChanged -= _listView_SelectionChanged;
@@ -79,6 +90,9 @@ public sealed partial class SameTagEditor : Control
         _addAppBarButton = GetTemplateChild("PART_AddTagButton") as AppBarButton;
         _removeAppBarButton = GetTemplateChild("PART_RemoveTagButton") as AppBarButton;
         _expander = GetTemplateChild("PART_Expander") as Expander;
+        _tagSourceGuidTextBox = GetTemplateChild("PART_TagSourceGuidTextBox") as TextBox;
+        _tagIDTextBox = GetTemplateChild("PART_TagIDTextBox") as TextBox;
+        _addFromInputButton = GetTemplateChild("PART_AddFromInputButton") as Button;
         _listView = GetTemplateChild("PART_TagListView") as ListView;
         _searchProgressRing = GetTemplateChild("PART_SearchProgressRing") as ProgressRing;
         _searchResultExceptionTextBlock = GetTemplateChild("PART_SearchResultExceptionTextBlock") as TextBlock;
@@ -87,6 +101,36 @@ public sealed partial class SameTagEditor : Control
         if (_uniTagListView != null)
         {
             _uniTagListView.ItemsSource = SameUnitags;
+        }
+    }
+
+    private void _addFromInputButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_tagSourceGuidTextBox != null
+            && _tagSourceGuidTextBox.Text.Trim() != string.Empty
+            && _tagIDTextBox != null
+            && _tagIDTextBox.Text.Trim() != string.Empty)
+        {
+            if (!SameUnitags.Any(x => x.UniTagSourceGUID == _tagSourceGuidTextBox.Text.Trim()))
+            {
+                AddUnitagInfo(new()
+                {
+                    UniTagSourceGUID = _tagSourceGuidTextBox.Text.Trim(),
+                    UniqueID = _tagIDTextBox.Text.Trim()
+                });
+                _tagSourceGuidTextBox.Text = string.Empty;
+                _tagIDTextBox.Text = string.Empty;
+            }
+            // Warn no 2 tag pointed to same entity in a same source
+            else
+            {
+
+            }
+        }
+        else
+        {
+            // Warn empty input
+
         }
     }
 

@@ -419,4 +419,22 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="DuplicateAppBarButton.Label" xml:space="preserve">
     <value>Duplicate</value>
   </data>
+  <data name="AddExternalIDTextBlock.Text" xml:space="preserve">
+    <value>Add External ID</value>
+  </data>
+  <data name="AddFromWikidataTextBlock.Text" xml:space="preserve">
+    <value>Add From Wikidata</value>
+  </data>
+  <data name="AddFromInputTextBlock.Text" xml:space="preserve">
+    <value>Add From Input</value>
+  </data>
+  <data name="TagSourceGuidTextBox.Header" xml:space="preserve">
+    <value>Tag Source Guid</value>
+  </data>
+  <data name="TagIDTextBox.Header" xml:space="preserve">
+    <value>Tag ID</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>Add</value>
+  </data>
 </root>

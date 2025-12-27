@@ -419,4 +419,22 @@
   <data name="DuplicateAppBarButton.Label" xml:space="preserve">
     <value>在此处复制</value>
   </data>
+  <data name="AddExternalIDTextBlock.Text" xml:space="preserve">
+    <value>添加外部ID</value>
+  </data>
+  <data name="AddFromWikidataTextBlock.Text" xml:space="preserve">
+    <value>从Wikidata添加</value>
+  </data>
+  <data name="AddFromInputTextBlock.Text" xml:space="preserve">
+    <value>通过输入添加</value>
+  </data>
+  <data name="TagSourceGuidTextBox.Header" xml:space="preserve">
+    <value>标签源标识</value>
+  </data>
+  <data name="TagIDTextBox.Header" xml:space="preserve">
+    <value>标签ID</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>添加</value>
+  </data>
 </root>
