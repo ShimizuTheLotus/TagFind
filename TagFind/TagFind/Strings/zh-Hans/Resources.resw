@@ -437,4 +437,10 @@
   <data name="AddButton.Content" xml:space="preserve">
     <value>添加</value>
   </data>
+  <data name="TagSourceNeedToBeNonEmptyValueTextBlock.Text" xml:space="preserve">
+    <value>标签源不能为空。</value>
+  </data>
+  <data name="TagIDNeedToBeNonEmptyValueTextBlock.Text" xml:space="preserve">
+    <value>标签ID不能为空。</value>
+  </data>
 </root>

@@ -437,4 +437,10 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="AddButton.Content" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="TagSourceNeedToBeNonEmptyValueTextBlock.Text" xml:space="preserve">
+    <value>Tag source need to be a non-empty value.</value>
+  </data>
+  <data name="TagIDNeedToBeNonEmptyValueTextBlock.Text" xml:space="preserve">
+    <value>Tag ID need to be a non-empty value.</value>
+  </data>
 </root>

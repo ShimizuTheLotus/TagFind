@@ -699,7 +699,9 @@
                                     <StackPanel>
                                         <TextBlock x:Uid="AddFromInputTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
                                         <TextBox x:Name="PART_TagSourceGuidTextBox" x:Uid="TagSourceGuidTextBox"/>
+                                        <TextBlock x:Name="PART_TagSourceNeedToBeNonEmptyValueTextBlock" x:Uid="TagSourceNeedToBeNonEmptyValueTextBlock" Visibility="Collapsed"/>
                                         <TextBox x:Name="PART_TagIDTextBox" x:Uid="TagIDTextBox"/>
+                                        <TextBlock x:Name="PART_TagIDNeedToBeNonEmptyValueTextBlock" x:Uid="TagIDNeedToBeNonEmptyValueTextBlock" Visibility="Collapsed"/>
                                         <Button x:Name="PART_AddFromInputButton" x:Uid="AddButton"/>
                                         <TextBlock x:Uid="AddFromWikidataTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
                                         <ListView x:Name="PART_TagListView">
@@ -709,14 +711,14 @@
                                                         <StackPanel Orientation="Horizontal">
                                                             <TextBlock Text="{Binding Label}" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 0 8 0"/>
                                                             <Grid Background="{ThemeResource SystemAccentColor}"
-                                                      Padding="8 4 8 4"
-                                                      CornerRadius="8"
-                                                      HorizontalAlignment="Left">
+                                                                Padding="8 4 8 4"
+                                                                CornerRadius="8"
+                                                                HorizontalAlignment="Left">
                                                                 <TextBlock Text="{Binding ID}"/>
                                                             </Grid>
                                                         </StackPanel>
                                                         <TextBlock Text="{Binding Description}"/>
-                                                    </StackPanel>
+                                                    </StackPanel>1
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>

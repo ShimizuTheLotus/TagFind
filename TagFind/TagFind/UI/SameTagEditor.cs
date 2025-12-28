@@ -23,7 +23,9 @@ public sealed partial class SameTagEditor : Control
     private AppBarButton? _removeAppBarButton;
     private Expander? _expander;
     private TextBox? _tagSourceGuidTextBox;
+    private TextBlock? _tagSourceNonEmptyTextBlock;
     private TextBox? _tagIDTextBox;
+    private TextBlock? _tagIDNonEmptyTextBlock;
     private Button? _addFromInputButton;
     private ListView? _listView;
     private ProgressRing? _searchProgressRing;
@@ -91,7 +93,9 @@ public sealed partial class SameTagEditor : Control
         _removeAppBarButton = GetTemplateChild("PART_RemoveTagButton") as AppBarButton;
         _expander = GetTemplateChild("PART_Expander") as Expander;
         _tagSourceGuidTextBox = GetTemplateChild("PART_TagSourceGuidTextBox") as TextBox;
+        _tagSourceNonEmptyTextBlock = GetTemplateChild("PART_TagSourceNeedToBeNonEmptyValueTextBlock") as TextBlock;
         _tagIDTextBox = GetTemplateChild("PART_TagIDTextBox") as TextBox;
+        _tagIDNonEmptyTextBlock = GetTemplateChild("PART_TagIDNeedToBeNonEmptyValueTextBlock") as TextBlock;
         _addFromInputButton = GetTemplateChild("PART_AddFromInputButton") as Button;
         _listView = GetTemplateChild("PART_TagListView") as ListView;
         _searchProgressRing = GetTemplateChild("PART_SearchProgressRing") as ProgressRing;
@@ -124,7 +128,22 @@ public sealed partial class SameTagEditor : Control
             // Warn no 2 tag pointed to same entity in a same source
             else
             {
-
+                if (_tagSourceGuidTextBox != null
+                    && _tagSourceGuidTextBox.Text.Trim() == string.Empty)
+                {
+                    if (_tagSourceNonEmptyTextBlock != null)
+                    {
+                        _tagSourceNonEmptyTextBlock.Visibility = Visibility.Visible;
+                    }
+                }
+                if (_tagIDTextBox != null
+                    && _tagIDTextBox.Text.Trim() == string.Empty)
+                {
+                    if (_tagIDNonEmptyTextBlock != null)
+                    {
+                        _tagIDNonEmptyTextBlock.Visibility = Visibility.Visible;
+                    }
+                }
             }
         }
         else
