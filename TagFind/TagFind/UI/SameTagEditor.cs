@@ -128,28 +128,28 @@ public sealed partial class SameTagEditor : Control
             // Warn no 2 tag pointed to same entity in a same source
             else
             {
-                if (_tagSourceGuidTextBox != null
-                    && _tagSourceGuidTextBox.Text.Trim() == string.Empty)
-                {
-                    if (_tagSourceNonEmptyTextBlock != null)
-                    {
-                        _tagSourceNonEmptyTextBlock.Visibility = Visibility.Visible;
-                    }
-                }
-                if (_tagIDTextBox != null
-                    && _tagIDTextBox.Text.Trim() == string.Empty)
-                {
-                    if (_tagIDNonEmptyTextBlock != null)
-                    {
-                        _tagIDNonEmptyTextBlock.Visibility = Visibility.Visible;
-                    }
-                }
+
             }
         }
         else
         {
             // Warn empty input
-
+            if (_tagSourceGuidTextBox != null
+                && _tagSourceGuidTextBox.Text.Trim() == string.Empty)
+            {
+                if (_tagSourceNonEmptyTextBlock != null)
+                {
+                    _tagSourceNonEmptyTextBlock.Visibility = Visibility.Visible;
+                }
+            }
+            if (_tagIDTextBox != null
+                && _tagIDTextBox.Text.Trim() == string.Empty)
+            {
+                if (_tagIDNonEmptyTextBlock != null)
+                {
+                    _tagIDNonEmptyTextBlock.Visibility = Visibility.Visible;
+                }
+            }
         }
     }
 
