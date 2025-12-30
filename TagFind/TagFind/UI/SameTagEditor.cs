@@ -128,7 +128,10 @@ public sealed partial class SameTagEditor : Control
             // Warn no 2 tag pointed to same entity in a same source
             else
             {
+                if (SameUnitags.Any(x => x.UniTagSourceGUID.Trim() == _tagSourceGuidTextBox.Text.Trim()))
+                {
 
+                }
             }
         }
         else
