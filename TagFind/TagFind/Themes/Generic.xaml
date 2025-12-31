@@ -718,7 +718,7 @@
                                                             </Grid>
                                                         </StackPanel>
                                                         <TextBlock Text="{Binding Description}"/>
-                                                    </StackPanel>1
+                                                    </StackPanel>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
