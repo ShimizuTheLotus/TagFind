@@ -26,6 +26,7 @@ public sealed partial class SameTagEditor : Control
     private TextBlock? _tagSourceNonEmptyTextBlock;
     private TextBox? _tagIDTextBox;
     private TextBlock? _tagIDNonEmptyTextBlock;
+    private TextBlock? _noMultiReferenceInSameProviderTextBlock;
     private Button? _addFromInputButton;
     private ListView? _listView;
     private ProgressRing? _searchProgressRing;
@@ -96,6 +97,7 @@ public sealed partial class SameTagEditor : Control
         _tagSourceNonEmptyTextBlock = GetTemplateChild("PART_TagSourceNeedToBeNonEmptyValueTextBlock") as TextBlock;
         _tagIDTextBox = GetTemplateChild("PART_TagIDTextBox") as TextBox;
         _tagIDNonEmptyTextBlock = GetTemplateChild("PART_TagIDNeedToBeNonEmptyValueTextBlock") as TextBlock;
+        _noMultiReferenceInSameProviderTextBlock = GetTemplateChild("PART_NoMultiReferenceInSameProviderTextBlock") as TextBlock;
         _addFromInputButton = GetTemplateChild("PART_AddFromInputButton") as Button;
         _listView = GetTemplateChild("PART_TagListView") as ListView;
         _searchProgressRing = GetTemplateChild("PART_SearchProgressRing") as ProgressRing;
@@ -130,7 +132,10 @@ public sealed partial class SameTagEditor : Control
             {
                 if (SameUnitags.Any(x => x.UniTagSourceGUID.Trim() == _tagSourceGuidTextBox.Text.Trim()))
                 {
-
+                    if (_noMultiReferenceInSameProviderTextBlock != null)
+                    {
+                        _noMultiReferenceInSameProviderTextBlock.Visibility = Visibility.Visible;
+                    }
                 }
             }
         }

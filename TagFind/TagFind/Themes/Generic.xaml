@@ -702,6 +702,7 @@
                                         <TextBlock x:Name="PART_TagSourceNeedToBeNonEmptyValueTextBlock" x:Uid="TagSourceNeedToBeNonEmptyValueTextBlock" Visibility="Collapsed"/>
                                         <TextBox x:Name="PART_TagIDTextBox" x:Uid="TagIDTextBox"/>
                                         <TextBlock x:Name="PART_TagIDNeedToBeNonEmptyValueTextBlock" x:Uid="TagIDNeedToBeNonEmptyValueTextBlock" Visibility="Collapsed"/>
+                                        <TextBlock x:Name="PART_NoMultiReferenceInSameProviderTextBlock" x:Uid="NoMultiReferenceInSameProvider" Visibility="Collapsed"/>
                                         <Button x:Name="PART_AddFromInputButton" x:Uid="AddButton"/>
                                         <TextBlock x:Uid="AddFromWikidataTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
                                         <ListView x:Name="PART_TagListView">

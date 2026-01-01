@@ -443,4 +443,7 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="TagIDNeedToBeNonEmptyValueTextBlock.Text" xml:space="preserve">
     <value>Tag ID need to be a non-empty value.</value>
   </data>
+  <data name="NoMultiReferenceInSameProvider.Text" xml:space="preserve">
+    <value>Cannot set more than one tag reference from a same provider.</value>
+  </data>
 </root>
