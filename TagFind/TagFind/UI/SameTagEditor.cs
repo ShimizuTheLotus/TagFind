@@ -165,13 +165,13 @@ public sealed partial class SameTagEditor : Control
     {
         if(_listView != null)
         {
-            var selectedItems = _listView.SelectedItems.Cast<UniTag>().ToList();
+            var selectedItems = _uniTagListView.SelectedItems.Cast<UniTag>().ToList();
             foreach (var item in selectedItems)
             {
                 SameUnitags.Remove(item);
             }
-            _listView.ItemsSource = null;
-            _listView.ItemsSource = SameUnitags;
+            _uniTagListView.ItemsSource = null;
+            _uniTagListView.ItemsSource = SameUnitags;
         }
     }
 
