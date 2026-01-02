@@ -728,6 +728,7 @@
                                     </StackPanel>
                                 </Expander.Content>
                             </Expander>
+                            <TextBlock x:Uid="TagCompatibleListTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
                             <ListView x:Name="PART_UniTagInfoListView">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>

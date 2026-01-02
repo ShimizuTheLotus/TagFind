@@ -163,7 +163,7 @@ public sealed partial class SameTagEditor : Control
 
     private void _removeAppBarButton_Click(object sender, RoutedEventArgs e)
     {
-        if(_listView != null)
+        if(_uniTagListView != null)
         {
             var selectedItems = _uniTagListView.SelectedItems.Cast<UniTag>().ToList();
             foreach (var item in selectedItems)
@@ -236,6 +236,14 @@ public sealed partial class SameTagEditor : Control
                     UniTagSourceGUID = "Wikidata",
                     UniqueID = selectedResult.ID
                 };
+                // A source can only have one tag entity reference.
+                if (SameUnitags.Any(x=>x.UniTagSourceGUID == uniTag.UniTagSourceGUID))
+                {
+                    foreach (UniTag delUniTag in SameUnitags.Where(x => x.UniTagSourceGUID == uniTag.UniTagSourceGUID))
+                    {
+                        SameUnitags.Remove(delUniTag);
+                    }
+                }
                 AddUnitagInfo(uniTag);
             }
             _listView.ItemsSource = null;

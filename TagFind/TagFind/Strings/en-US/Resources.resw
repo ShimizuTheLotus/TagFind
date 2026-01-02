@@ -446,4 +446,7 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="NoMultiReferenceInSameProvider.Text" xml:space="preserve">
     <value>Cannot set more than one tag reference from a same provider.</value>
   </data>
+  <data name="TagCompatibleListTextBlock.Text" xml:space="preserve">
+    <value>Tag Compatible List</value>
+  </data>
 </root>
