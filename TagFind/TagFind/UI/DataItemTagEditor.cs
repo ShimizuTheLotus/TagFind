@@ -13,6 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using TagFind.Classes.DataTypes;
 using TagFind.Classes.DB;
+using TagFind.Classes.Extensions;
 using TagFind.Interfaces;
 using Windows.ApplicationModel.Contacts;
 
@@ -194,11 +195,11 @@ namespace TagFind.UI
                     {
                         ContentDialog createTagDialog = new();
                         createTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-                        createTagDialog.Title = GetLocalizedString("TagNotExists/String");
-                        createTagDialog.Content = GetLocalizedString("DoYouWantToCreateThisTagNow/String");
+                        createTagDialog.Title = LocalizedString.GetLocalizedString("TagNotExists/String");
+                        createTagDialog.Content = LocalizedString.GetLocalizedString("DoYouWantToCreateThisTagNow/String");
                         createTagDialog.XamlRoot = this.XamlRoot;
-                        createTagDialog.PrimaryButtonText = GetLocalizedString("Create/String");
-                        createTagDialog.SecondaryButtonText = GetLocalizedString("Cancel/String");
+                        createTagDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Create/String");
+                        createTagDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel/String");
                         createTagDialog.DefaultButton = ContentDialogButton.Primary;
                         createTagDialog.PrimaryButtonClick += CreateTagDialog_PrimaryButtonClick;
                         await createTagDialog.ShowAsync();
@@ -400,19 +401,6 @@ namespace TagFind.UI
                 return _currentPage.ContentManager;
             }
             return null;
-        }
-
-        public string GetLocalizedString(string key)
-        {
-            try
-            {
-                var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
-                return resourceLoader.GetString(key);
-            }
-            catch
-            {
-                return "{Resource Load Failed}";
-            }
         }
     }
 }

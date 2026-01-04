@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TagFind.Classes.DataTypes;
 using TagFind.Classes.DB;
+using TagFind.Classes.Extensions;
 using TagFind.Interfaces;
 using TagFind.Interfaces.IPageNavigationParameter;
 using Windows.Foundation;
@@ -86,11 +87,11 @@ namespace TagFind.Pages
         {
             ContentDialog deleteTagDialog = new();
             deleteTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            deleteTagDialog.Title = GetLocalizedString("AreYouSureYouWantToRemoveThisTag/String");
-            deleteTagDialog.Content = GetLocalizedString("AllReferencesWillBeRemovedAlong/String");
+            deleteTagDialog.Title = LocalizedString.GetLocalizedString("AreYouSureYouWantToRemoveThisTag/String");
+            deleteTagDialog.Content = LocalizedString.GetLocalizedString("AllReferencesWillBeRemovedAlong/String");
             deleteTagDialog.XamlRoot = this.XamlRoot;
-            deleteTagDialog.PrimaryButtonText = GetLocalizedString("Remove/String");
-            deleteTagDialog.SecondaryButtonText = GetLocalizedString("Cancel/String");
+            deleteTagDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Remove/String");
+            deleteTagDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel/String");
             deleteTagDialog.DefaultButton = ContentDialogButton.Secondary;
             deleteTagDialog.PrimaryButtonClick += DeleteTagDialog_PrimaryButtonClick; ;
             await deleteTagDialog.ShowAsync();
@@ -103,19 +104,6 @@ namespace TagFind.Pages
             if (Frame.CanGoBack)
             {
                 Frame.GoBack();
-            }
-        }
-
-        public string GetLocalizedString(string key)
-        {
-            try
-            {
-                var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
-                return resourceLoader.GetString(key);
-            }
-            catch
-            {
-                return "{Resource Load Failed}";
             }
         }
     }

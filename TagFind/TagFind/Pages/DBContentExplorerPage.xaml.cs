@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using TagFind.Classes.DataTypes;
 using TagFind.Classes.DB;
+using TagFind.Classes.Extensions;
 using TagFind.Interfaces;
 using TagFind.Interfaces.IPageNavigationParameter;
 using TagFind.UI;
@@ -360,10 +361,10 @@ namespace TagFind.Pages
         {
             ContentDialog DeleteSelectionDialog = new();
             DeleteSelectionDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            DeleteSelectionDialog.Title = GetLocalizedString("ConfirmDeletingDataItemsDialogTitle/String");
+            DeleteSelectionDialog.Title = LocalizedString.GetLocalizedString("ConfirmDeletingDataItemsDialogTitle/String");
             DeleteSelectionDialog.XamlRoot = this.XamlRoot;
-            DeleteSelectionDialog.PrimaryButtonText = GetLocalizedString("Delete/String");
-            DeleteSelectionDialog.SecondaryButtonText = GetLocalizedString("Cancel/String");
+            DeleteSelectionDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Delete/String");
+            DeleteSelectionDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel/String");
             DeleteSelectionDialog.DefaultButton = ContentDialogButton.Secondary;
 
             ConfirmDeleteDataItemContentDialogPage content = new();
@@ -397,19 +398,6 @@ namespace TagFind.Pages
             {
                 await ContentManager.DataItemBatchDelete(rootIDsToDelete, removeChildItems);
                 await UpdateContentList();
-            }
-        }
-
-        public string GetLocalizedString(string key)
-        {
-            try
-            {
-                var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
-                return resourceLoader.GetString(key);
-            }
-            catch
-            {
-                return "{Resource Load Failed}";
             }
         }
 

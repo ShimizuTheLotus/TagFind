@@ -449,4 +449,10 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="TagCompatibleListTextBlock.Text" xml:space="preserve">
     <value>Tag Compatible List</value>
   </data>
+  <data name="Code.CS.FailedToGetPropertyNameWithIDWithReason" xml:space="preserve">
+    <value>Failed to get property name with ID {ID}. Reason: {Reason}.</value>
+  </data>
+  <data name="Code.CS.FailedToFindMatchedInfoFromDatabase" xml:space="preserve">
+    <value>Failed to find matched info from database.</value>
+  </data>
 </root>

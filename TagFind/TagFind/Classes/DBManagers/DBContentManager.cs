@@ -215,6 +215,17 @@ namespace TagFind.Classes.DB
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
+
+                command =
+                    "CREATE TABLE IF NOT EXISTS " +
+                    $"{nameof(TagCompatibilityTable)} " +
+                    $"USING FTS5(" +
+                    $"{nameof(TagCompatibilityTable.LocalTagID)} INTEGER," +
+                    $"{nameof(TagCompatibilityTable.SourceTagID)} TEXT," +
+                    $"{nameof(TagCompatibilityTable.SourceTagID)} TEXT" +
+                    $")";
+                SqliteCommand = new(command, dbConnection);
+                SqliteCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -467,7 +478,7 @@ namespace TagFind.Classes.DB
                 }
 
                 SqliteDataReader = SqliteCommand.ExecuteReader();
-                await foreach (DataItem dataItem in SqliteDataReader.DataItemsAddDataItemsIterativeFromReader(dbConnection, MessageManager))
+                await foreach (DataItem dataItem in SqliteDataReader.DataItemsAddFullDataItemsIterativeFromReader(dbConnection, MessageManager))
                 {
                     yield return dataItem;
                 }
@@ -1059,7 +1070,7 @@ namespace TagFind.Classes.DB
                             $"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}";
                         SqliteCommand sqlCmd = new(cmd, dbConnection);
                         SqliteDataReader reader = sqlCmd.ExecuteReader();
-                        await foreach (DataItem dataItem in reader.DataItemsAddDataItemsIterativeFromReader(dbConnection, MessageManager))
+                        await foreach (DataItem dataItem in reader.DataItemsAddFullDataItemsIterativeFromReader(dbConnection, MessageManager))
                         {
                             yield return dataItem;
                         }
@@ -1520,7 +1531,7 @@ namespace TagFind.Classes.DB
                     $")";
                 SqliteCommand sqliteCommand = new(command, dbConnection);
                 SqliteDataReader reader = sqliteCommand.ExecuteReader();
-                await foreach (DataItem dataItem in reader.DataItemsAddDataItemsIterativeFromReader(dbConnection, MessageManager))
+                await foreach (DataItem dataItem in reader.DataItemsAddFullDataItemsIterativeFromReader(dbConnection, MessageManager))
                 {
                     yield return dataItem;
                 }
@@ -2151,7 +2162,7 @@ namespace TagFind.Classes.DB
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
 
                 // Get tags
-                reader.TagPoolAddTagsFromReader(ref tags, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
+                reader.TagPoolAddFullTagsFromReader(ref tags, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
             }
 #if !DEBUG
             catch (Exception ex)
@@ -2198,7 +2209,7 @@ namespace TagFind.Classes.DB
                 reader = SqliteCommand.ExecuteReader();
 
                 // Get tags.
-                reader.TagPoolAddTagsFromReader(ref tags, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
+                reader.TagPoolAddFullTagsFromReader(ref tags, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
             }
 #if !DEBUG
             catch (Exception ex)
@@ -2236,7 +2247,7 @@ namespace TagFind.Classes.DB
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
 
                 // Get tags
-                reader.TagPoolAddTagsFromReader(ref tags, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
+                reader.TagPoolAddFullTagsFromReader(ref tags, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
             }
 #if !DEBUG
             catch (Exception ex)
@@ -3007,7 +3018,16 @@ namespace TagFind.Classes.DB
 
     public static class DBContentManagerExtension
     {
-        public static void TagPoolAddTagsFromReader(this SqliteDataReader reader,
+        /// <summary>
+        /// Add full tag info from reader to the target hash set.
+        /// </summary>
+        /// <param name="reader">The reader with command for selecting target tags.</param>
+        /// <param name="tags">The target hash set, tags selected will be added to it with their full info.</param>
+        /// <param name="dbConnection">The shared database connection.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
+        /// <param name="ParentPropertyNameTempDict">Shared dictionary, helping reducing storage disk IO.</param>
+        /// <param name="OnChainTagNameTempDict">Shared dictionary, helping reducing storage disk IO.</param>
+        public static void TagPoolAddFullTagsFromReader(this SqliteDataReader reader,
             ref HashSet<Tag> tags,
             SqliteConnection? dbConnection,
             MessageManager MessageManager,
@@ -3237,6 +3257,13 @@ namespace TagFind.Classes.DB
 #endif
         }
 
+        /// <summary>
+        /// Add full data items info from reader to the target hash set.
+        /// </summary>
+        /// <param name="reader">The reader with command for selecting data items.</param>
+        /// <param name="dataItems">The target hash set, the selected data items will be added with their full info.</param>
+        /// <param name="dbConnection">The shared database connection.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
         public static void DataItemsAddDataItemsFromReader(this SqliteDataReader reader,
             ref HashSet<DataItem> dataItems,
             SqliteConnection? dbConnection,
@@ -3295,7 +3322,7 @@ namespace TagFind.Classes.DB
                         if (!TagNameTempDict.ContainsKey(itemTag.TagID))
                         {
                             string tagName = string.Empty;
-                            tagName = dbConnection.TagPoolGetTagName(itemTag.TagID);
+                            tagName = dbConnection.TagPoolGetTagNameByID(itemTag.TagID, MessageManager);
                             TagNameTempDict.Add(itemTag.TagID, tagName);
                             itemTag.TagName = tagName;
                         }
@@ -3306,7 +3333,7 @@ namespace TagFind.Classes.DB
                         if (!PropertyNameTempDict.ContainsKey(itemTag.ParentPropertyID))
                         {
                             string propertyName = string.Empty;
-                            propertyName = dbConnection.TagDataGetPropertyName(itemTag.ParentPropertyID);
+                            propertyName = dbConnection.TagDataGetPropertyName(itemTag.ParentPropertyID, MessageManager);
                             PropertyNameTempDict.Add(itemTag.ParentPropertyID, propertyName);
                             itemTag.ParentPropertyName = propertyName;
                         }
@@ -3334,7 +3361,14 @@ namespace TagFind.Classes.DB
 #endif
         }
 
-        public static async IAsyncEnumerable<DataItem> DataItemsAddDataItemsIterativeFromReader(this SqliteDataReader reader,
+        /// <summary>
+        /// Add full data items info from reader to the target hash set, and also add all child data items with their full info.
+        /// </summary>
+        /// <param name="reader">The reader with command for selecting the ancestor data items.</param>
+        /// <param name="dbConnection">The shared database connection.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
+        /// <returns>A data item with its full info.</returns>
+        public static async IAsyncEnumerable<DataItem> DataItemsAddFullDataItemsIterativeFromReader(this SqliteDataReader reader,
             SqliteConnection? dbConnection,
             MessageManager MessageManager)
         {
@@ -3391,7 +3425,7 @@ namespace TagFind.Classes.DB
                         if (!TagNameTempDict.ContainsKey(itemTag.TagID))
                         {
                             string tagName = string.Empty;
-                            tagName = dbConnection.TagPoolGetTagName(itemTag.TagID);
+                            tagName = dbConnection.TagPoolGetTagNameByID(itemTag.TagID, MessageManager);
                             TagNameTempDict.Add(itemTag.TagID, tagName);
                             itemTag.TagName = tagName;
                         }
@@ -3402,7 +3436,7 @@ namespace TagFind.Classes.DB
                         if (!PropertyNameTempDict.ContainsKey(itemTag.ParentPropertyID))
                         {
                             string propertyName = string.Empty;
-                            propertyName = dbConnection.TagDataGetPropertyName(itemTag.ParentPropertyID);
+                            propertyName = dbConnection.TagDataGetPropertyName(itemTag.ParentPropertyID, MessageManager);
                             PropertyNameTempDict.Add(itemTag.ParentPropertyID, propertyName);
                             itemTag.ParentPropertyName = propertyName;
                         }
@@ -3429,36 +3463,73 @@ namespace TagFind.Classes.DB
 #endif
         }
 
-        public static string TagPoolGetTagName(this SqliteConnection dbConnection, long tagID)
+        /// <summary>
+        /// Get main name of a tag by its ID;
+        /// </summary>
+        /// <param name="dbConnection">The shared database connection.</param>
+        /// <param name="tagID">Tag ID of the tag we want to get its name.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
+        /// <returns>The main name of the tag.</returns>
+        public static string TagPoolGetTagNameByID(this SqliteConnection dbConnection, long tagID, MessageManager MessageManager)
         {
-            string command =
-                $"SELECT * FROM {nameof(TagPool)} " +
-                $"WHERE {new TagPool().ID} = @{new TagPool().ID} " +
-                $"LIMIT 1";
-            SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", tagID);
-            SqliteDataReader reader = SqliteCommand.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                return reader.GetString(1);
+                string command =
+                    $"SELECT * FROM {nameof(TagPool)} " +
+                    $"WHERE {new TagPool().ID} = @{new TagPool().ID} " +
+                    $"LIMIT 1";
+                SqliteCommand SqliteCommand = new(command, dbConnection);
+                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", tagID);
+                SqliteDataReader reader = SqliteCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    return reader.GetString(1);
+                }
+                return string.Empty;
             }
-            return string.Empty;
+            catch (Exception ex)
+            {
+
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
+                return string.Empty;
+            }
         }
 
-        public static string TagDataGetPropertyName(this SqliteConnection dbConnection, long PropertyID)
+        /// <summary>
+        /// Get property name by its ID.
+        /// </summary>
+        /// <param name="dbConnection">The shared database connection.</param>
+        /// <param name="PropertyID">The ID of property we want to get its name.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
+        /// <returns>The name of the property.</returns>
+        public static string TagDataGetPropertyName(this SqliteConnection dbConnection, long PropertyID, MessageManager MessageManager)
         {
-            string command =
-                $"SELECT * FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().ID} = @{new TagData().ID} " +
-                $"LIMIT 1";
-            SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", PropertyID);
-            SqliteDataReader reader = SqliteCommand.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                return reader.GetString(4);
+                string command =
+                    $"SELECT * FROM {nameof(TagData)} " +
+                    $"WHERE {new TagData().ID} = @{new TagData().ID} " +
+                    $"LIMIT 1";
+                SqliteCommand SqliteCommand = new(command, dbConnection);
+                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", PropertyID);
+                SqliteDataReader reader = SqliteCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    return reader.GetString(4);
+                }
+                string failedMessage = LocalizedString.GetLocalizedString("Code/CS/FailedToGetPropertyNameWithIDWithReason");
+                string failedReason = LocalizedString.GetLocalizedString("Code/CS/FailedToFindMatchedInfoFromDatabase");
+                failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", failedReason } });
+                MessageManager.PushMessage(MessageType.Warning, failedMessage);
+                return string.Empty;
             }
-            return string.Empty;
+            catch (Exception ex)
+            {
+                string failedMessage = LocalizedString.GetLocalizedString("Code/CS/FailedToGetPropertyNameWithIDWithReason");
+                failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", ex.Message } });
+                MessageManager.PushMessage(MessageType.Error, failedMessage);
+                return string.Empty;
+            }
         }
 
         public static void GetRestrictedTagLogicChainsFromReader(this SqliteDataReader reader,

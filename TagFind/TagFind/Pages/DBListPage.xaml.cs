@@ -120,8 +120,8 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
         CreateDatabaseDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
         CreateDatabaseDialog.TitleTemplate = CreateTitleTemplate();
         CreateDatabaseDialog.XamlRoot = this.XamlRoot;
-        CreateDatabaseDialog.PrimaryButtonText = GetLocalizedString("CreateDatabaseDialog/PrimaryButtonText");
-        CreateDatabaseDialog.SecondaryButtonText = GetLocalizedString("CreateDatabaseDialog/SecondaryButtonText");
+        CreateDatabaseDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("CreateDatabaseDialog/PrimaryButtonText");
+        CreateDatabaseDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("CreateDatabaseDialog/SecondaryButtonText");
         CreateDatabaseDialog.DefaultButton = ContentDialogButton.Primary;
         CreateDatabaseDialog.IsPrimaryButtonEnabled = false;
 
@@ -151,19 +151,6 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
         </DataTemplate>";
 
         return (DataTemplate)Microsoft.UI.Xaml.Markup.XamlReader.Load(xaml);
-    }
-
-    public string GetLocalizedString(string key)
-    {
-        try
-        {
-            var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
-            return resourceLoader.GetString(key);
-        }
-        catch
-        {
-            return "{Resource Load Failed}";
-        }
     }
 
     private void SettingsAppBarButton_Click(object sender, RoutedEventArgs e)

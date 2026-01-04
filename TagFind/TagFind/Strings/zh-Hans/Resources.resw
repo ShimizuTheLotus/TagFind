@@ -449,4 +449,10 @@
   <data name="TagCompatibleListTextBlock.Text" xml:space="preserve">
     <value>标签兼容列表</value>
   </data>
+  <data name="Code.CS.FailedToGetPropertyNameWithIDWithReason" xml:space="preserve">
+    <value>未能获取ID为{ID}的属性的名称。原因：{Reason}。</value>
+  </data>
+  <data name="Code.CS.FailedToFindMatchedInfoFromDatabase" xml:space="preserve">
+    <value>未能从数据库找到相符的数据。</value>
+  </data>
 </root>

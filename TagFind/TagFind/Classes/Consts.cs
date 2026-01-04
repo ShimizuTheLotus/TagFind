@@ -96,11 +96,11 @@ namespace TagFind.Classes
                     public string ParentTagID = nameof(ParentTagID);
                 }
 
-                public class TagCompatibilityList
+                public class TagCompatibilityTable
                 {
                     public string LocalTagID = nameof(LocalTagID);
                     public string SourceGUID = nameof(SourceGUID);
-                    public string TagID = nameof(TagID);
+                    public string SourceTagID = nameof(SourceTagID);
                 }
             }
         }
