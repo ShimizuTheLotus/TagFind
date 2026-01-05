@@ -1604,7 +1604,7 @@ namespace TagFind.Classes.DB
                 SqliteCommand.ExecuteNonQuery();
 
                 // Add tags
-                dbConnection.SaveDataItemTags(dataItem.ItemTags, dataItem.ID);
+                dbConnection.SaveDataItemTagsInfo(dataItem.ItemTags, dataItem.ID, MessageManager);
 
                 // Remove entire searchStrings
                 // Add searchStrings
@@ -1669,7 +1669,7 @@ namespace TagFind.Classes.DB
                     SqliteCommand.ExecuteNonQuery();
 
                     // Re-add tags
-                    dbConnection.SaveDataItemTags(dataItem.ItemTags, dataItem.ID);
+                    dbConnection.SaveDataItemTagsInfo(dataItem.ItemTags, dataItem.ID, MessageManager);
                 }
 
                 // Remove entire searchStrings
@@ -2019,7 +2019,7 @@ namespace TagFind.Classes.DB
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", sourceDataItem.SearchText);
 
                 // Add tags
-                dbConnection.SaveDataItemTags(sourceDataItem.ItemTags, sourceDataItem.ID);
+                dbConnection.SaveDataItemTagsInfo(sourceDataItem.ItemTags, sourceDataItem.ID, MessageManager);
             }
 #if !DEBUG
             catch (Exception ex)
@@ -2819,7 +2819,7 @@ namespace TagFind.Classes.DB
                 {
                     ID = PropertyID
                 });
-                tag.SortRestrictedLogicChainsOfTag(ref allRestrictionChainItems);
+                tag.SortRestrictedLogicChainsOfTagAndFillIntoProperties(ref allRestrictionChainItems, MessageManager);
                 return tag.PropertyItems[0].RestrictedTagLogicChains;
             }
             catch (Exception ex)
@@ -3111,7 +3111,7 @@ namespace TagFind.Classes.DB
                     subReader.GetRestrictedTagLogicChainsFromReader(ref allRestrictionChainItems, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
 
                     // Sort restriction chain items
-                    tag.SortRestrictedLogicChainsOfTag(ref allRestrictionChainItems);
+                    tag.SortRestrictedLogicChainsOfTagAndFillIntoProperties(ref allRestrictionChainItems, MessageManager);
 
                     // Get LogicChains
                     subcommand =
@@ -3532,6 +3532,15 @@ namespace TagFind.Classes.DB
             }
         }
 
+        /// <summary>
+        /// Get restricted logic chains from reader and add them to the target list.
+        /// </summary>
+        /// <param name="reader">Reader with restricted logic chains.</param>
+        /// <param name="allRestrictionChainItems">The target list.</param>
+        /// <param name="dbConnection">The shared database connection.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
+        /// <param name="ParentPropertyNameTempDict">Shared dictionary, helping reducing storage disk IO.</param>
+        /// <param name="OnChainTagNameTempDict">Shared dictionary, helping reducing storage disk IO.</param>
         public static void GetRestrictedTagLogicChainsFromReader(this SqliteDataReader reader,
             ref List<LogicChainItem> allRestrictionChainItems,
             SqliteConnection? dbConnection,
@@ -3624,87 +3633,115 @@ namespace TagFind.Classes.DB
             }
         }
 
-        public static void SortRestrictedLogicChainsOfTag(this Tag tag, ref List<LogicChainItem> allRestrictionChainItems)
+        /// <summary>
+        /// Sort restricted logic chains of specific tag and fill them into the properties.
+        /// </summary>
+        /// <param name="tag">The tag we're going to fill its properties with restriction logic chains.</param>
+        /// <param name="allRestrictionChainItems">Data source of all restriction chain items.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
+        public static void SortRestrictedLogicChainsOfTagAndFillIntoProperties(this Tag tag, ref List<LogicChainItem> allRestrictionChainItems, MessageManager MessageManager)
         {
-            // RestrictionPropertyID
-            Dictionary<long, List<LogicChainItem>> restrictionChainSortDictSortByPropertyID = [];
-            // RestrictionPropertyID, ChainID
-            Dictionary<(long, long), List<LogicChainItem>> restrictionChainSortDictSortByChainID = [];
-
-            // Sort by RestrictionPropertyID
-            foreach (LogicChainItem item in allRestrictionChainItems)
+            try
             {
-                if (!restrictionChainSortDictSortByPropertyID.ContainsKey(item.RestrictionPropertyID))
-                {
-                    restrictionChainSortDictSortByPropertyID.Add(item.RestrictionPropertyID, []);
-                }
-                restrictionChainSortDictSortByPropertyID[item.RestrictionPropertyID].Add(item);
-            }
+                // RestrictionPropertyID
+                Dictionary<long, List<LogicChainItem>> restrictionChainSortDictSortByPropertyID = [];
+                // RestrictionPropertyID, ChainID
+                Dictionary<(long, long), List<LogicChainItem>> restrictionChainSortDictSortByChainID = [];
 
-            // Sort by ChainID
-            foreach (KeyValuePair<long, List<LogicChainItem>> rawValue in restrictionChainSortDictSortByPropertyID)
-            {
-                foreach (LogicChainItem item in rawValue.Value)
+                // Sort by RestrictionPropertyID
+                foreach (LogicChainItem item in allRestrictionChainItems)
                 {
-                    if (!restrictionChainSortDictSortByChainID.ContainsKey((rawValue.Key, item.ChainID)))
+                    if (!restrictionChainSortDictSortByPropertyID.ContainsKey(item.RestrictionPropertyID))
                     {
-                        restrictionChainSortDictSortByChainID.Add((rawValue.Key, item.ChainID), []);
+                        restrictionChainSortDictSortByPropertyID.Add(item.RestrictionPropertyID, []);
                     }
-                    restrictionChainSortDictSortByChainID[(rawValue.Key, item.ChainID)].Add(item);
+                    restrictionChainSortDictSortByPropertyID[item.RestrictionPropertyID].Add(item);
                 }
-            }
 
-            // Fill tag properties with chains
-            foreach (KeyValuePair<(long, long), List<LogicChainItem>> rawValue in restrictionChainSortDictSortByChainID)
-            {
-                List<LogicChainItem> chainSource = rawValue.Value;
-                LogicChain chain = new()
+                // Sort by ChainID
+                foreach (KeyValuePair<long, List<LogicChainItem>> rawValue in restrictionChainSortDictSortByPropertyID)
                 {
-                    ChainID = chainSource[0].ChainID
-                };
-                LogicChainItem item = new();
-                if (!chainSource.Any(x => x.ParentDataItemID == -1))
-                {
-                    continue;
+                    foreach (LogicChainItem item in rawValue.Value)
+                    {
+                        if (!restrictionChainSortDictSortByChainID.ContainsKey((rawValue.Key, item.ChainID)))
+                        {
+                            restrictionChainSortDictSortByChainID.Add((rawValue.Key, item.ChainID), []);
+                        }
+                        restrictionChainSortDictSortByChainID[(rawValue.Key, item.ChainID)].Add(item);
+                    }
                 }
-                item = chainSource.First(x => x.ParentDataItemID == -1);
-                chainSource.Remove(item);
-                chain.LogicChainData.Add(item);
 
-                long thisChainItemID = item.ID;
-                while (true)
+                // Fill tag properties with chains
+                foreach (KeyValuePair<(long, long), List<LogicChainItem>> rawValue in restrictionChainSortDictSortByChainID)
                 {
-                    if (chainSource.Count == 0)
+                    List<LogicChainItem> chainSource = rawValue.Value;
+                    LogicChain chain = new()
                     {
-                        break;
-                    }
-                    if (!chainSource.Any(x => x.ParentDataItemID == thisChainItemID))
+                        ChainID = chainSource[0].ChainID
+                    };
+                    LogicChainItem item = new();
+                    if (!chainSource.Any(x => x.ParentDataItemID == -1))
                     {
-                        break;
+                        continue;
                     }
-                    item = chainSource.First(x => x.ParentDataItemID == thisChainItemID);
-                    chain.LogicChainData.Add(item);
+                    item = chainSource.First(x => x.ParentDataItemID == -1);
                     chainSource.Remove(item);
-                    thisChainItemID = item.ID;
-                }
-                if (chain.LogicChainData.Count > 0)
-                {
-                    if (!tag.PropertyItems.Any(x => x.ID == chain.LogicChainData[0].RestrictionPropertyID)) continue;
-                    PropertyItem propertyItem = tag.PropertyItems.First(x => x.ID == chain.LogicChainData[0].RestrictionPropertyID);
-                    propertyItem.RestrictedTagLogicChains.Add(chain);
+                    chain.LogicChainData.Add(item);
+
+                    long thisChainItemID = item.ID;
+                    while (true)
+                    {
+                        if (chainSource.Count == 0)
+                        {
+                            break;
+                        }
+                        if (!chainSource.Any(x => x.ParentDataItemID == thisChainItemID))
+                        {
+                            break;
+                        }
+                        item = chainSource.First(x => x.ParentDataItemID == thisChainItemID);
+                        chain.LogicChainData.Add(item);
+                        chainSource.Remove(item);
+                        thisChainItemID = item.ID;
+                    }
+                    if (chain.LogicChainData.Count > 0)
+                    {
+                        if (!tag.PropertyItems.Any(x => x.ID == chain.LogicChainData[0].RestrictionPropertyID)) continue;
+                        PropertyItem propertyItem = tag.PropertyItems.First(x => x.ID == chain.LogicChainData[0].RestrictionPropertyID);
+                        propertyItem.RestrictedTagLogicChains.Add(chain);
+                    }
                 }
             }
-        }
-
-        public static void SaveDataItemTags(this SqliteConnection? dbConnection, List<ItemTagTreeItem> ItemTagSource, long ItemID)
-        {
-            if (dbConnection == null) return;
-            foreach (ItemTagTreeItem itemTag in ItemTagSource)
+            catch (Exception ex)
             {
-                dbConnection.SaveDataItemTagTreeRecursive(ItemID, -1, -1, itemTag);
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
             }
         }
 
+
+        /// <summary>
+        /// Save info of data item tags to database.
+        /// </summary>
+        /// <param name="dbConnection">The shared database connection.</param>
+        /// <param name="ItemTagSource">Source tag item tag info get from UI. It's a tree structure.</param>
+        /// <param name="ItemID">Item ID of data item.</param>
+        /// <param name="MessageManager">The message manager for showing user the error or warning info.</param>
+        public static void SaveDataItemTagsInfo(this SqliteConnection? dbConnection, List<ItemTagTreeItem> ItemTagSource, long ItemID, MessageManager MessageManager)
+        {
+            try
+            {
+                if (dbConnection == null) return;
+                foreach (ItemTagTreeItem itemTag in ItemTagSource)
+                {
+                    dbConnection.SaveDataItemTagTreeRecursive(ItemID, -1, -1, itemTag);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
+            }
+        }
+        // Helper method.
         public static void SaveDataItemTagTreeRecursive(this SqliteConnection? dbConnection, long ItemID, long PropertyID, long ParentTagID, ItemTagTreeItem itemTagTreeItem)
         {
             if (itemTagTreeItem.MarkedToDelete) return; // Remove branch marked
