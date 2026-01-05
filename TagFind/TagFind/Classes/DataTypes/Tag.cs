@@ -96,16 +96,16 @@ namespace TagFind.Classes.DataTypes
         /// The format of each string is "TagSource:TagID".
         /// TagID can be any string.
         /// </summary>
-        public List<string> SameTagList
+        public List<UniTag> TagCompatibilityInfoList
         {
-            get => _sameTagList;
+            get => _tagCompatibilityInfoList;
             set
             {
-                _sameTagList = value;
-                PropertyChanged?.Invoke(this, new(nameof(SameTagList)));
+                _tagCompatibilityInfoList = value;
+                PropertyChanged?.Invoke(this, new(nameof(TagCompatibilityInfoList)));
             }
         }
-        private List<string> _sameTagList = [];
+        private List<UniTag> _tagCompatibilityInfoList = [];
 
         public Tag(int ID, string MainName)
         {

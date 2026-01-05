@@ -2351,6 +2351,9 @@ namespace TagFind.Classes.DB
 
                 // Log property items
                 TagDataAddPropertyItems(tag.ID, tag.PropertyItems);
+
+                // Log tag compatibility info
+                TagCompatibilityTableAddCompatibility(tag.ID, tag.TagCompatibilityInfoList);
             }
 #if !DEBUG
             catch (Exception ex)
@@ -2432,6 +2435,9 @@ namespace TagFind.Classes.DB
                         TagDataAddPropertyItem(tagInfo.ID, property);
                     }
                 }
+
+                TagCompatibilityTableRemoveCompatibilityInfoByTagID(tagInfo.ID);
+                TagCompatibilityTableAddCompatibility(tagInfo.ID, tagInfo.TagCompatibilityInfoList);
             }
             catch (Exception ex)
             {
@@ -2537,6 +2543,7 @@ namespace TagFind.Classes.DB
                 i++;
             }
         }
+
         private void TagDataRemoveSurnames(long TagID)
         {
             string command =
@@ -2575,6 +2582,7 @@ namespace TagFind.Classes.DB
                 chainID++;
             }
         }
+
         private long TagDataAddLogicChainItem(long TagID, LogicChainItem Item)
         {
 #if !DEBUG
@@ -2616,6 +2624,7 @@ namespace TagFind.Classes.DB
 #endif
             return Item.ID;
         }
+
         private void TagDataRemoveLogicChainByID(long TagID, long ChainID)
         {
             List<long> tagDataIDs = [];
@@ -2652,6 +2661,7 @@ namespace TagFind.Classes.DB
             }
             SqliteCommand.ExecuteNonQuery();
         }
+
         private void TagDataRemoveLogicChainsOfTag(long TagID)
         {
             string command =
@@ -2663,6 +2673,7 @@ namespace TagFind.Classes.DB
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().LogicChainItem);
             SqliteCommand.ExecuteNonQuery();
         }
+
 
         // RestrictionLogicChains
 
@@ -2684,6 +2695,7 @@ namespace TagFind.Classes.DB
                 chainID++;
             }
         }
+
         private long TagDataAddRestrictionLogicChainItem(long tagID, LogicChainItem item, long PropertyID, int chainID)
         {
 #if !DEBUG
@@ -2725,6 +2737,7 @@ namespace TagFind.Classes.DB
 #endif
             return item.ID;
         }
+
         private void TagDataRemoveRestrictionLogicChainsOfPropertyItem(long TagID, long PropertyID)
         {
             string seq = $"% % % {PropertyID}";
@@ -2739,6 +2752,7 @@ namespace TagFind.Classes.DB
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", seq);
             SqliteCommand.ExecuteNonQuery();
         }
+
         private void TagDataRemoveRestrictionLogicChainByID(long TagID, long chainID)
         {
             List<long> tagDataIDs = [];
@@ -2769,6 +2783,7 @@ namespace TagFind.Classes.DB
             SqliteCommand.Parameters.AddWithValue($"@{new TagData().ID}", string.Join(",", tagDataIDs));
             SqliteCommand.ExecuteNonQuery();
         }
+
         public async Task<List<LogicChain>> TagDataGetRestrictionLogicChainsOfPropertyItem(long PropertyID, long tagID = -1)
         {
             await _lock.WaitAsync();
@@ -2833,6 +2848,7 @@ namespace TagFind.Classes.DB
             }
         }
 
+
         // PropertyItems
 
         private void TagDataAddPropertyItems(long TagID, List<PropertyItem> PropertyItems)
@@ -2842,6 +2858,7 @@ namespace TagFind.Classes.DB
                 TagDataAddPropertyItem(TagID, PropertyItem);
             }
         }
+
         private void TagDataAddPropertyItem(long TagID, PropertyItem PropertyItem)
         {
             string command =
@@ -2889,6 +2906,7 @@ namespace TagFind.Classes.DB
                 chainID++;
             }
         }
+
         private void TagDataUpdatePropertyItemSeq(long PropertyID, long newSeq, string newName, bool isContainRelation)
         {
             string command =
@@ -2902,6 +2920,7 @@ namespace TagFind.Classes.DB
             SqliteCommand.Parameters.AddWithValue($"@{nameof(TagData.ID)}", PropertyID);
             SqliteCommand.ExecuteNonQuery();
         }
+
         private void TagDataRemovePropertyItem(long PropertyTagID, PropertyItem Property)
         {
             // Remove all references
@@ -3014,7 +3033,60 @@ namespace TagFind.Classes.DB
             }
             return false;
         }
+
+
+        // TagCompatibilityTable
+
+        private void TagCompatibilityTableAddCompatibility(long TagID, List<UniTag> TagCompatibilityInfo)
+        {
+            try
+            {
+                foreach (UniTag unitag in TagCompatibilityInfo)
+                {
+                    string command =
+                        $"INSERT INTO {nameof(TagCompatibilityTable)} " +
+                        $"(" +
+                        $"{nameof(TagCompatibilityTable.LocalTagID)}, " +
+                        $"{nameof(TagCompatibilityTable.SourceGUID)}, " +
+                        $"{nameof(TagCompatibilityTable.SourceTagID)}" +
+                        $") " +
+                        $"VALUES (" +
+                        $"@{nameof(TagCompatibilityTable.LocalTagID)}, " +
+                        $"@{nameof(TagCompatibilityTable.SourceGUID)}, " +
+                        $"@{nameof(TagCompatibilityTable.SourceTagID)}" +
+                        $")";
+                    SqliteCommand sqliteCommand = new(command, dbConnection);
+                    sqliteCommand.Parameters.AddWithValue($"@{nameof(TagCompatibilityTable.LocalTagID)}", TagID);
+                    sqliteCommand.Parameters.AddWithValue($"@{nameof(TagCompatibilityTable.SourceGUID)}", unitag.UniTagSourceGUID);
+                    sqliteCommand.Parameters.AddWithValue($"@{nameof(TagCompatibilityTable.SourceTagID)}", unitag.UniqueID);
+                    sqliteCommand.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
+            }
+        }
+
+        private void TagCompatibilityTableRemoveCompatibilityInfoByTagID(long TagID)
+        {
+            try
+            {
+                string command =
+                    $"DELETE FROM {nameof(TagCompatibilityTable)} " +
+                    $"WHERE {nameof(TagCompatibilityTable.LocalTagID)} = @{nameof(TagCompatibilityTable.LocalTagID)}";
+                SqliteCommand sqliteCommand = new(command, dbConnection);
+                sqliteCommand.Parameters.AddWithValue($"@{nameof(TagCompatibilityTable.LocalTagID)}", TagID);
+                sqliteCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
+            }
+        }
     }
+
+
 
     public static class DBContentManagerExtension
     {
