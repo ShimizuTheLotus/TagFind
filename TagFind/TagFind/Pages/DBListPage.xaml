@@ -19,6 +19,7 @@
                 </AppBarButton>
                 <AppBarButton x:Name="AddReferenceAppBarButton" x:Uid="AddReferenceAppBarButton" Icon="Add" Click="AddReferenceAppBarButton_Click"/>
                 <AppBarButton x:Name="SettingsAppBarButton" x:Uid="SettingsAppBarButton" Icon="Setting" Click="SettingsAppBarButton_Click"/>
+                <AppBarButton x:Name="MLPageAppBarButton" Icon="Accept" Click="MLPageAppBarButton_Click"/>
             </CommandBar>
             <Grid RelativePanel.AlignLeftWithPanel="True"
                   RelativePanel.Below="PageCommandBar"

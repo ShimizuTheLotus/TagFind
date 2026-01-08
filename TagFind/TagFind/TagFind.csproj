@@ -17,6 +17,7 @@
     <None Remove="Pages\DBDataImportPage.xaml" />
     <None Remove="Pages\DBTagPoolPage.xaml" />
     <None Remove="Pages\DBWildItemsManagePage.xaml" />
+    <None Remove="Pages\MLTestPage.xaml" />
     <None Remove="UI\ContentDialogPages\TutorialContentDialogPage.xaml" />
   </ItemGroup>
 
@@ -48,6 +49,12 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\MLTestPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

@@ -118,7 +118,7 @@ namespace TagFind.Classes.Extensions
             string ext = Path.GetExtension(filePath).ToLowerInvariant();
 
             // Text-like files: stream line by line
-            string[] textLike = { ".txt", ".csv", ".log", ".md", ".json", ".xml", ".rtf" };
+            string[] textLike = { ".txt", ".csv", ".log", ".md", ".json", ".xml", ".rtf"};
             if (textLike.Contains(ext))
             {
                 encoding ??= Encoding.UTF8;

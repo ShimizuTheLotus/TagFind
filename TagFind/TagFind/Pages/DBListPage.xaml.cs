@@ -192,4 +192,9 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
             }
         }
     }
+
+    private void MLPageAppBarButton_Click(object sender, RoutedEventArgs e)
+    {
+        Frame.Navigate(typeof(MLTestPage));
+    }
 }
