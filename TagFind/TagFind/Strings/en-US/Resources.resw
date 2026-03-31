@@ -455,4 +455,16 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Code.CS.FailedToFindMatchedInfoFromDatabase" xml:space="preserve">
     <value>Failed to find matched info from database.</value>
   </data>
+  <data name="DetailedInformationNavigationViewitem.Content" xml:space="preserve">
+    <value>Detailed Information</value>
+  </data>
+  <data name="StorageSizeTextBlock.Text" xml:space="preserve">
+    <value>Storage Size</value>
+  </data>
+  <data name="ManageReferencedFilesTextBlock.Text" xml:space="preserve">
+    <value>Manage Referenced Files</value>
+  </data>
+  <data name="ManageButton.Content" xml:space="preserve">
+    <value>Manage</value>
+  </data>
 </root>

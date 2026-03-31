@@ -21,6 +21,11 @@
                 <!--<NavigationViewItem x:Uid="DBContentEditPageNavigationViewItem" Icon="Edit" Tag="DBContentEditPage"/>-->
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>
+                <NavigationViewItem x:Uid="DetailedInformationNavigationViewitem" Tag="DBDetailedInformationPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE946;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem x:Uid="ExitNavigationViewItem" Tag="Exit">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xF3B1;"/>

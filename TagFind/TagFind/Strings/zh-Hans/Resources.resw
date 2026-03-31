@@ -455,4 +455,16 @@
   <data name="Code.CS.FailedToFindMatchedInfoFromDatabase" xml:space="preserve">
     <value>未能从数据库找到相符的数据。</value>
   </data>
+  <data name="DetailedInformationNavigationViewitem.Content" xml:space="preserve">
+    <value>详细信息</value>
+  </data>
+  <data name="StorageSizeTextBlock.Text" xml:space="preserve">
+    <value>存储空间</value>
+  </data>
+  <data name="ManageReferencedFilesTextBlock.Text" xml:space="preserve">
+    <value>管理引用的文件</value>
+  </data>
+  <data name="ManageButton.Content" xml:space="preserve">
+    <value>管理</value>
+  </data>
 </root>
