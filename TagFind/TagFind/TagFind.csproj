@@ -56,6 +56,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Pages\DBManageReferencedFilesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="Pages\DBDetailedInformationPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

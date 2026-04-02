@@ -10,9 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using TagFind.Classes;
+using System.Threading;
 using TagFind.Classes.DB;
-using TagFind.Classes.Extensions;
 using TagFind.Interfaces;
 using TagFind.Interfaces.IPageNavigationParameter;
 using Windows.Foundation;
@@ -26,9 +25,16 @@ namespace TagFind.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class DBDetailedInformationPage : Page, IDBContentAccessiblePage
+    public sealed partial class ManageReferencedFilesPage : Page, IDBContentAccessiblePage
     {
         public DBContentManager ContentManager { get; set; } = new();
+
+        public CancellationTokenSource GetReferencedCancellationTokenSource { get; set; } = new();
+
+        public ManageReferencedFilesPage()
+        {
+            InitializeComponent();
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -45,23 +51,19 @@ namespace TagFind.Pages
                     ContentManager = dBContentManagerParameter.DBContentManager;
                 }
             }
-
-            // Load info
-            DBNameTextBlock.Text = Path.GetFileNameWithoutExtension(ContentManager.DBPath);
-            long fileLength = new FileInfo(ContentManager.DBPath).Length;
-            StorageSizeValueTextBlock.Text = fileLength < 1024
-                ? fileLength + " " + "bytes"
-                : fileLength.ToSuitableStorageSize(SettingsValues.UseBinaryStorageUnits) + " (" + fileLength.ToString() + " " + "bytes" + ")";
         }
 
-        public DBDetailedInformationPage()
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            InitializeComponent();
+            base.OnNavigatedFrom(e);
+
+            GetReferencedCancellationTokenSource.Cancel();
         }
 
-        private void ManageReferencedFilesButton_Click(object sender, RoutedEventArgs e)
+        public void GetReferencedFileInfos()
         {
-            Frame.Navigate(typeof(ManageReferencedFilesPage), ContentManager);
+            GetReferencedCancellationTokenSource = new();
+            ContentManager.
         }
     }
 }

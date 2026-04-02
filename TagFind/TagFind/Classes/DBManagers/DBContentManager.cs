@@ -2062,11 +2062,9 @@ namespace TagFind.Classes.DB
             await _lock.WaitAsync();
             try
             {
-                bool IsFirstRecord = true;
                 await foreach (string searchText in dataItem.RefPath.GetDocumentFileTextAsync())
                 {
-                    await DataItemFastSearchStoreSearchText(dataItem, searchText, IsFirstRecord);
-                    IsFirstRecord = false;
+                    await DataItemFastSearchStoreSearchText(dataItem, searchText);
                 }
             }
             catch (Exception ex)
@@ -2096,30 +2094,21 @@ namespace TagFind.Classes.DB
             }
         }
 
-        private async Task DataItemFastSearchStoreSearchText(DataItem dataItem, string searchText, bool IsFirstRecord = false)
+        private async Task DataItemFastSearchStoreSearchText(DataItem dataItem, string searchText)
         {
             try
             {
                 string command =
                     $"INSERT INTO {nameof(DataItemFastSearch)} (" +
                     $"{new DataItemFastSearch().DataItemID}, " +
-                    $"{new DataItemFastSearch().Title}, " +
-                    $"{new DataItemFastSearch().Description}, " +
-                    $"{new DataItemFastSearch().RefPath}, " +
                     $"{new DataItemFastSearch().SearchText}" +
                     $")" +
                     $"VALUES (" +
                     $"@{new DataItemFastSearch().DataItemID}, " +
-                    $"@{new DataItemFastSearch().Title}, " +
-                    $"@{new DataItemFastSearch().Description}, " +
-                    $"@{new DataItemFastSearch().RefPath}, " +
                     $"@{new DataItemFastSearch().SearchText}" +
                     $")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", dataItem.ID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", IsFirstRecord ? dataItem.Title : string.Empty);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", IsFirstRecord ? dataItem.Description : string.Empty);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().RefPath}", IsFirstRecord ? dataItem.RefPath : string.Empty);
                 SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", searchText);
                 SqliteCommand.ExecuteNonQuery();
             }

@@ -14,7 +14,7 @@
             <TextBlock x:Uid="StorageSizeTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
             <TextBlock x:Name="StorageSizeValueTextBlock" Style="{StaticResource BodyLargeTextBlockStyle}"/>
             <TextBlock x:Uid="ManageReferencedFilesTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
-            <Button x:Name="ManageReferencedFilesButton" x:Uid="ManageButton"/>
+            <Button x:Name="ManageReferencedFilesButton" x:Uid="ManageButton" Click="ManageReferencedFilesButton_Click"/>
         </StackPanel>
     </Grid>
 </Page>
