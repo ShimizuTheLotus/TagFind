@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAppBarButton.Label" xml:space="preserve">
-    <value>添加</value>
-  </data>
   <data name="TitleTextBlock.Text" xml:space="preserve">
     <value>标题</value>
   </data>
@@ -466,5 +463,35 @@
   </data>
   <data name="ManageButton.Content" xml:space="preserve">
     <value>管理</value>
+  </data>
+  <data name="AddAppBarButton.Label" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="FileReferenceCountTextBlock.Text" xml:space="preserve">
+    <value>文件引用计数</value>
+  </data>
+  <data name="FileReferenceCountValueTextBlock.Text" xml:space="preserve">
+    <value>引用了{ref_count}个文件,  {valid_count} 个有效</value>
+  </data>
+  <data name="PackOptionsExpander.Header" xml:space="preserve">
+    <value>打包选项</value>
+  </data>
+  <data name="PackButton.Content" xml:space="preserve">
+    <value>打包</value>
+  </data>
+  <data name="IncludePathMappingFilesCheckBox.Content" xml:space="preserve">
+    <value>包含路径映射文件</value>
+  </data>
+  <data name="PackPackPathTextBlockTextBlock.Text" xml:space="preserve">
+    <value>打包到</value>
+  </data>
+  <data name="SelectPathButton.Content" xml:space="preserve">
+    <value>选择路径</value>
+  </data>
+  <data name="PackPathTextBlock.Text" xml:space="preserve">
+    <value>打包路径</value>
+  </data>
+  <data name="Code.CS.NotSelected" xml:space="preserve">
+    <value>未选择</value>
   </data>
 </root>

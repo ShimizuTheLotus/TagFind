@@ -29,6 +29,19 @@ namespace TagFind.Classes.Extensions
             return !string.IsNullOrWhiteSpace(filePath) && System.IO.File.Exists(filePath);
         }
 
+        public static bool IsWellFormattedFilePath(this string path)
+        {
+            try
+            {
+                string a = Path.GetFullPath(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static bool IsImageFile(this string filePath)
         {
             string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg", ".webp" };

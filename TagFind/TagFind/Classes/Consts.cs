@@ -19,21 +19,21 @@ namespace TagFind.Classes
             {
                 public class Meta
                 {
-                    public string Property = nameof(Property);
-                    public string Value = nameof(Value);
-                    
+                    public static string Property = nameof(Property);
+                    public static string Value = nameof(Value);
+
                     // Property names
-                    public string Description = nameof(Description);
-                    public string Version = nameof(Version);
+                    public static string Description = nameof(Description);
+                    public static string Version = nameof(Version);
                 }
 
                 public class TagPool
                 {
-                    public string ID = nameof(ID);
-                    public string MainName = nameof(MainName);
-                    public string Description = nameof(Description);
-                    public string CreatedTime = nameof(CreatedTime);
-                    public string ModifiedTime = nameof(ModifiedTime);
+                    public static string ID = nameof(ID);
+                    public static string MainName = nameof(MainName);
+                    public static string Description = nameof(Description);
+                    public static string CreatedTime = nameof(CreatedTime);
+                    public static string ModifiedTime = nameof(ModifiedTime);
                     
                     // External:
                     //public string SurNames = nameof(SurNames);
@@ -43,64 +43,64 @@ namespace TagFind.Classes
 
                 public class TagData
                 {
-                    public string ID = nameof(ID);
-                    public string TagID = nameof(TagID);
-                    public string Seq = nameof(Seq);
-                    public string Type = nameof(Type);
-                    public string Value = nameof(Value);
+                    public static string ID = nameof(ID);
+                    public static string TagID = nameof(TagID);
+                    public static string Seq = nameof(Seq);
+                    public static string Type = nameof(Type);
+                    public static string Value = nameof(Value);
 
                     // Types
-                    public string Surname = nameof(Surname);
-                    public string LogicChainItem = nameof(LogicChainItem);
-                    public string PropertyItem = nameof(PropertyItem);
-                    public string RestrictionLogicChainItem = nameof(RestrictionLogicChainItem);
+                    public static string Surname = nameof(Surname);
+                    public static string LogicChainItem = nameof(LogicChainItem);
+                    public static string PropertyItem = nameof(PropertyItem);
+                    public static string RestrictionLogicChainItem = nameof(RestrictionLogicChainItem);
                 }
 
                 public class PropertyTemplates
                 {
-                    public string ID = nameof(ID);
-                    public string TemplateName = nameof(TemplateName);
-                    public string PropertyName = nameof(PropertyName);
-                    public string Seq = nameof(Seq);
-                    public string TagParentRestriction = nameof(TagParentRestriction);
+                    public static string ID = nameof(ID);
+                    public static string TemplateName = nameof(TemplateName);
+                    public static string PropertyName = nameof(PropertyName);
+                    public static string Seq = nameof(Seq);
+                    public static string TagParentRestriction = nameof(TagParentRestriction);
                 }
 
                 public class DataItems
                 {
-                    public string ID = nameof(ID);
-                    public string ParentItemID = nameof(ParentItemID);
+                    public static string ID = nameof(ID);
+                    public static string ParentItemID = nameof(ParentItemID);
                     //public string Title = nameof(Title);
                     //public string Description = nameof(Description);
-                    public string Type = nameof(Type);
-                    public string CreatedTime = nameof(CreatedTime);
-                    public string ModifiedTime = nameof(ModifiedTime);
-                    public string Title = nameof(Title);
+                    public static string Type = nameof(Type);
+                    public static string CreatedTime = nameof(CreatedTime);
+                    public static string ModifiedTime = nameof(ModifiedTime);
+                    public static string Title = nameof(Title);
                     //public string RefPath = nameof(RefPath);
                     //public string SearchText = nameof(SearchText);
                 }
 
                 public class DataItemFastSearch
                 {
-                    public string DataItemID = nameof(DataItemID);
-                    public string Title = nameof(Title);
-                    public string Description = nameof(Description);
-                    public string RefPath = nameof(RefPath);
-                    public string SearchText = nameof(SearchText);
+                    public static string DataItemID = nameof(DataItemID);
+                    public static string Title = nameof(Title);
+                    public static string Description = nameof(Description);
+                    public static string RefPath = nameof(RefPath);
+                    public static string SearchText = nameof(SearchText);
                 }
 
                 public class ItemTags
                 {
-                    public string ItemID = nameof(ItemID);
-                    public string PropertyID = nameof(PropertyID);
-                    public string TagID = nameof(TagID);
-                    public string ParentTagID = nameof(ParentTagID);
+                    public static string ItemID = nameof(ItemID);
+                    public static string PropertyID = nameof(PropertyID);
+                    public static string TagID = nameof(TagID);
+                    public static string ParentTagID = nameof(ParentTagID);
                 }
 
                 public class TagCompatibilityTable
                 {
-                    public string LocalTagID = nameof(LocalTagID);
-                    public string SourceGUID = nameof(SourceGUID);
-                    public string SourceTagID = nameof(SourceTagID);
+                    public static string LocalTagID = nameof(LocalTagID);
+                    public static string SourceGUID = nameof(SourceGUID);
+                    public static string SourceTagID = nameof(SourceTagID);
                 }
             }
         }

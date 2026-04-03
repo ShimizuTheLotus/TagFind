@@ -6,9 +6,28 @@
     xmlns:local="using:TagFind.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converter="using:TagFind.Classes.XAMLDataConverters"
     mc:Ignorable="d">
-
-    <Grid>
-
+    <Page.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converter:StorageFolderToPathConverter x:Key="StorageFolderToPathConverter"/>
+        <converter:NullableToBoolConverter x:Key="NullableToBoolConverter"/>
+    </Page.Resources>
+    <Grid Margin="0 48 0 0">
+        <StackPanel Margin="8 0 8 0">
+            <TextBlock x:Uid="FileReferenceCountTextBlock" Style="{StaticResource TitleTextBlockStyle}"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="FileReferenceCountValueTextBlock" Style="{StaticResource BodyLargeStrongTextBlockStyle}" VerticalAlignment="Center"/>
+                <ProgressRing x:Name="FileReferenceCountProgressRing" IsActive="True" Margin="8 0 0 0" Visibility="{Binding IsGettingReferencedFileInfos, Converter={StaticResource BooleanToVisibilityConverter}}" Height="32" Width="32" />
+            </StackPanel>
+            <TextBlock x:Uid="ManageReferencedFilesTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 16 0 0"/>
+            <Expander x:Uid="PackOptionsExpander" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                <CheckBox x:Uid="IncludePathMappingFilesCheckBox" IsChecked="True"/>
+            </Expander>
+            <TextBlock x:Uid="PackPathTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
+            <TextBlock x:Name="PackPathValueTextBlock" Text="{Binding PackStorageFolder, Converter={StaticResource StorageFolderToPathConverter}}"/>
+            <Button x:Name="SelectPackPathPathButton" x:Uid="SelectPathButton" Click="SelectPackPathPathButton_Click"/>
+            <Button x:Name="PackButton" x:Uid="PackButton" Click="PackButton_Click" IsEnabled="{Binding PackStorageFolder, Converter={StaticResource NullableToBoolConverter}}"/>
+        </StackPanel>
     </Grid>
 </Page>

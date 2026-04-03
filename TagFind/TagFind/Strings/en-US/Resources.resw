@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAppBarButton.Label" xml:space="preserve">
-    <value>Add</value>
-  </data>
   <data name="TitleTextBlock.Text" xml:space="preserve">
     <value>Title</value>
   </data>
@@ -286,7 +283,7 @@
     <value>Tutorial</value>
   </data>
   <data name="EnterTutorialButton.Content" xml:space="preserve">
-    <value>Enter Totorial</value>
+    <value>Enter Tutorial</value>
   </data>
   <data name="Skip.String" xml:space="preserve">
     <value>Skip</value>
@@ -466,5 +463,32 @@ Tips: If different things has same name, we recommend separate them into differe
   </data>
   <data name="ManageButton.Content" xml:space="preserve">
     <value>Manage</value>
+  </data>
+  <data name="AddAppBarButton.Label" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="FileReferenceCountTextBlock.Text" xml:space="preserve">
+    <value>File Reference Count</value>
+  </data>
+  <data name="FileReferenceCountValueTextBlock.Text" xml:space="preserve">
+    <value>{ref_count} files referenced, {valid_count} valid</value>
+  </data>
+  <data name="PackOptionsExpander.Header" xml:space="preserve">
+    <value>Pack Options</value>
+  </data>
+  <data name="PackButton.Content" xml:space="preserve">
+    <value>Pack</value>
+  </data>
+  <data name="IncludePathMappingFilesCheckBox.Content" xml:space="preserve">
+    <value>Include Path Mapping File</value>
+  </data>
+  <data name="SelectPathButton.Content" xml:space="preserve">
+    <value>Select Path</value>
+  </data>
+  <data name="PackPathTextBlock.Text" xml:space="preserve">
+    <value>Pack Path</value>
+  </data>
+  <data name="Code.CS.NotSelected" xml:space="preserve">
+    <value>Not selected</value>
   </data>
 </root>

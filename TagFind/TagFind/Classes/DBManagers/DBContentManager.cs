@@ -138,19 +138,19 @@ namespace TagFind.Classes.DB
             {
                 string command = "CREATE TABLE IF NOT EXISTS " +
                     $"{nameof(Meta)} (" +
-                    $"{new Meta().Property} TEXT NOT NULL," +
-                    $"{new Meta().Value} TEXT NOT NULL)";
+                    $"{Meta.Property} TEXT NOT NULL," +
+                    $"{Meta.Value} TEXT NOT NULL)";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
 
                 command =
                     "CREATE TABLE IF NOT EXISTS " +
                     $"{nameof(TagPool)} (" +
-                    $"{new TagPool().ID} INTEGER PRIMARY KEY," +
-                    $"{new TagPool().MainName} TEXT NOT NULL," +
-                    $"{new TagPool().Description} TEXT," +
-                    $"{new TagPool().CreatedTime} INTEGER," +
-                    $"{new TagPool().ModifiedTime} INTEGER" +
+                    $"{TagPool.ID} INTEGER PRIMARY KEY," +
+                    $"{TagPool.MainName} TEXT NOT NULL," +
+                    $"{TagPool.Description} TEXT," +
+                    $"{TagPool.CreatedTime} INTEGER," +
+                    $"{TagPool.ModifiedTime} INTEGER" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -158,11 +158,11 @@ namespace TagFind.Classes.DB
                 command =
                     "CREATE TABLE IF NOT EXISTS " +
                     $"{nameof(TagData)} (" +
-                    $"{new TagData().ID} INTEGER PRIMARY KEY," +
-                    $"{new TagData().TagID} INTEGER NOT NULL," +
-                    $"{new TagData().Seq} TEXT NOT NULL," +
-                    $"{new TagData().Type} TEXT NOT NULL," +
-                    $"{new TagData().Value} TEXT NOT NULL" +
+                    $"{TagData.ID} INTEGER PRIMARY KEY," +
+                    $"{TagData.TagID} INTEGER NOT NULL," +
+                    $"{TagData.Seq} TEXT NOT NULL," +
+                    $"{TagData.Type} TEXT NOT NULL," +
+                    $"{TagData.Value} TEXT NOT NULL" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -170,11 +170,11 @@ namespace TagFind.Classes.DB
                 command =
                     "CREATE TABLE IF NOT EXISTS " +
                     $"{nameof(PropertyTemplates)} (" +
-                    $"{new PropertyTemplates().ID} INTEGER PRIMARY KEY," +
-                    $"{new PropertyTemplates().TemplateName} TEXT," +
-                    $"{new PropertyTemplates().PropertyName} TEXT NOT NULL," +
-                    $"{new PropertyTemplates().Seq} INTEGER NOT NULL," +
-                    $"{new PropertyTemplates().TagParentRestriction} INTEGER NOT NULL" +
+                    $"{PropertyTemplates.ID} INTEGER PRIMARY KEY," +
+                    $"{PropertyTemplates.TemplateName} TEXT," +
+                    $"{PropertyTemplates.PropertyName} TEXT NOT NULL," +
+                    $"{PropertyTemplates.Seq} INTEGER NOT NULL," +
+                    $"{PropertyTemplates.TagParentRestriction} INTEGER NOT NULL" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -182,12 +182,12 @@ namespace TagFind.Classes.DB
                 command =
                     "CREATE TABLE IF NOT EXISTS " +
                     $"{nameof(DataItems)} (" +
-                    $"{new DataItems().ID} INTEGER PRIMARY KEY," +
-                    $"{new DataItems().ParentItemID} INTEGER NOT NULL," +
-                    $"{new DataItems().Type} TEXT NOT NULL," +
-                    $"{new DataItems().CreatedTime} INTEGER NOT NULL," +
-                    $"{new DataItems().ModifiedTime} INTEGER NOT NULL," +
-                    $"{new DataItems().Title} TEXT" +
+                    $"{DataItems.ID} INTEGER PRIMARY KEY," +
+                    $"{DataItems.ParentItemID} INTEGER NOT NULL," +
+                    $"{DataItems.Type} TEXT NOT NULL," +
+                    $"{DataItems.CreatedTime} INTEGER NOT NULL," +
+                    $"{DataItems.ModifiedTime} INTEGER NOT NULL," +
+                    $"{DataItems.Title} TEXT" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -196,11 +196,11 @@ namespace TagFind.Classes.DB
                     "CREATE VIRTUAL TABLE IF NOT EXISTS " +
                     $"{nameof(DataItemFastSearch)} " +
                     $"USING FTS5(" +
-                    $"{new DataItemFastSearch().DataItemID}," +
-                    $"{new DataItemFastSearch().Title}," +
-                    $"{new DataItemFastSearch().Description}," +
-                    $"{new DataItemFastSearch().RefPath}," +
-                    $"{new DataItemFastSearch().SearchText}," +
+                    $"{DataItemFastSearch.DataItemID}," +
+                    $"{DataItemFastSearch.Title}," +
+                    $"{DataItemFastSearch.Description}," +
+                    $"{DataItemFastSearch.RefPath}," +
+                    $"{DataItemFastSearch.SearchText}," +
                     $")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -208,10 +208,10 @@ namespace TagFind.Classes.DB
                 command =
                     "CREATE TABLE IF NOT EXISTS " +
                     $"{nameof(ItemTags)} (" +
-                    $"{new ItemTags().ItemID} INTEGER," +
-                    $"{new ItemTags().PropertyID} INTEGER NOT NULL," +
-                    $"{new ItemTags().TagID} INTEGER NOT NULL," +
-                    $"{new ItemTags().ParentTagID} INTEGER NOT NULL" +
+                    $"{ItemTags.ItemID} INTEGER," +
+                    $"{ItemTags.PropertyID} INTEGER NOT NULL," +
+                    $"{ItemTags.TagID} INTEGER NOT NULL," +
+                    $"{ItemTags.ParentTagID} INTEGER NOT NULL" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
                 SqliteCommand.ExecuteNonQuery();
@@ -251,10 +251,10 @@ namespace TagFind.Classes.DB
                 }
                 string command =
                     $"SELECT * FROM {nameof(Meta)} " +
-                    $"WHERE {new Meta().Property} = @{new Meta().Property} " +
+                    $"WHERE {Meta.Property} = @{Meta.Property} " +
                     $"LIMIT 1";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new Meta().Property}", Property);
+                SqliteCommand.Parameters.AddWithValue($"@{Meta.Property}", Property);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
                 MetaItem metaItem = new();
                 while (reader.Read())
@@ -267,11 +267,11 @@ namespace TagFind.Classes.DB
                 {
                     command =
                         $"UPDATE {nameof(Meta)} " +
-                        $"SET {new Meta().Value} = @{new Meta().Value} " +
-                        $"WHERE {new Meta().Property} = @{new Meta().Property}";
+                        $"SET {Meta.Value} = @{Meta.Value} " +
+                        $"WHERE {Meta.Property} = @{Meta.Property}";
                     SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new Meta().Value}", Value);
-                    SqliteCommand.Parameters.AddWithValue($"@{new Meta().Property}", Property);
+                    SqliteCommand.Parameters.AddWithValue($"@{Meta.Value}", Value);
+                    SqliteCommand.Parameters.AddWithValue($"@{Meta.Property}", Property);
                     SqliteCommand.ExecuteNonQuery();
                 }
                 else
@@ -279,12 +279,12 @@ namespace TagFind.Classes.DB
                     command =
                         $"INSERT INTO {nameof(Meta)} " +
                         $"VALUES (" +
-                        $"@{new Meta().Property}," +
-                        $"@{new Meta().Value}" +
+                        $"@{Meta.Property}," +
+                        $"@{Meta.Value}" +
                         ")";
                     SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new Meta().Property}", Property);
-                    SqliteCommand.Parameters.AddWithValue($"@{new Meta().Value}", Value);
+                    SqliteCommand.Parameters.AddWithValue($"@{Meta.Property}", Property);
+                    SqliteCommand.Parameters.AddWithValue($"@{Meta.Value}", Value);
                     SqliteCommand.ExecuteNonQuery();
                 }
             }
@@ -309,10 +309,10 @@ namespace TagFind.Classes.DB
                 string result = string.Empty;
                 string command =
                     $"SELECT * FROM {nameof(Meta)} " +
-                    $"WHERE {new Meta().Property} = @{new Meta().Property} " +
+                    $"WHERE {Meta.Property} = @{Meta.Property} " +
                     $"LIMIT 1";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new Meta().Property}", Property);
+                SqliteCommand.Parameters.AddWithValue($"@{Meta.Property}", Property);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
                 while (reader.Read())
                 {
@@ -351,7 +351,7 @@ namespace TagFind.Classes.DB
                         $"SELECT * FROM {nameof(DataItems)} " +
                         (ParentID == -1
                         ? $""
-                        : $"WHERE {new DataItems().ParentItemID} = @{new DataItems().ID}");
+                        : $"WHERE {DataItems.ParentItemID} = @{DataItems.ID}");
                     SqliteCommand sqlCmd = new(cmd, dbConnection);
                     SqliteDataReader reader1 = sqlCmd.ExecuteReader();
                     reader1.DataItemsAddDataItemsFromReader(ref dataItems, dbConnection, MessageManager);
@@ -368,26 +368,26 @@ namespace TagFind.Classes.DB
                 string command =
                     $"SELECT * FROM {nameof(DataItemFastSearch)} " +
                     $"WHERE (" +
-                    $"{new DataItemFastSearch().Title} MATCH @{new DataItemFastSearch().Title} " +
+                    $"{DataItemFastSearch.Title} MATCH @{DataItemFastSearch.Title} " +
                     (searchDescription
-                    ? $"OR {new DataItemFastSearch().Description} MATCH @{new DataItemFastSearch().Description} "
+                    ? $"OR {DataItemFastSearch.Description} MATCH @{DataItemFastSearch.Description} "
                     : $"") +
                     (searchSearchText
-                    ? $"OR {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText} "
+                    ? $"OR {DataItemFastSearch.SearchText} MATCH @{DataItemFastSearch.SearchText} "
                     : $"") +
                     $")"
                     + (ParentID == -1
                     ? $""
-                    : $"AND {new DataItems().ID} IN ({placeholders})");
+                    : $"AND {DataItems.ID} IN ({placeholders})");
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", searchString);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", searchString);
                 if (searchDescription)
                 {
-                    SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", searchString);
+                    SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", searchString);
                 }
                 if (searchSearchText)
                 {
-                    SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", searchString);
+                    SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", searchString);
                 }
                 if (ParentID != default)
                 {
@@ -431,12 +431,12 @@ namespace TagFind.Classes.DB
                     commandBuilder.Append($"SELECT * FROM {nameof(DataItems)} ");
                     if (parentDataItemID != -1)
                     {
-                        commandBuilder.Append($"WHERE {new DataItems().ParentItemID} = @{new DataItems().ParentItemID}");
+                        commandBuilder.Append($"WHERE {DataItems.ParentItemID} = @{DataItems.ParentItemID}");
                     }
                     SqliteCommand SqliteCommand = new(commandBuilder.ToString(), dbConnection);
                     if (parentDataItemID != -1)
                     {
-                        SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", parentDataItemID);
+                        SqliteCommand.Parameters.AddWithValue($"@{DataItems.ParentItemID}", parentDataItemID);
                     }
                     SqliteDataReader SqliteDataReader = SqliteCommand.ExecuteReader();
                     SqliteDataReader.DataItemsAddDataItemsFromReader(ref result, dbConnection, MessageManager);
@@ -467,14 +467,14 @@ namespace TagFind.Classes.DB
                 commandBuilder.Append($"SELECT * FROM {nameof(DataItems)} ");
                 if (parentDataItemID != -1)
                 {
-                    commandBuilder.Append($"WHERE {new DataItems().ParentItemID} = @{new DataItems().ParentItemID} ");
+                    commandBuilder.Append($"WHERE {DataItems.ParentItemID} = @{DataItems.ParentItemID} ");
                 }
                 commandBuilder.Append($"ORDER BY {Enum.GetName(sortMode.SortMode)} {Enum.GetName(sortMode.SortDirection)}");
 
                 SqliteCommand SqliteCommand = new(commandBuilder.ToString(), dbConnection);
                 if (parentDataItemID != -1)
                 {
-                    SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", parentDataItemID);
+                    SqliteCommand.Parameters.AddWithValue($"@{DataItems.ParentItemID}", parentDataItemID);
                 }
 
                 SqliteDataReader = SqliteCommand.ExecuteReader();
@@ -527,10 +527,10 @@ namespace TagFind.Classes.DB
         {
             string subcommand =
                 $"SELECT * FROM {nameof(DataItemFastSearch)} " +
-                $"WHERE {new DataItemFastSearch().DataItemID} = @{new DataItemFastSearch().DataItemID} " +
+                $"WHERE {DataItemFastSearch.DataItemID} = @{DataItemFastSearch.DataItemID} " +
                 $"LIMIT 1";
             SqliteCommand SqliteCommand = new(subcommand, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", ID);
+            SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", ID);
             SqliteDataReader SqliteDataReader = SqliteCommand.ExecuteReader();
             while (SqliteDataReader.Read())
             {
@@ -622,26 +622,26 @@ namespace TagFind.Classes.DB
                         HashSet<long> matchID = new();
                         // FTS5 table uses split words, this might be bad for words searching. Try to search using LIKE
                         StringBuilder _commandBuilder = new();
-                        _commandBuilder.Append($"SELECT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
-                        _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText} ");
+                        _commandBuilder.Append($"SELECT {DataItemFastSearch.DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                        _commandBuilder.Append($"WHERE {DataItemFastSearch.SearchText} MATCH @{DataItemFastSearch.SearchText} ");
                         if (dataItemSearchConfig.SearchTitle)
                         {
-                            _commandBuilder.Append($"OR {new DataItemFastSearch().Title} MATCH @{new DataItemFastSearch().Title} ");
+                            _commandBuilder.Append($"OR {DataItemFastSearch.Title} MATCH @{DataItemFastSearch.Title} ");
                         }
                         if (dataItemSearchConfig.SearchDescription)
                         {
-                            _commandBuilder.Append($"OR {new DataItemFastSearch().Description} MATCH @{new DataItemFastSearch().Description}");
+                            _commandBuilder.Append($"OR {DataItemFastSearch.Description} MATCH @{DataItemFastSearch.Description}");
                         }
 
                         SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
-                        _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", tcond.MainName);
+                        _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", tcond.MainName);
                         if (dataItemSearchConfig.SearchTitle)
                         {
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", tcond.MainName);
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", tcond.MainName);
                         }
                         if (dataItemSearchConfig.SearchDescription)
                         {
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", tcond.MainName);
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", tcond.MainName);
                         }
 
                         using (SqliteDataReader reader = _cmd.ExecuteReader())
@@ -657,26 +657,26 @@ namespace TagFind.Classes.DB
                         }
 
                         _commandBuilder = new();
-                        _commandBuilder.Append($"SELECT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
-                        _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} LIKE @{new DataItemFastSearch().SearchText} ");
+                        _commandBuilder.Append($"SELECT {DataItemFastSearch.DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                        _commandBuilder.Append($"WHERE {DataItemFastSearch.SearchText} LIKE @{DataItemFastSearch.SearchText} ");
                         if (dataItemSearchConfig.SearchTitle)
                         {
-                            _commandBuilder.Append($"OR {new DataItemFastSearch().Title} LIKE @{new DataItemFastSearch().Title} ");
+                            _commandBuilder.Append($"OR {DataItemFastSearch.Title} LIKE @{DataItemFastSearch.Title} ");
                         }
                         if (dataItemSearchConfig.SearchDescription)
                         {
-                            _commandBuilder.Append($"OR {new DataItemFastSearch().Description} LIKE @{new DataItemFastSearch().Description}");
+                            _commandBuilder.Append($"OR {DataItemFastSearch.Description} LIKE @{DataItemFastSearch.Description}");
                         }
 
                         _cmd = new(_commandBuilder.ToString(), dbConnection);
-                        _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", $"%{tcond.MainName}%");
+                        _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", $"%{tcond.MainName}%");
                         if (dataItemSearchConfig.SearchTitle)
                         {
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", $"%{tcond.MainName}%");
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", $"%{tcond.MainName}%");
                         }
                         if (dataItemSearchConfig.SearchDescription)
                         {
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", $"%{tcond.MainName}%");
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", $"%{tcond.MainName}%");
                         }
 
                         using (SqliteDataReader reader = _cmd.ExecuteReader())
@@ -701,10 +701,10 @@ namespace TagFind.Classes.DB
                     foreach (TagCondition tcond in tagConditions)
                     {
                         string _command =
-                            $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
-                            $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
+                            $"SELECT DISTINCT {ItemTags.ItemID} FROM {nameof(ItemTags)} " +
+                            $"WHERE {ItemTags.TagID} = @{ItemTags.TagID}";
                         SqliteCommand _cmd = new(_command, dbConnection);
-                        _cmd.Parameters.AddWithValue($"@{new ItemTags().TagID}", tcond.TagID);
+                        _cmd.Parameters.AddWithValue($"@{ItemTags.TagID}", tcond.TagID);
                         using (SqliteDataReader reader = _cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -765,7 +765,7 @@ namespace TagFind.Classes.DB
 
                     string selectCmd =
                         $"SELECT * FROM {nameof(DataItems)} " +
-                        $"WHERE {new DataItems().ID} IN ({placeholders})";
+                        $"WHERE {DataItems.ID} IN ({placeholders})";
                     SqliteCommand selectCommand = new(selectCmd, dbConnection);
                     for (int i = 0; i < idList.Count; i++)
                     {
@@ -1100,26 +1100,26 @@ namespace TagFind.Classes.DB
                         if (SearchAndSortMode.TextMatchMode == TextMatchModeEnum.Fast)
                         {
                             StringBuilder _commandBuilder = new();
-                            _commandBuilder.Append($"SELECT DISTINCT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
-                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText} ");
+                            _commandBuilder.Append($"SELECT DISTINCT {DataItemFastSearch.DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {DataItemFastSearch.SearchText} MATCH @{DataItemFastSearch.SearchText} ");
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} MATCH @{new DataItemFastSearch().Title} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Title} MATCH @{DataItemFastSearch.Title} ");
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} MATCH @{new DataItemFastSearch().Description} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Description} MATCH @{DataItemFastSearch.Description} ");
                             }
 
                             SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", tcond.MainName);
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", tcond.MainName);
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", tcond.MainName);
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", tcond.MainName);
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", tcond.MainName);
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", tcond.MainName);
                             }
 
                             using (SqliteDataReader reader = _cmd.ExecuteReader())
@@ -1136,26 +1136,26 @@ namespace TagFind.Classes.DB
                         else
                         {
                             StringBuilder _commandBuilder = new();
-                            _commandBuilder.Append($"SELECT DISTINCT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
-                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} LIKE @{new DataItemFastSearch().SearchText} ");
+                            _commandBuilder.Append($"SELECT DISTINCT {DataItemFastSearch.DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {DataItemFastSearch.SearchText} LIKE @{DataItemFastSearch.SearchText} ");
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} LIKE @{new DataItemFastSearch().Title} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Title} LIKE @{DataItemFastSearch.Title} ");
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} LIKE @{new DataItemFastSearch().Description} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Description} LIKE @{DataItemFastSearch.Description} ");
                             }
 
                             SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", $"%{tcond.MainName}%");
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", $"%{tcond.MainName}%");
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", $"%{tcond.MainName}%");
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", $"%{tcond.MainName}%");
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", $"%{tcond.MainName}%");
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", $"%{tcond.MainName}%");
                             }
 
                             using (SqliteDataReader reader = _cmd.ExecuteReader())
@@ -1215,7 +1215,7 @@ namespace TagFind.Classes.DB
                     if (dataItemSearchConfig.SetSearch)
                     {
                         StringBuilder command = new();
-                        command.Append($"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} ");
+                        command.Append($"SELECT DISTINCT {ItemTags.ItemID} FROM {nameof(ItemTags)} ");
                         string[] tagIDInListPlaceHolders = tcond.EqualValueList.Select((_, i) => $"@p{i}").ToArray();
                         string tagIDInListPlaceHolderText = string.Join(",", tagIDInListPlaceHolders);
                         command.Append($"WHERE {nameof(ItemTags.TagID)} IN ({tagIDInListPlaceHolderText})");
@@ -1238,10 +1238,10 @@ namespace TagFind.Classes.DB
                     else
                     {
                         string _command =
-                            $"SELECT DISTINCT {new ItemTags().ItemID} FROM {nameof(ItemTags)} " +
-                            $"WHERE {new ItemTags().TagID} = @{new ItemTags().TagID}";
+                            $"SELECT DISTINCT {ItemTags.ItemID} FROM {nameof(ItemTags)} " +
+                            $"WHERE {ItemTags.TagID} = @{ItemTags.TagID}";
                         SqliteCommand _cmd = new(_command, dbConnection);
-                        _cmd.Parameters.AddWithValue($"@{new ItemTags().TagID}", tcond.TagID);
+                        _cmd.Parameters.AddWithValue($"@{ItemTags.TagID}", tcond.TagID);
                         using (SqliteDataReader reader = _cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -1287,15 +1287,15 @@ namespace TagFind.Classes.DB
                         if (SearchAndSortMode.TextMatchMode == TextMatchModeEnum.Fast)
                         {
                             StringBuilder _commandBuilder = new();
-                            _commandBuilder.Append($"SELECT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
-                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} MATCH @{new DataItemFastSearch().SearchText} ");
+                            _commandBuilder.Append($"SELECT {DataItemFastSearch.DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {DataItemFastSearch.SearchText} MATCH @{DataItemFastSearch.SearchText} ");
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} MATCH @{new DataItemFastSearch().Title} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Title} MATCH @{DataItemFastSearch.Title} ");
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} MATCH @{new DataItemFastSearch().Description} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Description} MATCH @{DataItemFastSearch.Description} ");
                             }
                             if (hasTag)
                             {
@@ -1303,14 +1303,14 @@ namespace TagFind.Classes.DB
                             }
 
                             SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", tcond.MainName);
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", tcond.MainName);
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", tcond.MainName);
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", tcond.MainName);
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", tcond.MainName);
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", tcond.MainName);
                             }
                             if (hasTag)
                             {
@@ -1339,15 +1339,15 @@ namespace TagFind.Classes.DB
                         else
                         {
                             StringBuilder _commandBuilder = new();
-                            _commandBuilder.Append($"SELECT {new DataItemFastSearch().DataItemID} FROM {nameof(DataItemFastSearch)} ");
-                            _commandBuilder.Append($"WHERE {new DataItemFastSearch().SearchText} LIKE @{new DataItemFastSearch().SearchText} ");
+                            _commandBuilder.Append($"SELECT {DataItemFastSearch.DataItemID} FROM {nameof(DataItemFastSearch)} ");
+                            _commandBuilder.Append($"WHERE {DataItemFastSearch.SearchText} LIKE @{DataItemFastSearch.SearchText} ");
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Title} LIKE @{new DataItemFastSearch().Title} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Title} LIKE @{DataItemFastSearch.Title} ");
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _commandBuilder.Append($"OR {new DataItemFastSearch().Description} LIKE @{new DataItemFastSearch().Description} ");
+                                _commandBuilder.Append($"OR {DataItemFastSearch.Description} LIKE @{DataItemFastSearch.Description} ");
                             }
                             if (hasTag)
                             {
@@ -1355,14 +1355,14 @@ namespace TagFind.Classes.DB
                             }
 
                             SqliteCommand _cmd = new(_commandBuilder.ToString(), dbConnection);
-                            _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", $"%{tcond.MainName}%");
+                            _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", $"%{tcond.MainName}%");
                             if (dataItemSearchConfig.SearchTitle)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", $"%{tcond.MainName}%");
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", $"%{tcond.MainName}%");
                             }
                             if (dataItemSearchConfig.SearchDescription)
                             {
-                                _cmd.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", $"%{tcond.MainName}%");
+                                _cmd.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", $"%{tcond.MainName}%");
                             }
                             if (hasTag)
                             {
@@ -1495,7 +1495,7 @@ namespace TagFind.Classes.DB
                     StringBuilder selectCmd = new();
                     selectCmd.Append($"SELECT * FROM {nameof(DataItems)} ");
                     if (hasTag)
-                        selectCmd.Append($"WHERE {new DataItems().ID} IN ({pathMatchIDPlaceHolderText}) ");
+                        selectCmd.Append($"WHERE {DataItems.ID} IN ({pathMatchIDPlaceHolderText}) ");
                     selectCmd.Append($"ORDER BY {Enum.GetName(SearchAndSortMode.SortMode)} {Enum.GetName(SearchAndSortMode.SortDirection)}");
                     SqliteCommand sqliteCommand = new(selectCmd.ToString(), dbConnection);
                     if (pathMatchIDPlaceHolders.Count() > 0)
@@ -1552,25 +1552,25 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"INSERT INTO {nameof(DataItems)} (" +
-                    $"{new DataItems().ParentItemID}," +
-                    $"{new DataItems().Type}," +
-                    $"{new DataItems().CreatedTime}," +
-                    $"{new DataItems().ModifiedTime}," +
-                    $"{new DataItems().Title}" +
+                    $"{DataItems.ParentItemID}," +
+                    $"{DataItems.Type}," +
+                    $"{DataItems.CreatedTime}," +
+                    $"{DataItems.ModifiedTime}," +
+                    $"{DataItems.Title}" +
                     $")" +
                     $"VALUES (" +
-                    $"@{new DataItems().ParentItemID}," +
-                    $"@{new DataItems().Type}," +
-                    $"@{new DataItems().CreatedTime}," +
-                    $"@{new DataItems().ModifiedTime}," +
-                    $"@{new DataItems().Title}" +
+                    $"@{DataItems.ParentItemID}," +
+                    $"@{DataItems.Type}," +
+                    $"@{DataItems.CreatedTime}," +
+                    $"@{DataItems.ModifiedTime}," +
+                    $"@{DataItems.Title}" +
                     $")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", dataItem.ParentID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", dataItem.ItemType);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().CreatedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Title}", dataItem.Title);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ParentItemID}", dataItem.ParentID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.Type}", dataItem.ItemType);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.CreatedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.Title}", dataItem.Title);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Get data item ID
@@ -1582,25 +1582,25 @@ namespace TagFind.Classes.DB
 
                 command =
                     $"INSERT INTO {nameof(DataItemFastSearch)} (" +
-                    $"{new DataItemFastSearch().DataItemID}," +
-                    $"{new DataItemFastSearch().Title}," +
-                    $"{new DataItemFastSearch().Description}," +
-                    $"{new DataItemFastSearch().RefPath}," +
-                    $"{new DataItemFastSearch().SearchText}" +
+                    $"{DataItemFastSearch.DataItemID}," +
+                    $"{DataItemFastSearch.Title}," +
+                    $"{DataItemFastSearch.Description}," +
+                    $"{DataItemFastSearch.RefPath}," +
+                    $"{DataItemFastSearch.SearchText}" +
                     $") " +
                     $"VALUES (" +
-                    $"@{new DataItemFastSearch().DataItemID}," +
-                    $"@{new DataItemFastSearch().Title}," +
-                    $"@{new DataItemFastSearch().Description}," +
-                    $"@{new DataItemFastSearch().RefPath}," +
-                    $"@{new DataItemFastSearch().SearchText}" +
+                    $"@{DataItemFastSearch.DataItemID}," +
+                    $"@{DataItemFastSearch.Title}," +
+                    $"@{DataItemFastSearch.Description}," +
+                    $"@{DataItemFastSearch.RefPath}," +
+                    $"@{DataItemFastSearch.SearchText}" +
                     $")";
                 SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", dataItem.ID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", dataItem.Title);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", dataItem.Description);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().RefPath}", dataItem.RefPath);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", dataItem.SearchText);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", dataItem.ID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", dataItem.Title);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", dataItem.Description);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.RefPath}", dataItem.RefPath);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", dataItem.SearchText);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Add tags
@@ -1644,17 +1644,17 @@ namespace TagFind.Classes.DB
                 string command =
                     $"UPDATE {nameof(DataItems)} " +
                     $"SET " +
-                    $"{new DataItems().ParentItemID} = @{new DataItems().ParentItemID}," +
-                    $"{new DataItems().Type} = @{new DataItems().Type}," +
-                    $"{new DataItems().ModifiedTime} = @{new DataItems().ModifiedTime}," +
-                    $"{new DataItems().Title} = @{new DataItems().Title} " +
-                    $"WHERE {new DataItems().ID} = @{new DataItems().ID}";
+                    $"{DataItems.ParentItemID} = @{DataItems.ParentItemID}," +
+                    $"{DataItems.Type} = @{DataItems.Type}," +
+                    $"{DataItems.ModifiedTime} = @{DataItems.ModifiedTime}," +
+                    $"{DataItems.Title} = @{DataItems.Title} " +
+                    $"WHERE {DataItems.ID} = @{DataItems.ID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", dataItem.ParentID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", dataItem.ItemType);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ID}", dataItem.ID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Title}", dataItem.Title);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ParentItemID}", dataItem.ParentID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.Type}", dataItem.ItemType);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ID}", dataItem.ID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.Title}", dataItem.Title);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Update tags
@@ -1663,9 +1663,9 @@ namespace TagFind.Classes.DB
                     // Delete tags related
                     command =
                         $"DELETE FROM {nameof(ItemTags)} " +
-                        $"WHERE {new ItemTags().ItemID} = @{new ItemTags().ItemID}";
+                        $"WHERE {ItemTags.ItemID} = @{ItemTags.ItemID}";
                     SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ItemID}", dataItem.ID);
+                    SqliteCommand.Parameters.AddWithValue($"@{ItemTags.ItemID}", dataItem.ID);
                     SqliteCommand.ExecuteNonQuery();
 
                     // Re-add tags
@@ -1677,25 +1677,25 @@ namespace TagFind.Classes.DB
 
                 command =
                     $"INSERT INTO {nameof(DataItemFastSearch)} (" +
-                    $"{new DataItemFastSearch().DataItemID}," +
-                    $"{new DataItemFastSearch().Title}," +
-                    $"{new DataItemFastSearch().Description}," +
-                    $"{new DataItemFastSearch().RefPath}," +
-                    $"{new DataItemFastSearch().SearchText}" +
+                    $"{DataItemFastSearch.DataItemID}," +
+                    $"{DataItemFastSearch.Title}," +
+                    $"{DataItemFastSearch.Description}," +
+                    $"{DataItemFastSearch.RefPath}," +
+                    $"{DataItemFastSearch.SearchText}" +
                     $")" +
                     $"VALUES (" +
-                    $"@{new DataItemFastSearch().DataItemID}," +
-                    $"@{new DataItemFastSearch().Title}," +
-                    $"@{new DataItemFastSearch().Description}," +
-                    $"@{new DataItemFastSearch().RefPath}," +
-                    $"@{new DataItemFastSearch().SearchText}" +
+                    $"@{DataItemFastSearch.DataItemID}," +
+                    $"@{DataItemFastSearch.Title}," +
+                    $"@{DataItemFastSearch.Description}," +
+                    $"@{DataItemFastSearch.RefPath}," +
+                    $"@{DataItemFastSearch.SearchText}" +
                     $")";
                 SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", dataItem.ID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", dataItem.Title);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", dataItem.Description);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().RefPath}", dataItem.RefPath);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", dataItem.SearchText);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", dataItem.ID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", dataItem.Title);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", dataItem.Description);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.RefPath}", dataItem.RefPath);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", dataItem.SearchText);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Add searchStrings
@@ -1892,24 +1892,24 @@ namespace TagFind.Classes.DB
                 // Delete data from table DataItems
                 string command =
                     $"DELETE FROM {nameof(DataItems)} " +
-                    $"WHERE {new DataItems().ID} = @{new DataItems().ID}";
+                    $"WHERE {DataItems.ID} = @{DataItems.ID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ID}", ID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ID}", ID);
                 SqliteCommand.ExecuteNonQuery();
 
                 command =
                     $"DELETE FROM {nameof(DataItemFastSearch)} " +
-                    $"WHERE {new DataItemFastSearch().DataItemID} = @{new DataItemFastSearch().DataItemID}";
+                    $"WHERE {DataItemFastSearch.DataItemID} = @{DataItemFastSearch.DataItemID}";
                 SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", ID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", ID);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Delete tags related
                 command =
                     $"DELETE FROM {nameof(ItemTags)} " +
-                    $"WHERE {new ItemTags().ItemID} = @{new ItemTags().ItemID}";
+                    $"WHERE {ItemTags.ItemID} = @{ItemTags.ItemID}";
                 SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ItemID}", ID);
+                SqliteCommand.Parameters.AddWithValue($"@{ItemTags.ItemID}", ID);
                 SqliteCommand.ExecuteNonQuery();
             }
 #if !DEBUG
@@ -1938,11 +1938,11 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"UPDATE {nameof(DataItems)} " +
-                    $"SET {new DataItems().ParentItemID} = @{new DataItems().ParentItemID} " +
-                    $"WHERE {new DataItems().ID} = @{new DataItems().ID}";
+                    $"SET {DataItems.ParentItemID} = @{DataItems.ParentItemID} " +
+                    $"WHERE {DataItems.ID} = @{DataItems.ID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", newParentID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ID}", dataItemID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ParentItemID}", newParentID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ID}", dataItemID);
                 SqliteCommand.ExecuteNonQuery();
 
                 // No need to update fast search table, as it doesn't contain parent info.
@@ -1968,26 +1968,26 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"INSERT INTO {nameof(DataItems)} (" +
-                    $"{new DataItems().ParentItemID}," +
-                    $"{new DataItems().Type}," +
-                    $"{new DataItems().CreatedTime}," +
-                    $"{new DataItems().ModifiedTime}," +
-                    $"{new DataItems().Title}" +
+                    $"{DataItems.ParentItemID}," +
+                    $"{DataItems.Type}," +
+                    $"{DataItems.CreatedTime}," +
+                    $"{DataItems.ModifiedTime}," +
+                    $"{DataItems.Title}" +
                     $")" +
                     $"VALUES (" +
-                    $"@{new DataItems().ParentItemID}," +
-                    $"@{new DataItems().Type}," +
-                    $"@{new DataItems().CreatedTime}," +
-                    $"@{new DataItems().ModifiedTime}," +
-                    $"@{new DataItems().Title}" +
+                    $"@{DataItems.ParentItemID}," +
+                    $"@{DataItems.Type}," +
+                    $"@{DataItems.CreatedTime}," +
+                    $"@{DataItems.ModifiedTime}," +
+                    $"@{DataItems.Title}" +
                     ")";
 
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", insertParentID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Type}", sourceDataItem.ItemType);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().CreatedTime}", sourceDataItem.CreatedTime);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ModifiedTime}", sourceDataItem.ModifiedTime);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().Title}", sourceDataItem.Title);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ParentItemID}", insertParentID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.Type}", sourceDataItem.ItemType);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.CreatedTime}", sourceDataItem.CreatedTime);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ModifiedTime}", sourceDataItem.ModifiedTime);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.Title}", sourceDataItem.Title);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Get data item ID
@@ -1998,25 +1998,25 @@ namespace TagFind.Classes.DB
 
                 command =
                     $"INSERT INTO {nameof(DataItemFastSearch)} (" +
-                    $"{new DataItemFastSearch().DataItemID}," +
-                    $"{new DataItemFastSearch().Title}," +
-                    $"{new DataItemFastSearch().Description}," +
-                    $"{new DataItemFastSearch().RefPath}," +
-                    $"{new DataItemFastSearch().SearchText}" +
+                    $"{DataItemFastSearch.DataItemID}," +
+                    $"{DataItemFastSearch.Title}," +
+                    $"{DataItemFastSearch.Description}," +
+                    $"{DataItemFastSearch.RefPath}," +
+                    $"{DataItemFastSearch.SearchText}" +
                     $")" +
                     $"VALUES (" +
-                    $"@{new DataItemFastSearch().DataItemID}," +
-                    $"@{new DataItemFastSearch().Title}," +
-                    $"@{new DataItemFastSearch().Description}," +
-                    $"@{new DataItemFastSearch().RefPath}," +
-                    $"@{new DataItemFastSearch().SearchText}" +
+                    $"@{DataItemFastSearch.DataItemID}," +
+                    $"@{DataItemFastSearch.Title}," +
+                    $"@{DataItemFastSearch.Description}," +
+                    $"@{DataItemFastSearch.RefPath}," +
+                    $"@{DataItemFastSearch.SearchText}" +
                     ")";
                 SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", newDataItemID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Title}", sourceDataItem.Title);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().Description}", sourceDataItem.Description);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().RefPath}", sourceDataItem.RefPath);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", sourceDataItem.SearchText);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", newDataItemID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Title}", sourceDataItem.Title);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.Description}", sourceDataItem.Description);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.RefPath}", sourceDataItem.RefPath);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", sourceDataItem.SearchText);
 
                 // Add tags
                 dbConnection.SaveDataItemTagsInfo(sourceDataItem.ItemTags, sourceDataItem.ID, MessageManager);
@@ -2039,9 +2039,9 @@ namespace TagFind.Classes.DB
                 List<long> IDs = [];
                 string command =
                     $"SELECT * FROM {nameof(DataItems)} " +
-                    $"WHERE {new DataItems().ParentItemID} = @{new DataItems().ParentItemID}";
+                    $"WHERE {DataItems.ParentItemID} = @{DataItems.ParentItemID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItems().ParentItemID}", ID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItems.ParentItemID}", ID);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
                 while (reader.Read())
                 {
@@ -2083,9 +2083,9 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"DELETE FROM {nameof(DataItemFastSearch)} " +
-                    $"WHERE {new DataItemFastSearch().DataItemID} = @{new DataItemFastSearch().DataItemID}";
+                    $"WHERE {DataItemFastSearch.DataItemID} = @{DataItemFastSearch.DataItemID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", dataItemID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", dataItemID);
                 SqliteCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -2100,21 +2100,47 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"INSERT INTO {nameof(DataItemFastSearch)} (" +
-                    $"{new DataItemFastSearch().DataItemID}, " +
-                    $"{new DataItemFastSearch().SearchText}" +
+                    $"{DataItemFastSearch.DataItemID}, " +
+                    $"{DataItemFastSearch.SearchText}" +
                     $")" +
                     $"VALUES (" +
-                    $"@{new DataItemFastSearch().DataItemID}, " +
-                    $"@{new DataItemFastSearch().SearchText}" +
+                    $"@{DataItemFastSearch.DataItemID}, " +
+                    $"@{DataItemFastSearch.SearchText}" +
                     $")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", dataItem.ID);
-                SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().SearchText}", searchText);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", dataItem.ID);
+                SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.SearchText}", searchText);
                 SqliteCommand.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
                 MessageManager.PushMessage(MessageType.Error, ex.Message);
+            }
+        }
+
+        public async IAsyncEnumerable<ReferencedFileInfo> DataItemFastSearchGetAllReferencedFileInfos([EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            string command =
+               $"SELECT {DataItemFastSearch.DataItemID}, {DataItemFastSearch.RefPath} " +
+               $"FROM {nameof(DataItemFastSearch)} " +
+               $"WHERE {DataItemFastSearch.RefPath} IS NOT NULL " +
+               $"AND TRIM({DataItemFastSearch.RefPath}) != ''";
+            SqliteCommand SqliteCommand = new(command, dbConnection);
+            SqliteCommand.ExecuteNonQuery();
+            SqliteDataReader reader = SqliteCommand.ExecuteReader();
+
+            while (reader.Read())
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ReferencedFileInfo referencedFileInfo = new()
+                {
+                    DataItemID = reader.GetInt64(0),
+                    Path = reader.GetString(1)
+                };
+                if (referencedFileInfo.Path.IsWellFormattedFilePath())
+                {
+                    yield return referencedFileInfo;
+                }
             }
         }
 
@@ -2142,11 +2168,11 @@ namespace TagFind.Classes.DB
                     $"SELECT * FROM {nameof(TagPool)} " +
                     (searchString == string.Empty
                     ? $""
-                    : $"WHERE {new TagPool().MainName} LIKE @{new TagPool().MainName}");
+                    : $"WHERE {TagPool.MainName} LIKE @{TagPool.MainName}");
                 SqliteCommand SqliteCommand = new(command, dbConnection);
                 if (searchString != string.Empty)
                 {
-                    SqliteCommand.Parameters.AddWithValue($"@{new TagPool().MainName}", searchString);
+                    SqliteCommand.Parameters.AddWithValue($"@{TagPool.MainName}", searchString);
                 }
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
 
@@ -2173,11 +2199,11 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"SELECT * FROM {nameof(TagData)} " +
-                    $"WHERE {new TagData().Type} = @{new TagData().Type} " +
-                    $"AND {new TagData().Value} LIKE @{new TagData().Value}";
+                    $"WHERE {TagData.Type} = @{TagData.Type} " +
+                    $"AND {TagData.Value} LIKE @{TagData.Value}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().Surname);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Value}", searchString);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.Surname);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Value}", searchString);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
                 while (reader.Read())
                 {
@@ -2187,7 +2213,7 @@ namespace TagFind.Classes.DB
                 string placeholders = string.Join(",", tagIDViaSurnames.ToList().Select((_, i) => $"@p{i}"));
                 command =
                     $"SELECT * FROM {nameof(TagPool)} " +
-                    $"WHERE {new TagPool().ID} IN ({placeholders})";
+                    $"WHERE {TagPool.ID} IN ({placeholders})";
                 SqliteCommand = new(command, dbConnection);
                 int index = 0;
                 foreach (long ID in tagIDViaSurnames)
@@ -2229,10 +2255,10 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"SELECT * FROM {nameof(TagPool)} " +
-                    $"WHERE {new TagPool().ID} = @{new TagPool().ID} " +
+                    $"WHERE {TagPool.ID} = @{TagPool.ID} " +
                     $"LIMIT 1";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", tagID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ID}", tagID);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
 
                 // Get tags
@@ -2267,10 +2293,10 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"SELECT * FROM {nameof(TagData)} " +
-                    $"WHERE {new TagData().ID} = @{new TagData().ID} " +
+                    $"WHERE {TagData.ID} = @{TagData.ID} " +
                     $"LIMIT 1";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", propertyID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ID}", propertyID);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
                 long tagID = -1;
                 while (reader.Read())
@@ -2308,22 +2334,22 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"INSERT INTO {nameof(TagPool)}(" +
-                    $"{new TagPool().MainName}," +
-                    $"{new TagPool().Description}," +
-                    $"{new TagPool().CreatedTime}," +
-                    $"{new TagPool().ModifiedTime}" +
+                    $"{TagPool.MainName}," +
+                    $"{TagPool.Description}," +
+                    $"{TagPool.CreatedTime}," +
+                    $"{TagPool.ModifiedTime}" +
                     $") " +
                     $"VALUES (" +
-                    $"@{new TagPool().MainName}," +
-                    $"@{new TagPool().Description}," +
-                    $"@{new TagPool().CreatedTime}," +
-                    $"@{new TagPool().ModifiedTime}" +
+                    $"@{TagPool.MainName}," +
+                    $"@{TagPool.Description}," +
+                    $"@{TagPool.CreatedTime}," +
+                    $"@{TagPool.ModifiedTime}" +
                     ")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().MainName}", tag.MainName);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().Description}", tag.Description);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().CreatedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.MainName}", tag.MainName);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.Description}", tag.Description);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.CreatedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 SqliteCommand.ExecuteNonQuery();
 
                 // Get tag ID
@@ -2368,15 +2394,15 @@ namespace TagFind.Classes.DB
                 // Update main name
                 string command =
                     $"UPDATE {nameof(TagPool)} " +
-                    $"SET {new TagPool().MainName} = @{new TagPool().MainName}, " +
-                    $"{new TagPool().Description} = @{new TagPool().Description}, " +
-                    $"{new TagPool().ModifiedTime} = @{new TagPool().ModifiedTime} " +
-                    $"WHERE {new TagPool().ID} = @{new TagPool().ID}";
+                    $"SET {TagPool.MainName} = @{TagPool.MainName}, " +
+                    $"{TagPool.Description} = @{TagPool.Description}, " +
+                    $"{TagPool.ModifiedTime} = @{TagPool.ModifiedTime} " +
+                    $"WHERE {TagPool.ID} = @{TagPool.ID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().MainName}", tagInfo.MainName);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().Description}", tagInfo.Description);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", tagInfo.ID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.MainName}", tagInfo.MainName);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.Description}", tagInfo.Description);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ModifiedTime}", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ID}", tagInfo.ID);
                 SqliteCommand.ExecuteNonQuery();
 
 
@@ -2455,17 +2481,17 @@ namespace TagFind.Classes.DB
                 }
                 string command =
                     $"DELETE FROM {nameof(TagPool)} " +
-                    $"WHERE {new TagPool().ID} = @{new TagPool().ID}";
+                    $"WHERE {TagPool.ID} = @{TagPool.ID}";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", ID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ID}", ID);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Remove all other TagData
                 command =
                     $"DELETE FROM {nameof(TagData)} " +
-                    $"WHERE {new TagData().TagID} = @{new TagData().TagID}";
+                    $"WHERE {TagData.TagID} = @{TagData.TagID}";
                 SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", ID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", ID);
                 SqliteCommand.ExecuteNonQuery();
 
                 // Remove all references from DataItem ItemTags
@@ -2512,22 +2538,22 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"INSERT INTO {nameof(TagData)}(" +
-                    $"{new TagData().TagID}," +
-                    $"{new TagData().Seq}," +
-                    $"{new TagData().Type}," +
-                    $"{new TagData().Value}" +
+                    $"{TagData.TagID}," +
+                    $"{TagData.Seq}," +
+                    $"{TagData.Type}," +
+                    $"{TagData.Value}" +
                     ") " +
                     $"VALUES (" +
-                    $"@{new TagData().TagID}," +
-                    $"@{new TagData().Seq}," +
-                    $"@{new TagData().Type}," +
-                    $"@{new TagData().Value}" +
+                    $"@{TagData.TagID}," +
+                    $"@{TagData.Seq}," +
+                    $"@{TagData.Type}," +
+                    $"@{TagData.Value}" +
                     ")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", i.ToString());
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().Surname);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Value}", surname);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", i.ToString());
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.Surname);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Value}", surname);
                 SqliteCommand.ExecuteNonQuery();
                 i++;
             }
@@ -2537,11 +2563,11 @@ namespace TagFind.Classes.DB
         {
             string command =
                 $"DELETE FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                $"AND {new TagData().Type} = @{new TagData().Type}";
+                $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                $"AND {TagData.Type} = @{TagData.Type}";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().Surname);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.Surname);
             SqliteCommand.ExecuteNonQuery();
         }
 
@@ -2582,22 +2608,22 @@ namespace TagFind.Classes.DB
 
                 string command =
                     $"INSERT INTO {nameof(TagData)}(" +
-                    $"{new TagData().TagID}," +
-                    $"{new TagData().Seq}," +
-                    $"{new TagData().Type}," +
-                    $"{new TagData().Value}" +
+                    $"{TagData.TagID}," +
+                    $"{TagData.Seq}," +
+                    $"{TagData.Type}," +
+                    $"{TagData.Value}" +
                     ") " +
                     $"VALUES (" +
-                    $"@{new TagData().TagID}," +
-                    $"@{new TagData().Seq}," +
-                    $"@{new TagData().Type}," +
-                    $"@{new TagData().Value}" +
+                    $"@{TagData.TagID}," +
+                    $"@{TagData.Seq}," +
+                    $"@{TagData.Type}," +
+                    $"@{TagData.Value}" +
                     ")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", seq);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().LogicChainItem);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Value}", Item.OnChainTagID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", seq);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.LogicChainItem);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Value}", Item.OnChainTagID);
                 SqliteCommand.ExecuteNonQuery();
                 // Get inserted ID
                 command = "SELECT last_insert_rowid()";
@@ -2619,11 +2645,11 @@ namespace TagFind.Classes.DB
             List<long> tagDataIDs = [];
             string subCommand =
                 $"SELECT * FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                $"AND {new TagData().Type} = @{new TagData().Type}";
+                $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                $"AND {TagData.Type} = @{TagData.Type}";
             SqliteCommand SqliteCommand = new(subCommand, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().LogicChainItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.LogicChainItem);
             SqliteDataReader reader = SqliteCommand.ExecuteReader();
             while (reader.Read())
             {
@@ -2642,7 +2668,7 @@ namespace TagFind.Classes.DB
 
             subCommand =
                 $"DELETE FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().ID} IN ({string.Join(",", parameters)})";
+                $"WHERE {TagData.ID} IN ({string.Join(",", parameters)})";
             SqliteCommand = new(subCommand, dbConnection);
             for (int i = 0; i < tagDataIDs.Count; i++)
             {
@@ -2655,11 +2681,11 @@ namespace TagFind.Classes.DB
         {
             string command =
                 $"DELETE FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                $"AND {new TagData().Type} = @{new TagData().Type}";
+                $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                $"AND {TagData.Type} = @{TagData.Type}";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().LogicChainItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.LogicChainItem);
             SqliteCommand.ExecuteNonQuery();
         }
 
@@ -2695,22 +2721,22 @@ namespace TagFind.Classes.DB
 
                 string command =
                     $"INSERT INTO {nameof(TagData)}(" +
-                    $"{new TagData().TagID}," +
-                    $"{new TagData().Seq}," +
-                    $"{new TagData().Type}," +
-                    $"{new TagData().Value}" +
+                    $"{TagData.TagID}," +
+                    $"{TagData.Seq}," +
+                    $"{TagData.Type}," +
+                    $"{TagData.Value}" +
                     ") " +
                     $"VALUES (" +
-                    $"@{new TagData().TagID}," +
-                    $"@{new TagData().Seq}," +
-                    $"@{new TagData().Type}," +
-                    $"@{new TagData().Value}" +
+                    $"@{TagData.TagID}," +
+                    $"@{TagData.Seq}," +
+                    $"@{TagData.Type}," +
+                    $"@{TagData.Value}" +
                     ")";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", tagID);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", seq);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().RestrictionLogicChainItem);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagData().Value}", item.OnChainTagID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", tagID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", seq);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.RestrictionLogicChainItem);
+                SqliteCommand.Parameters.AddWithValue($"@{TagData.Value}", item.OnChainTagID);
                 SqliteCommand.ExecuteNonQuery();
                 // Get inserted ID
                 command = "SELECT last_insert_rowid()";
@@ -2732,13 +2758,13 @@ namespace TagFind.Classes.DB
             string seq = $"% % % {PropertyID}";
             string command =
                 $"DELETE FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                $"AND {new TagData().Type} = @{new TagData().Type} " +
-                $"AND {new TagData().Seq} LIKE @{new TagData().Seq}";
+                $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                $"AND {TagData.Type} = @{TagData.Type} " +
+                $"AND {TagData.Seq} LIKE @{TagData.Seq}";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().RestrictionLogicChainItem);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", seq);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.RestrictionLogicChainItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", seq);
             SqliteCommand.ExecuteNonQuery();
         }
 
@@ -2747,11 +2773,11 @@ namespace TagFind.Classes.DB
             List<long> tagDataIDs = [];
             string subCommand =
                 $"SELECT * FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                $"AND {new TagData().Type} = @{new TagData().Type}";
+                $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                $"AND {TagData.Type} = @{TagData.Type}";
             SqliteCommand SqliteCommand = new(subCommand, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().RestrictionLogicChainItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.RestrictionLogicChainItem);
             SqliteDataReader reader = SqliteCommand.ExecuteReader();
             while (reader.Read())
             {
@@ -2767,9 +2793,9 @@ namespace TagFind.Classes.DB
 
             subCommand =
                 $"DELETE FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().ID} IN @{new TagData().ID}";
+                $"WHERE {TagData.ID} IN @{TagData.ID}";
             SqliteCommand = new(subCommand, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().ID}", string.Join(",", tagDataIDs));
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.ID}", string.Join(",", tagDataIDs));
             SqliteCommand.ExecuteNonQuery();
         }
 
@@ -2787,12 +2813,12 @@ namespace TagFind.Classes.DB
                     // Get tag ID to fasten search
                     string command =
                         $"SELECT * FROM {nameof(TagData)} " +
-                        $"WHERE {new TagData().Type} = @{new TagData().Type} " +
-                        $"AND  {new TagData().ID} = @{new TagData().ID} " +
+                        $"WHERE {TagData.Type} = @{TagData.Type} " +
+                        $"AND  {TagData.ID} = @{TagData.ID} " +
                         $"LIMIT 1";
                     SqliteCommand SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().PropertyItem);
-                    SqliteCommand.Parameters.AddWithValue($"@{new TagData().ID}", PropertyID);
+                    SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.PropertyItem);
+                    SqliteCommand.Parameters.AddWithValue($"@{TagData.ID}", PropertyID);
                     SqliteDataReader SqliteDataReader = SqliteCommand.ExecuteReader();
                     while (SqliteDataReader.Read())
                     {
@@ -2805,13 +2831,13 @@ namespace TagFind.Classes.DB
                 string searchSeq = $"% % % {PropertyID}";
                 string cmd =
                     $"SELECT * FROM {nameof(TagData)} " +
-                    $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                    $"AND {new TagData().Type} = @{new TagData().Type} " +
-                    $"AND {new TagData().Seq} LIKE @{new TagData().Seq}";
+                    $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                    $"AND {TagData.Type} = @{TagData.Type} " +
+                    $"AND {TagData.Seq} LIKE @{TagData.Seq}";
                 SqliteCommand SqlCmd = new(cmd, dbConnection);
-                SqlCmd.Parameters.AddWithValue($"@{new TagData().TagID}", tagID);
-                SqlCmd.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().RestrictionLogicChainItem);
-                SqlCmd.Parameters.AddWithValue($"@{new TagData().Seq}", searchSeq);
+                SqlCmd.Parameters.AddWithValue($"@{TagData.TagID}", tagID);
+                SqlCmd.Parameters.AddWithValue($"@{TagData.Type}", TagData.RestrictionLogicChainItem);
+                SqlCmd.Parameters.AddWithValue($"@{TagData.Seq}", searchSeq);
                 SqliteDataReader reader = SqlCmd.ExecuteReader();
                 List<LogicChainItem> allRestrictionChainItems = [];
                 reader.GetRestrictedTagLogicChainsFromReader(ref allRestrictionChainItems, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
@@ -2852,22 +2878,22 @@ namespace TagFind.Classes.DB
         {
             string command =
                 $"INSERT INTO {nameof(TagData)}(" +
-                $"{new TagData().TagID}," +
-                $"{new TagData().Seq}," +
-                $"{new TagData().Type}," +
-                $"{new TagData().Value}" +
+                $"{TagData.TagID}," +
+                $"{TagData.Seq}," +
+                $"{TagData.Type}," +
+                $"{TagData.Value}" +
                 $") " +
                 $"VALUES (" +
-                $"@{new TagData().TagID}," +
-                $"@{new TagData().Seq}," +
-                $"@{new TagData().Type}," +
-                $"@{new TagData().Value}" +
+                $"@{TagData.TagID}," +
+                $"@{TagData.Seq}," +
+                $"@{TagData.Type}," +
+                $"@{TagData.Value}" +
                 ")";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", $"{PropertyItem.Seq.ToString()} {(PropertyItem.IsContainsRelation ? 1 : 0)}");
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().PropertyItem);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Value}", PropertyItem.PropertyName);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", TagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", $"{PropertyItem.Seq.ToString()} {(PropertyItem.IsContainsRelation ? 1 : 0)}");
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.PropertyItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Value}", PropertyItem.PropertyName);
             SqliteCommand.ExecuteNonQuery();
 
             command = "SELECT last_insert_rowid()";
@@ -2919,13 +2945,13 @@ namespace TagFind.Classes.DB
             // Remove restriction logic chains
             string command =
                 $"DELETE FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                $"AND {new TagData().Type} = @{new TagData().Type} " +
-                $"AND {new TagData().Seq} LIKE @{new TagData().Seq}";
+                $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                $"AND {TagData.Type} = @{TagData.Type} " +
+                $"AND {TagData.Seq} LIKE @{TagData.Seq}";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", PropertyTagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().RestrictionLogicChainItem);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", searchSeq);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", PropertyTagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.RestrictionLogicChainItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", searchSeq);
             SqliteCommand.ExecuteNonQuery();
 
             // Remove outer references
@@ -2936,11 +2962,11 @@ namespace TagFind.Classes.DB
             List<(long, long)> restrictionChainsBeingDeleted = [];
             command =
                 $"SELECT * FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().Type} = @{new TagData().Type} " +
-                $"AND {new TagData().Seq} LIKE @{new TagData().Seq}";
+                $"WHERE {TagData.Type} = @{TagData.Type} " +
+                $"AND {TagData.Seq} LIKE @{TagData.Seq}";
             SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().LogicChainItem);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", searchSeq);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.LogicChainItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", searchSeq);
             SqliteDataReader reader = SqliteCommand.ExecuteReader();
             while (reader.Read())
             {
@@ -2962,13 +2988,13 @@ namespace TagFind.Classes.DB
             // Find restriction chains
             command =
                 $"SELECT *  FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                $"AND {new TagData().Type} = @{new TagData().Type} " +
-                $"AND {new TagData().Seq} LIKE @{new TagData().Seq}";
+                $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                $"AND {TagData.Type} = @{TagData.Type} " +
+                $"AND {TagData.Seq} LIKE @{TagData.Seq}";
             SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().TagID}", PropertyTagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().RestrictionLogicChainItem);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().Seq}", searchSeq);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.TagID}", PropertyTagID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Type}", TagData.RestrictionLogicChainItem);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.Seq}", searchSeq);
             reader = SqliteCommand.ExecuteReader();
             while (reader.Read())
             {
@@ -2992,9 +3018,9 @@ namespace TagFind.Classes.DB
 
             command =
                 $"DELETE FROM {nameof(TagData)} " +
-                $"WHERE {new TagData().ID} = @{new TagData().ID}";
+                $"WHERE {TagData.ID} = @{TagData.ID}";
             SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new TagData().ID}", Property.ID);
+            SqliteCommand.Parameters.AddWithValue($"@{TagData.ID}", Property.ID);
             SqliteCommand.ExecuteNonQuery();
         }
 
@@ -3113,10 +3139,10 @@ namespace TagFind.Classes.DB
                     // Get surnames
                     string subcommand =
                         $"SELECT * FROM {nameof(TagData)} " +
-                        $"WHERE {new TagData().TagID} = {tag.ID} " +
-                        $"AND {new TagData().Type} = @{new TagData().Type}";
+                        $"WHERE {TagData.TagID} = {tag.ID} " +
+                        $"AND {TagData.Type} = @{TagData.Type}";
                     SqliteCommand subSqlCmd = new(subcommand, dbConnection);
-                    subSqlCmd.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().Surname);
+                    subSqlCmd.Parameters.AddWithValue($"@{TagData.Type}", TagData.Surname);
                     SqliteDataReader subReader = subSqlCmd.ExecuteReader();
                     while (subReader.Read())
                     {
@@ -3130,11 +3156,11 @@ namespace TagFind.Classes.DB
                     // Get property items
                     subcommand =
                         $"SELECT * FROM {nameof(TagData)} " +
-                        $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                        $"AND {new TagData().Type} = @{new TagData().Type}";
+                        $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                        $"AND {TagData.Type} = @{TagData.Type}";
                     subSqlCmd = new(subcommand, dbConnection);
-                    subSqlCmd.Parameters.AddWithValue($"@{new TagData().TagID}", tag.ID);
-                    subSqlCmd.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().PropertyItem);
+                    subSqlCmd.Parameters.AddWithValue($"@{TagData.TagID}", tag.ID);
+                    subSqlCmd.Parameters.AddWithValue($"@{TagData.Type}", TagData.PropertyItem);
                     subReader = subSqlCmd.ExecuteReader();
                     List<PropertyItem> properties = [];
 
@@ -3162,11 +3188,11 @@ namespace TagFind.Classes.DB
                     // Get RestrictedTagLogicChains
                     subcommand =
                         $"SELECT * FROM {nameof(TagData)} " +
-                        $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                        $"AND {new TagData().Type} = @{new TagData().Type}";
+                        $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                        $"AND {TagData.Type} = @{TagData.Type}";
                     subSqlCmd = new(subcommand, dbConnection);
-                    subSqlCmd.Parameters.AddWithValue($"@{new TagData().TagID}", tag.ID);
-                    subSqlCmd.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().RestrictionLogicChainItem);
+                    subSqlCmd.Parameters.AddWithValue($"@{TagData.TagID}", tag.ID);
+                    subSqlCmd.Parameters.AddWithValue($"@{TagData.Type}", TagData.RestrictionLogicChainItem);
                     subReader = subSqlCmd.ExecuteReader();
                     List<LogicChainItem> allRestrictionChainItems = [];
                     subReader.GetRestrictedTagLogicChainsFromReader(ref allRestrictionChainItems, dbConnection, MessageManager, ref ParentPropertyNameTempDict, ref OnChainTagNameTempDict);
@@ -3177,11 +3203,11 @@ namespace TagFind.Classes.DB
                     // Get LogicChains
                     subcommand =
                         $"SELECT * FROM {nameof(TagData)} " +
-                        $"WHERE {new TagData().TagID} = @{new TagData().TagID} " +
-                        $"AND {new TagData().Type} = @{new TagData().Type}";
+                        $"WHERE {TagData.TagID} = @{TagData.TagID} " +
+                        $"AND {TagData.Type} = @{TagData.Type}";
                     subSqlCmd = new(subcommand, dbConnection);
-                    subSqlCmd.Parameters.AddWithValue($"@{new TagData().TagID}", tag.ID);
-                    subSqlCmd.Parameters.AddWithValue($"@{new TagData().Type}", new TagData().LogicChainItem);
+                    subSqlCmd.Parameters.AddWithValue($"@{TagData.TagID}", tag.ID);
+                    subSqlCmd.Parameters.AddWithValue($"@{TagData.Type}", TagData.LogicChainItem);
                     subReader = subSqlCmd.ExecuteReader();
                     List<LogicChainItem> allChainItems = [];
 
@@ -3224,9 +3250,9 @@ namespace TagFind.Classes.DB
                         {
                             string cmd =
                                 $"SELECT * FROM {nameof(TagData)} " +
-                                $"WHERE {new TagData().ID} = @{new TagData().ID}";
+                                $"WHERE {TagData.ID} = @{TagData.ID}";
                             SqliteCommand sqlcmd = new(cmd, dbConnection);
-                            sqlcmd.Parameters.AddWithValue($"@{new TagData().ID}", chainItem.ParentPropertyItemID);
+                            sqlcmd.Parameters.AddWithValue($"@{TagData.ID}", chainItem.ParentPropertyItemID);
                             SqliteDataReader sqlreader = sqlcmd.ExecuteReader();
                             while (sqlreader.Read())
                             {
@@ -3244,9 +3270,9 @@ namespace TagFind.Classes.DB
                         {
                             string cmd =
                                 $"SELECT * FROM {nameof(TagPool)} " +
-                                $"WHERE {new TagPool().ID} = @{new TagPool().ID}";
+                                $"WHERE {TagPool.ID} = @{TagPool.ID}";
                             SqliteCommand sqlcmd = new(cmd, dbConnection);
-                            sqlcmd.Parameters.AddWithValue($"@{new TagPool().ID}", chainItem.OnChainTagID);
+                            sqlcmd.Parameters.AddWithValue($"@{TagPool.ID}", chainItem.OnChainTagID);
                             SqliteDataReader sqlreader = sqlcmd.ExecuteReader();
                             while (sqlreader.Read())
                             {
@@ -3350,10 +3376,10 @@ namespace TagFind.Classes.DB
                     // Get DataItem in table DataItems
                     string command =
                         $"SELECT * FROM {nameof(DataItemFastSearch)} " +
-                        $"WHERE {new DataItemFastSearch().DataItemID} = @{new DataItemFastSearch().DataItemID} " +
+                        $"WHERE {DataItemFastSearch.DataItemID} = @{DataItemFastSearch.DataItemID} " +
                         $"LIMIT 1";
                     SqliteCommand SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", item.ID);
+                    SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", item.ID);
                     SqliteDataReader SqliteDataReader = SqliteCommand.ExecuteReader();
                     while (SqliteDataReader.Read())
                     {
@@ -3367,9 +3393,9 @@ namespace TagFind.Classes.DB
                     List<ItemTagDataSource> itemTagDataSources = [];
                     command =
                         $"SELECT * FROM {nameof(ItemTags)} " +
-                        $"WHERE {new ItemTags().ItemID} = @{new ItemTags().ItemID} ";
+                        $"WHERE {ItemTags.ItemID} = @{ItemTags.ItemID} ";
                     SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ItemID}", item.ID);
+                    SqliteCommand.Parameters.AddWithValue($"@{ItemTags.ItemID}", item.ID);
                     SqliteDataReader = SqliteCommand.ExecuteReader();
                     while (SqliteDataReader.Read())
                     {
@@ -3453,10 +3479,10 @@ namespace TagFind.Classes.DB
                     // Get DataItem in table DataItems
                     string command =
                         $"SELECT * FROM {nameof(DataItemFastSearch)} " +
-                        $"WHERE {new DataItemFastSearch().DataItemID} = @{new DataItemFastSearch().DataItemID} " +
+                        $"WHERE {DataItemFastSearch.DataItemID} = @{DataItemFastSearch.DataItemID} " +
                         $"LIMIT 1";
                     SqliteCommand SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new DataItemFastSearch().DataItemID}", item.ID);
+                    SqliteCommand.Parameters.AddWithValue($"@{DataItemFastSearch.DataItemID}", item.ID);
                     SqliteDataReader SqliteDataReader = SqliteCommand.ExecuteReader();
                     while (SqliteDataReader.Read())
                     {
@@ -3470,9 +3496,9 @@ namespace TagFind.Classes.DB
                     List<ItemTagDataSource> itemTagDataSources = [];
                     command =
                         $"SELECT * FROM {nameof(ItemTags)} " +
-                        $"WHERE {new ItemTags().ItemID} = @{new ItemTags().ItemID} ";
+                        $"WHERE {ItemTags.ItemID} = @{ItemTags.ItemID} ";
                     SqliteCommand = new(command, dbConnection);
-                    SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ItemID}", item.ID);
+                    SqliteCommand.Parameters.AddWithValue($"@{ItemTags.ItemID}", item.ID);
                     SqliteDataReader = SqliteCommand.ExecuteReader();
                     while (SqliteDataReader.Read())
                     {
@@ -3537,10 +3563,10 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"SELECT * FROM {nameof(TagPool)} " +
-                    $"WHERE {new TagPool().ID} = @{new TagPool().ID} " +
+                    $"WHERE {TagPool.ID} = @{TagPool.ID} " +
                     $"LIMIT 1";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", tagID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ID}", tagID);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
                 while (reader.Read())
                 {
@@ -3569,10 +3595,10 @@ namespace TagFind.Classes.DB
             {
                 string command =
                     $"SELECT * FROM {nameof(TagData)} " +
-                    $"WHERE {new TagData().ID} = @{new TagData().ID} " +
+                    $"WHERE {TagData.ID} = @{TagData.ID} " +
                     $"LIMIT 1";
                 SqliteCommand SqliteCommand = new(command, dbConnection);
-                SqliteCommand.Parameters.AddWithValue($"@{new TagPool().ID}", PropertyID);
+                SqliteCommand.Parameters.AddWithValue($"@{TagPool.ID}", PropertyID);
                 SqliteDataReader reader = SqliteCommand.ExecuteReader();
                 while (reader.Read())
                 {
@@ -3580,15 +3606,15 @@ namespace TagFind.Classes.DB
                 }
                 string failedMessage = LocalizedString.GetLocalizedString("Code/CS/FailedToGetPropertyNameWithIDWithReason");
                 string failedReason = LocalizedString.GetLocalizedString("Code/CS/FailedToFindMatchedInfoFromDatabase");
-                failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", failedReason } });
-                MessageManager.PushMessage(MessageType.Warning, failedMessage);
+                string lfailedMessage = failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", failedReason } });
+                MessageManager.PushMessage(MessageType.Warning, lfailedMessage);
                 return string.Empty;
             }
             catch (Exception ex)
             {
                 string failedMessage = LocalizedString.GetLocalizedString("Code/CS/FailedToGetPropertyNameWithIDWithReason");
-                failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", ex.Message } });
-                MessageManager.PushMessage(MessageType.Error, failedMessage);
+                string lfailedMessage = failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", ex.Message } });
+                MessageManager.PushMessage(MessageType.Error, lfailedMessage);
                 return string.Empty;
             }
         }
@@ -3651,9 +3677,9 @@ namespace TagFind.Classes.DB
                     {
                         string cmd =
                             $"SELECT * FROM {nameof(TagData)} " +
-                            $"WHERE {new TagData().ID} = @{new TagData().ID}";
+                            $"WHERE {TagData.ID} = @{TagData.ID}";
                         SqliteCommand sqlcmd = new(cmd, dbConnection);
-                        sqlcmd.Parameters.AddWithValue($"@{new TagData().ID}", chainItem.ParentPropertyItemID);
+                        sqlcmd.Parameters.AddWithValue($"@{TagData.ID}", chainItem.ParentPropertyItemID);
                         SqliteDataReader sqlreader = sqlcmd.ExecuteReader();
                         while (sqlreader.Read())
                         {
@@ -3670,9 +3696,9 @@ namespace TagFind.Classes.DB
                     {
                         string cmd =
                             $"SELECT * FROM {nameof(TagPool)} " +
-                            $"WHERE {new TagPool().ID} = @{new TagPool().ID}";
+                            $"WHERE {TagPool.ID} = @{TagPool.ID}";
                         SqliteCommand sqlcmd = new(cmd, dbConnection);
-                        sqlcmd.Parameters.AddWithValue($"@{new TagPool().ID}", chainItem.OnChainTagID);
+                        sqlcmd.Parameters.AddWithValue($"@{TagPool.ID}", chainItem.OnChainTagID);
                         SqliteDataReader sqlreader = sqlcmd.ExecuteReader();
                         while (sqlreader.Read())
                         {
@@ -3810,22 +3836,22 @@ namespace TagFind.Classes.DB
             if (dbConnection == null) return;
             string command =
                 $"INSERT INTO {nameof(ItemTags)} (" +
-                $"{new ItemTags().ItemID}, " +
-                $"{new ItemTags().PropertyID}, " +
-                $"{new ItemTags().TagID}, " +
-                $"{new ItemTags().ParentTagID}" +
+                $"{ItemTags.ItemID}, " +
+                $"{ItemTags.PropertyID}, " +
+                $"{ItemTags.TagID}, " +
+                $"{ItemTags.ParentTagID}" +
                 $") " +
                 $"VALUES (" +
-                $"@{new ItemTags().ItemID}, " +
-                $"@{new ItemTags().PropertyID}, " +
-                $"@{new ItemTags().TagID}, " +
-                $"@{new ItemTags().ParentTagID}" +
+                $"@{ItemTags.ItemID}, " +
+                $"@{ItemTags.PropertyID}, " +
+                $"@{ItemTags.TagID}, " +
+                $"@{ItemTags.ParentTagID}" +
                 $")";
             SqliteCommand SqliteCommand = new(command, dbConnection);
-            SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ItemID}", ItemID);
-            SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().PropertyID}", PropertyID);
-            SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().TagID}", itemTagTreeItem.TagID);
-            SqliteCommand.Parameters.AddWithValue($"@{new ItemTags().ParentTagID}", ParentTagID);
+            SqliteCommand.Parameters.AddWithValue($"@{ItemTags.ItemID}", ItemID);
+            SqliteCommand.Parameters.AddWithValue($"@{ItemTags.PropertyID}", PropertyID);
+            SqliteCommand.Parameters.AddWithValue($"@{ItemTags.TagID}", itemTagTreeItem.TagID);
+            SqliteCommand.Parameters.AddWithValue($"@{ItemTags.ParentTagID}", ParentTagID);
             SqliteCommand.ExecuteNonQuery();
             foreach (ItemTagTreePropertyItem propertyItem in itemTagTreeItem.PropertyItems)
             {

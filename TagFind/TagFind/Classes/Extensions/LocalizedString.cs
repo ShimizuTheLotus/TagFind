@@ -21,12 +21,13 @@ namespace TagFind.Classes.Extensions
             }
         }
 
-        public static void FormatLocalizedStringWithParameters(this string originalString, Dictionary<string, object> parameters)
+        public static string FormatLocalizedStringWithParameters(this string originalString, Dictionary<string, object> parameters)
         {
             foreach (var parameter in parameters)
             {
                 originalString = originalString.Replace($"{{{parameter.Key}}}", parameter.Value.ToString());
             }
+            return originalString;
         }
     }
 }
