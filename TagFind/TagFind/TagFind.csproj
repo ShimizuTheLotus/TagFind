@@ -28,9 +28,6 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.TokenizingTextBox" Version="8.2.250402" />
-    <PackageReference Include="LLamaSharp" Version="0.25.0" />
-    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.25.0" />
-    <PackageReference Include="LLamaSharp.Backend.Cuda12" Version="0.25.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
