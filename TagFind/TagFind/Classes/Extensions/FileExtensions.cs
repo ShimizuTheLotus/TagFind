@@ -31,9 +31,15 @@ namespace TagFind.Classes.Extensions
 
         public static bool IsWellFormattedFilePath(this string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
+            if (path.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+                return false;
+
             try
             {
-                string a = Path.GetFullPath(path);
+                string fullPath = Path.GetFullPath(path);
                 return true;
             }
             catch

@@ -77,7 +77,7 @@ namespace TagFind.Pages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -93,7 +93,7 @@ namespace TagFind.Pages
                 }
             }
 
-            GetReferencedFileInfos();
+            await GetReferencedFileInfos();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -103,7 +103,7 @@ namespace TagFind.Pages
             GetReferencedCancellationTokenSource.Cancel();
         }
 
-        public async void GetReferencedFileInfos()
+        public async Task GetReferencedFileInfos()
         {
             GetReferencedCancellationTokenSource = new();
 
@@ -113,30 +113,33 @@ namespace TagFind.Pages
 
             try
             {
-                await foreach (ReferencedFileInfo info in ContentManager.DataItemFastSearchGetAllReferencedFileInfos(GetReferencedCancellationTokenSource.Token))
+                await Task.Run(async () =>
                 {
-                    ReferencedFileInfos.Add(info);
-                    if (File.Exists(info.Path))
+                    await foreach (ReferencedFileInfo info in ContentManager.DataItemFastSearchGetAllReferencedFileInfos(GetReferencedCancellationTokenSource.Token))
                     {
-                        ValidFileReferenceCounter++;
-                        FileInfo fileInfo = new FileInfo(info.Path);
-                        info.StorageSize = fileInfo.Length;
-                        string rawString = LocalizedString.GetLocalizedString("FileReferenceCountValueTextBlock/Text");
-                        string processedString = rawString.FormatLocalizedStringWithParameters(new Dictionary<string, object>()
+                        ReferencedFileInfos.Add(info);
+                        if (File.Exists(info.Path))
+                        {
+                            ValidFileReferenceCounter++;
+                            FileInfo fileInfo = new FileInfo(info.Path);
+                            info.StorageSize = fileInfo.Length;
+                            string rawString = LocalizedString.GetLocalizedString("FileReferenceCountValueTextBlock/Text");
+                            string processedString = rawString.FormatLocalizedStringWithParameters(new Dictionary<string, object>()
                         {
                             { "valid_count", ValidFileReferenceCounter },
                             { "ref_count", FileReferenceCounter }
                         });
-                        DispatcherQueue.TryEnqueue(() =>
-                        {
-                            try
+                            DispatcherQueue.TryEnqueue(() =>
                             {
-                                FileReferenceCountValueTextBlock.Text = processedString;
-                            }
-                            catch { }
-                        });
+                                try
+                                {
+                                    FileReferenceCountValueTextBlock.Text = processedString;
+                                }
+                                catch { }
+                            });
+                        }
                     }
-                }
+                });
             }
             catch (OperationCanceledException)
             {
