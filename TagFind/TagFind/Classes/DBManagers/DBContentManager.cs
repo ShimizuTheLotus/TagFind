@@ -2137,7 +2137,11 @@ namespace TagFind.Classes.DB
                     DataItemID = reader.GetInt64(0),
                     Path = reader.GetString(1)
                 };
-                if (referencedFileInfo.Path.IsWellFormattedFilePath())
+                bool result = await Task.Run(() =>
+                {
+                    return referencedFileInfo.Path.IsWellFormattedFilePath();
+                });
+                if (result)
                 {
                     yield return referencedFileInfo;
                 }

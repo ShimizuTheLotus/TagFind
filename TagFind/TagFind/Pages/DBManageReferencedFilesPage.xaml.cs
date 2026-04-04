@@ -34,6 +34,7 @@ namespace TagFind.Pages
     public sealed partial class ManageReferencedFilesPage : Page, IDBContentAccessiblePage, INotifyPropertyChanged
     {
         public DBContentManager ContentManager { get; set; } = new();
+        public bool IsFirstTimeLoaded = true;
 
         public CancellationTokenSource GetReferencedCancellationTokenSource { get; set; } = new();
         public long FileReferenceCounter { get => ReferencedFileInfos.Count; }
@@ -48,10 +49,13 @@ namespace TagFind.Pages
                 {
                     _isGettingReferencedFileInfos = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsGettingReferencedFileInfos)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadyForPack)));
                 }
             }
         }
         private bool _isGettingReferencedFileInfos = false;
+
+        public bool IsReadyForPack => !IsGettingReferencedFileInfos && PackStorageFolder != null;
 
 
         public StorageFolder? PackStorageFolder
@@ -63,6 +67,7 @@ namespace TagFind.Pages
                 {
                     _packStorageFolder = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PackStorageFolder)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReadyForPack)));
                 }
             }
         }
@@ -71,8 +76,14 @@ namespace TagFind.Pages
         public ManageReferencedFilesPage()
         {
             InitializeComponent();
+            this.Loaded += ManageReferencedFilesPage_Loaded;
 
             this.DataContext = this;
+        }
+
+        private async void ManageReferencedFilesPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            await GetReferencedFileInfos();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -92,8 +103,6 @@ namespace TagFind.Pages
                     ContentManager = dBContentManagerParameter.DBContentManager;
                 }
             }
-
-            await GetReferencedFileInfos();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -113,33 +122,31 @@ namespace TagFind.Pages
 
             try
             {
-                await Task.Run(async () =>
+                await foreach (ReferencedFileInfo info in ContentManager.DataItemFastSearchGetAllReferencedFileInfos(GetReferencedCancellationTokenSource.Token))
                 {
-                    await foreach (ReferencedFileInfo info in ContentManager.DataItemFastSearchGetAllReferencedFileInfos(GetReferencedCancellationTokenSource.Token))
+                    ReferencedFileInfos.Add(info);
+                    bool exists = await Task.Run(() => File.Exists(info.Path));
+                    if (exists)
                     {
-                        ReferencedFileInfos.Add(info);
-                        if (File.Exists(info.Path))
-                        {
-                            ValidFileReferenceCounter++;
-                            FileInfo fileInfo = new FileInfo(info.Path);
-                            info.StorageSize = fileInfo.Length;
-                            string rawString = LocalizedString.GetLocalizedString("FileReferenceCountValueTextBlock/Text");
-                            string processedString = rawString.FormatLocalizedStringWithParameters(new Dictionary<string, object>()
+                        ValidFileReferenceCounter++;
+                        FileInfo fileInfo = new FileInfo(info.Path);
+                        info.StorageSize = await Task.Run(() => new FileInfo(info.Path).Length);
+                        string rawString = LocalizedString.GetLocalizedString("FileReferenceCountValueTextBlock/Text");
+                        string processedString = rawString.FormatLocalizedStringWithParameters(new Dictionary<string, object>()
                         {
                             { "valid_count", ValidFileReferenceCounter },
                             { "ref_count", FileReferenceCounter }
                         });
-                            DispatcherQueue.TryEnqueue(() =>
+                        DispatcherQueue.TryEnqueue(() =>
+                        {
+                            try
                             {
-                                try
-                                {
-                                    FileReferenceCountValueTextBlock.Text = processedString;
-                                }
-                                catch { }
-                            });
-                        }
+                                FileReferenceCountValueTextBlock.Text = processedString;
+                            }
+                            catch { }
+                        });
                     }
-                });
+                }
             }
             catch (OperationCanceledException)
             {
@@ -164,9 +171,64 @@ namespace TagFind.Pages
             }
         }
 
-        private void PackButton_Click(object sender, RoutedEventArgs e)
+        private async void PackButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            List<ReferencedFilePackStatusInfo> referencedFilePackStatusInfos = [];
+            if (PackStorageFolder is null)
+            {
+                // Selected folder does not exist.
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    PackStatusTextBlock.Text = LocalizedString.GetLocalizedString("Code/CS/Error_SelectedFolderNotExistsOrNoPermission");
+                });
+                return;
+            }
+            StorageFolder contentFolder = await PackStorageFolder.CreateFolderAsync("content", CreationCollisionOption.OpenIfExists);
+
+            foreach (ReferencedFileInfo info in ReferencedFileInfos)
+            {
+                ReferencedFilePackStatusInfo referencedFilePackStatusInfo = new()
+                {
+                    ReferencedFileInfo = info
+                };
+                referencedFilePackStatusInfos.Add(referencedFilePackStatusInfo);
+                if (File.Exists(info.Path))
+                {
+                    try
+                    {
+                        DispatcherQueue.TryEnqueue(() =>
+                        {
+                            string s = LocalizedString.GetLocalizedString("Code/CS/Copying_Value");
+                            PackStatusTextBlock.Text = s.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "value", info.Path } });
+                        });
+                        StorageFile storageFile = await StorageFile.GetFileFromPathAsync(info.Path);
+                        await storageFile.StorageWithPath(contentFolder);
+                        referencedFilePackStatusInfo.FileNavigationStatus = FileNavigationStatus.Succeeded;
+                    }
+                    catch (Exception ex)
+                    {
+                        referencedFilePackStatusInfo.FileNavigationStatus = FileNavigationStatus.Failed;
+                        referencedFilePackStatusInfo.Exception = ex.Message;
+                    }
+                }
+                else
+                {
+                    referencedFilePackStatusInfo.FileNavigationStatus = FileNavigationStatus.Failed;
+                    referencedFilePackStatusInfo.Exception = LocalizedString.GetLocalizedString("Code/CS/FileNotExistOrNoPermissionToAccess");
+                }
+            }
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                PackStatusTextBlock.Text = LocalizedString.GetLocalizedString("Code/CS/CopyFinished");
+            });
+
+            ShowFailedPackList(referencedFilePackStatusInfos);
+        }
+
+        public async void ShowFailedPackList(List<ReferencedFilePackStatusInfo> sourceList)
+        {
+            List<ReferencedFilePackStatusInfo> failedFilePackStatusInfos = sourceList.Where(x => x.FileNavigationStatus == FileNavigationStatus.Failed).ToList();
+            PackFailedInfoListView.ItemsSource = failedFilePackStatusInfos;
         }
     }
 }

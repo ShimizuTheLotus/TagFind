@@ -464,9 +464,6 @@
   <data name="ManageButton.Content" xml:space="preserve">
     <value>管理</value>
   </data>
-  <data name="AddAppBarButton.Label" xml:space="preserve">
-    <value>添加</value>
-  </data>
   <data name="FileReferenceCountTextBlock.Text" xml:space="preserve">
     <value>文件引用计数</value>
   </data>
@@ -482,9 +479,6 @@
   <data name="IncludePathMappingFilesCheckBox.Content" xml:space="preserve">
     <value>包含路径映射文件</value>
   </data>
-  <data name="PackPackPathTextBlockTextBlock.Text" xml:space="preserve">
-    <value>打包到</value>
-  </data>
   <data name="SelectPathButton.Content" xml:space="preserve">
     <value>选择路径</value>
   </data>
@@ -493,5 +487,26 @@
   </data>
   <data name="Code.CS.NotSelected" xml:space="preserve">
     <value>未选择</value>
+  </data>
+  <data name="AddAppBarButton.Label" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Code.CS.FileNotExistOrNoPermissionToAccess" xml:space="preserve">
+    <value>文件不存在或无权限</value>
+  </data>
+  <data name="Code.CS.Error_SelectedFolderNotExistsOrNoPermission" xml:space="preserve">
+    <value>错误：选定的文件夹不存在或无权访问</value>
+  </data>
+  <data name="Code.CS.Copying_Value" xml:space="preserve">
+    <value>正在复制 {value}</value>
+  </data>
+  <data name="PackPackPathTextBlockTextBlock.Text" xml:space="preserve">
+    <value>打包到</value>
+  </data>
+  <data name="Code.CS.CopyFinished" xml:space="preserve">
+    <value>复制完成</value>
+  </data>
+  <data name="Code.CS.FailedCopyString" xml:space="preserve">
+    <value>复制失败：{value}</value>
   </data>
 </root>

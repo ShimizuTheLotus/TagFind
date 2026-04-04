@@ -12,6 +12,7 @@
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converter:StorageFolderToPathConverter x:Key="StorageFolderToPathConverter"/>
         <converter:NullableToBoolConverter x:Key="NullableToBoolConverter"/>
+        <converter:StringToFailedCopyStringConverter x:Key="StringToFailedCopyStringConverter"/>
     </Page.Resources>
     <Grid Margin="0 48 0 0">
         <StackPanel Margin="8 0 8 0">
@@ -21,13 +22,21 @@
                 <ProgressRing x:Name="FileReferenceCountProgressRing" IsActive="True" Margin="8 0 0 0" Visibility="{Binding IsGettingReferencedFileInfos, Converter={StaticResource BooleanToVisibilityConverter}}" Height="32" Width="32" />
             </StackPanel>
             <TextBlock x:Uid="ManageReferencedFilesTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 16 0 0"/>
-            <Expander x:Uid="PackOptionsExpander" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+            <Expander x:Uid="PackOptionsExpander" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Visibility="Collapsed">
                 <CheckBox x:Uid="IncludePathMappingFilesCheckBox" IsChecked="True"/>
             </Expander>
             <TextBlock x:Uid="PackPathTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
             <TextBlock x:Name="PackPathValueTextBlock" Text="{Binding PackStorageFolder, Converter={StaticResource StorageFolderToPathConverter}}"/>
             <Button x:Name="SelectPackPathPathButton" x:Uid="SelectPathButton" Click="SelectPackPathPathButton_Click"/>
-            <Button x:Name="PackButton" x:Uid="PackButton" Click="PackButton_Click" IsEnabled="{Binding PackStorageFolder, Converter={StaticResource NullableToBoolConverter}}"/>
+            <Button x:Name="PackButton" x:Uid="PackButton" Click="PackButton_Click" IsEnabled="{Binding IsReadyForPack}"/>
+            <TextBlock x:Name="PackStatusTextBlock"/>
+            <ListView x:Name="PackFailedInfoListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <InfoBar IsOpen="True" Severity="Warning" Title="{Binding ReferencedFileInfo.Path, Converter={StaticResource StringToFailedCopyStringConverter}}" Message="{Binding Exception}"></InfoBar>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
     </Grid>
 </Page>

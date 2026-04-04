@@ -464,9 +464,6 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="ManageButton.Content" xml:space="preserve">
     <value>Manage</value>
   </data>
-  <data name="AddAppBarButton.Label" xml:space="preserve">
-    <value>Add</value>
-  </data>
   <data name="FileReferenceCountTextBlock.Text" xml:space="preserve">
     <value>File Reference Count</value>
   </data>
@@ -490,5 +487,23 @@ Tips: If different things has same name, we recommend separate them into differe
   </data>
   <data name="Code.CS.NotSelected" xml:space="preserve">
     <value>Not selected</value>
+  </data>
+  <data name="AddAppBarButton.Label" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Code.CS.FileNotExistOrNoPermissionToAccess" xml:space="preserve">
+    <value>File not exist or no permission.</value>
+  </data>
+  <data name="Code.CS.Error_SelectedFolderNotExistsOrNoPermission" xml:space="preserve">
+    <value>Error: selected folder not exists or no permission</value>
+  </data>
+  <data name="Code.CS.Copying_Value" xml:space="preserve">
+    <value>Copying {value}</value>
+  </data>
+  <data name="Code.CS.CopyFinished" xml:space="preserve">
+    <value>Copy finished</value>
+  </data>
+  <data name="Code.CS.FailedCopyString" xml:space="preserve">
+    <value>Failed to copy: {value}</value>
   </data>
 </root>
