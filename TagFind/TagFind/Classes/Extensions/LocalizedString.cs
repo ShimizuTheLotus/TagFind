@@ -21,6 +21,13 @@ namespace TagFind.Classes.Extensions
             }
         }
 
+        /// <summary>
+        /// Replace placeholders to values.
+        /// Use like s = s.FormatLocalizedStringWithParameters(), not s.FormatLocalizedStringWithParameters(), which can't change its value.
+        /// </summary>
+        /// <param name="originalString">Input string</param>
+        /// <param name="parameters">Placeholder and parameters.</param>
+        /// <returns></returns>
         public static string FormatLocalizedStringWithParameters(this string originalString, Dictionary<string, object> parameters)
         {
             foreach (var parameter in parameters)

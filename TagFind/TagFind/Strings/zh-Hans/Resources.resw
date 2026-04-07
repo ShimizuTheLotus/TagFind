@@ -500,9 +500,6 @@
   <data name="Code.CS.Copying_Value" xml:space="preserve">
     <value>正在复制 {value}</value>
   </data>
-  <data name="PackPackPathTextBlockTextBlock.Text" xml:space="preserve">
-    <value>打包到</value>
-  </data>
   <data name="Code.CS.CopyFinished" xml:space="preserve">
     <value>复制完成</value>
   </data>
@@ -511,5 +508,23 @@
   </data>
   <data name="Code.CS.ValueWarnings" xml:space="preserve">
     <value>{value} 个警告</value>
+  </data>
+  <data name="RestoreReferencedFileFromPathTextBlock.Text" xml:space="preserve">
+    <value>从文件还原引用的文件</value>
+  </data>
+  <data name="PackToTextBlock.Text" xml:space="preserve">
+    <value>打包到</value>
+  </data>
+  <data name="DataSourcePathTextBlock.Text" xml:space="preserve">
+    <value>数据源</value>
+  </data>
+  <data name="Code.CS.NoPath" xml:space="preserve">
+    <value>无路径</value>
+  </data>
+  <data name="SelectFromFileButton.Content" xml:space="preserve">
+    <value>从文件选择</value>
+  </data>
+  <data name="SelectFromFolderButton.Content" xml:space="preserve">
+    <value>从文件夹选择</value>
   </data>
 </root>

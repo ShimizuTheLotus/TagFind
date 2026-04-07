@@ -9,7 +9,7 @@ using Windows.Storage;
 
 namespace TagFind.Classes.XAMLDataConverters
 {
-    public class StorageFolderToPathConverter : IValueConverter
+    public class StorageFolderToPathStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

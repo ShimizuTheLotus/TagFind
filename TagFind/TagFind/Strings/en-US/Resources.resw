@@ -509,4 +509,22 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Code.CS.ValueWarnings" xml:space="preserve">
     <value>{value} warnings</value>
   </data>
+  <data name="RestoreReferencedFileFromPathTextBlock.Text" xml:space="preserve">
+    <value>Restore Referenced File From Path</value>
+  </data>
+  <data name="PackToTextBlock.Text" xml:space="preserve">
+    <value>Pack To</value>
+  </data>
+  <data name="DataSourcePathTextBlock.Text" xml:space="preserve">
+    <value>Data Source</value>
+  </data>
+  <data name="Code.CS.NoPath" xml:space="preserve">
+    <value>No path</value>
+  </data>
+  <data name="SelectFromFileButton.Content" xml:space="preserve">
+    <value>Select from file</value>
+  </data>
+  <data name="SelectFromFolderButton.Content" xml:space="preserve">
+    <value>Select from folder</value>
+  </data>
 </root>

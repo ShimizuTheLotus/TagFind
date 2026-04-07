@@ -83,6 +83,17 @@ namespace TagFind.Pages
         }
         private StorageFolder? _packStorageFolder = null;
 
+        public T_StorageItem RestoreDataSource
+        {
+            get => _restoreDataSource;
+            set
+            {
+                _restoreDataSource = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RestoreDataSource)));
+            }
+        }
+        private T_StorageItem _restoreDataSource = new();
+
         public ManageReferencedFilesPage()
         {
             InitializeComponent();
@@ -239,6 +250,42 @@ namespace TagFind.Pages
         {
             FailedFilePackStatusInfos = sourceList.Where(x => x.FileNavigationStatus == FileNavigationStatus.Failed).ToList();
             PackFailedInfoListView.ItemsSource = FailedFilePackStatusInfos;
+        }
+
+        private async void DataSourceFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Microsoft.UI.Xaml.Window();
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+            Microsoft.Windows.Storage.Pickers.FileOpenPicker filePicker = new(windowId);
+            var result = await filePicker.PickSingleFileAsync();
+            window.Close();
+            if (result != null)
+            {
+                RestoreDataSource = new(await StorageFile.GetFileFromPathAsync(result.Path));
+            }
+        }
+
+        private async void DataSourceFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Microsoft.UI.Xaml.Window();
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+            Microsoft.Windows.Storage.Pickers.FolderPicker folderPicker = new(windowId);
+            var result = await folderPicker.PickSingleFolderAsync();
+            window.Close();
+            if (result != null)
+            {
+                RestoreDataSource = new(await StorageFolder.GetFolderFromPathAsync(result.Path));
+            }
+        }
+
+        private void DataSourcePathHelperTextHyperLinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is FrameworkElement frameworkElement)
+            {
+                frameworkElement.ShowHelperText("Code/CS/ValueWarnings", new() { { "value", 1 } });
+            }
         }
     }
 }
