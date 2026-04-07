@@ -506,4 +506,7 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Code.CS.FailedCopyString" xml:space="preserve">
     <value>Failed to copy: {value}</value>
   </data>
+  <data name="Code.CS.ValueWarnings" xml:space="preserve">
+    <value>{value} warnings</value>
+  </data>
 </root>

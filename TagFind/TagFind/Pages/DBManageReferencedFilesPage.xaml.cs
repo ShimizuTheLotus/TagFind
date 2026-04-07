@@ -54,6 +54,16 @@ namespace TagFind.Pages
             }
         }
         private bool _isGettingReferencedFileInfos = false;
+        public List<ReferencedFilePackStatusInfo> FailedFilePackStatusInfos
+        {
+            get => _failedFilePackStatusInfos;
+            set
+            {
+                _failedFilePackStatusInfos = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FailedFilePackStatusInfos)));
+            }
+        }
+        private List<ReferencedFilePackStatusInfo> _failedFilePackStatusInfos = [];
 
         public bool IsReadyForPack => !IsGettingReferencedFileInfos && PackStorageFolder != null;
 
@@ -227,8 +237,8 @@ namespace TagFind.Pages
 
         public async void ShowFailedPackList(List<ReferencedFilePackStatusInfo> sourceList)
         {
-            List<ReferencedFilePackStatusInfo> failedFilePackStatusInfos = sourceList.Where(x => x.FileNavigationStatus == FileNavigationStatus.Failed).ToList();
-            PackFailedInfoListView.ItemsSource = failedFilePackStatusInfos;
+            FailedFilePackStatusInfos = sourceList.Where(x => x.FileNavigationStatus == FileNavigationStatus.Failed).ToList();
+            PackFailedInfoListView.ItemsSource = FailedFilePackStatusInfos;
         }
     }
 }
