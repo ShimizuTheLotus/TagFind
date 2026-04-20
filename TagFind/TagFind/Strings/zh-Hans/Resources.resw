@@ -545,7 +545,7 @@
   <data name="ImportAbsentFilesOnlyRadioButton.Content" xml:space="preserve">
     <value>仅导入缺失的文件</value>
   </data>
-  <data name="FileImportOptionsTextBlock.Text" xml:space="preserve">
+  <data name="FileImportOptionTextBlock.Text" xml:space="preserve">
     <value>文件导入选项</value>
   </data>
   <data name="ImportModeTextBlock.Text" xml:space="preserve">
@@ -565,5 +565,8 @@
   </data>
   <data name="UserDecideRadioButton.Content" xml:space="preserve">
     <value>用户抉择</value>
+  </data>
+  <data name="ImportButton.Content" xml:space="preserve">
+    <value>导入</value>
   </data>
 </root>

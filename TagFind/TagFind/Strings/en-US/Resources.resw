@@ -542,8 +542,8 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="ImportAbsentFilesOnlyRadioButton.Content" xml:space="preserve">
     <value>Import absent files only</value>
   </data>
-  <data name="FileImportOptionsTextBlock.Text" xml:space="preserve">
-    <value>File Import Options</value>
+  <data name="FileImportOptionTextBlock.Text" xml:space="preserve">
+    <value>File Import Option</value>
   </data>
   <data name="ImportModeTextBlock.Text" xml:space="preserve">
     <value>Restore Mode</value>
@@ -562,5 +562,8 @@ Tips: If different things has same name, we recommend separate them into differe
   </data>
   <data name="UserDecideRadioButton.Content" xml:space="preserve">
     <value>User decide</value>
+  </data>
+  <data name="ImportButton.Content" xml:space="preserve">
+    <value>Import</value>
   </data>
 </root>

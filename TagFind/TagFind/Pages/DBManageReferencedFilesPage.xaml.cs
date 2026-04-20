@@ -67,7 +67,6 @@ namespace TagFind.Pages
 
         public bool IsReadyForPack => !IsGettingReferencedFileInfos && PackStorageFolder != null;
 
-
         public StorageFolder? PackStorageFolder
         {
             get => _packStorageFolder;
@@ -83,16 +82,77 @@ namespace TagFind.Pages
         }
         private StorageFolder? _packStorageFolder = null;
 
-        public T_StorageItem RestoreDataSource
+        public T_StorageItem ImportDataSource
         {
-            get => _restoreDataSource;
+            get => _importDataSource;
             set
             {
-                _restoreDataSource = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RestoreDataSource)));
+                _importDataSource = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImportDataSource)));
             }
         }
-        private T_StorageItem _restoreDataSource = new();
+        private T_StorageItem _importDataSource = new();
+
+
+        private enum ImportMode
+        {
+            ImportAllFiles,
+            mportAbsentFilesOnly,
+            NotSelected
+        }
+        private enum FileImportOption
+        {
+            OriginalPath,
+            MigratePath,
+            NotSelected
+        }
+        private enum ConflictPreference
+        {
+            Skip,
+            Replace,
+            UserDecide,
+            NotSelected
+        }
+        private ImportMode importMode
+        {
+            get => _importMode;
+            set
+            {
+                if (value != _importMode)
+                {
+                    _importMode = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(importMode)));
+                }
+            }
+        }
+        private ImportMode _importMode = ImportMode.NotSelected;
+
+        private FileImportOption fileImportOption
+        {
+            get => _fileImportOption;
+            set
+            {
+                if (value != _fileImportOption)
+                {
+                    _fileImportOption = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(fileImportOption)));
+                }
+            }
+        }
+        private FileImportOption _fileImportOption = FileImportOption.NotSelected;
+        private ConflictPreference conflictPreference
+        {
+            get => _conflictPreference;
+            set
+            {
+                if (value != _conflictPreference)
+                {
+                    _conflictPreference = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(conflictPreference)));
+                }
+            }
+        }
+        private ConflictPreference _conflictPreference = ConflictPreference.NotSelected;
 
         public ManageReferencedFilesPage()
         {
@@ -262,7 +322,7 @@ namespace TagFind.Pages
             window.Close();
             if (result != null)
             {
-                RestoreDataSource = new(await StorageFile.GetFileFromPathAsync(result.Path));
+                ImportDataSource = new(await StorageFile.GetFileFromPathAsync(result.Path));
             }
         }
 
@@ -276,7 +336,7 @@ namespace TagFind.Pages
             window.Close();
             if (result != null)
             {
-                RestoreDataSource = new(await StorageFolder.GetFolderFromPathAsync(result.Path));
+                ImportDataSource = new(await StorageFolder.GetFolderFromPathAsync(result.Path));
             }
         }
 
@@ -284,51 +344,61 @@ namespace TagFind.Pages
         {
             if (sender is FrameworkElement frameworkElement)
             {
-                frameworkElement.ShowHelperText("Code/CS/HelperText/ImportFileDataSourcePath", new() { { "value", 1 } });
+                frameworkElement.ShowHelperText("Code/CS/HelperText/ImportFileDataSourcePath");
             }
-        }
-
-        private void ImportAllFilesRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ImportAbsentFilesOnlyRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void OriginalPathRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MigratePathRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void ConflictPreferenceHelperTextHyperLinkButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is FrameworkElement frameworkElement)
             {
-                frameworkElement.ShowHelperText("Code/CS/HelperText/ConflictPreference", new() { { "value", 1 } });
+                frameworkElement.ShowHelperText("Code/CS/HelperText/ConflictPreference");
             }
         }
 
-        private void SkipRadioButton_Checked(object sender, RoutedEventArgs e)
+        private void ImportModeRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (sender is RadioButtons radioButtons)
+            {
+                RadioButton? selectedRadioButton = radioButtons.SelectedItem as RadioButton;
+                if (selectedRadioButton != null)
+                {
+                    if (Enum.TryParse<ImportMode>(selectedRadioButton.Tag.ToString(), out ImportMode selection))
+                    {
+                        importMode = selection;
+                    }
+                }
+            }
         }
 
-        private void ReplaceRadioButton_Checked(object sender, RoutedEventArgs e)
+        private void FileImportOptionRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (sender is RadioButtons radioButtons)
+            {
+                RadioButton? selectedRadioButton = radioButtons.SelectedItem as RadioButton;
+                if (selectedRadioButton != null)
+                {
+                    if (Enum.TryParse<FileImportOption>(selectedRadioButton.Tag.ToString(), out FileImportOption selection))
+                    {
+                        fileImportOption = selection;
+                    }
+                }
+            }
         }
 
-        private void UserDecideRadioButton_Checked(object sender, RoutedEventArgs e)
+        private void ConflictPreferenceRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (sender is RadioButtons radioButtons)
+            {
+                RadioButton? selectedRadioButton = radioButtons.SelectedItem as RadioButton;
+                if (selectedRadioButton != null)
+                {
+                    if (Enum.TryParse<ConflictPreference>(selectedRadioButton.Tag.ToString(), out ConflictPreference selection))
+                    {
+                        conflictPreference = selection;
+                    }
+                }
+            }
         }
     }
 }
