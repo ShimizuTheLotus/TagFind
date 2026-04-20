@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -94,26 +95,37 @@ namespace TagFind.Pages
         private T_StorageItem _importDataSource = new();
 
 
-        private enum ImportMode
+        public bool ImportFieldRequiredFieldWarningTextBlockShowTrigger
+        {
+            get => _importFieldRequiredFieldWarningTextBlockShowTrigger;
+            set
+            {
+                if (_importFieldRequiredFieldWarningTextBlockShowTrigger != value)
+                {
+                    _importFieldRequiredFieldWarningTextBlockShowTrigger = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImportFieldRequiredFieldWarningTextBlockShowTrigger)));
+                }
+            }
+        }
+        public bool _importFieldRequiredFieldWarningTextBlockShowTrigger = false;
+        public enum ImportModeEnum
         {
             ImportAllFiles,
-            mportAbsentFilesOnly,
-            NotSelected
+            mportAbsentFilesOnly
         }
-        private enum FileImportOption
+        public enum FileImportOptionEnum
         {
             OriginalPath,
-            MigratePath,
-            NotSelected
+            MigratePath
         }
-        private enum ConflictPreference
+        public enum ConflictPreferenceEnum
         {
             Skip,
             Replace,
-            UserDecide,
-            NotSelected
+            UserDecide
         }
-        private ImportMode importMode
+
+        public ImportModeEnum? ImportMode
         {
             get => _importMode;
             set
@@ -121,13 +133,14 @@ namespace TagFind.Pages
                 if (value != _importMode)
                 {
                     _importMode = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(importMode)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImportMode)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AllowImport)));
                 }
             }
         }
-        private ImportMode _importMode = ImportMode.NotSelected;
+        private ImportModeEnum? _importMode = null;
 
-        private FileImportOption fileImportOption
+        public FileImportOptionEnum? FileImportOption
         {
             get => _fileImportOption;
             set
@@ -135,12 +148,13 @@ namespace TagFind.Pages
                 if (value != _fileImportOption)
                 {
                     _fileImportOption = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(fileImportOption)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileImportOption)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AllowImport)));
                 }
             }
         }
-        private FileImportOption _fileImportOption = FileImportOption.NotSelected;
-        private ConflictPreference conflictPreference
+        private FileImportOptionEnum? _fileImportOption = null;
+        public ConflictPreferenceEnum? ConflictPreference
         {
             get => _conflictPreference;
             set
@@ -148,11 +162,31 @@ namespace TagFind.Pages
                 if (value != _conflictPreference)
                 {
                     _conflictPreference = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(conflictPreference)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ConflictPreference)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AllowImport)));
                 }
             }
         }
-        private ConflictPreference _conflictPreference = ConflictPreference.NotSelected;
+        private ConflictPreferenceEnum? _conflictPreference = null;
+        public bool AllowImport
+        {
+            get
+            {
+                if (ImportMode == null)
+                {
+                    return false;
+                }
+                if (FileImportOption == null)
+                {
+                    return false;
+                }
+                if (ConflictPreference == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
 
         public ManageReferencedFilesPage()
         {
@@ -363,9 +397,9 @@ namespace TagFind.Pages
                 RadioButton? selectedRadioButton = radioButtons.SelectedItem as RadioButton;
                 if (selectedRadioButton != null)
                 {
-                    if (Enum.TryParse<ImportMode>(selectedRadioButton.Tag.ToString(), out ImportMode selection))
+                    if (Enum.TryParse<ImportModeEnum>(selectedRadioButton.Tag.ToString(), out ImportModeEnum selection))
                     {
-                        importMode = selection;
+                        ImportMode = selection;
                     }
                 }
             }
@@ -378,9 +412,9 @@ namespace TagFind.Pages
                 RadioButton? selectedRadioButton = radioButtons.SelectedItem as RadioButton;
                 if (selectedRadioButton != null)
                 {
-                    if (Enum.TryParse<FileImportOption>(selectedRadioButton.Tag.ToString(), out FileImportOption selection))
+                    if (Enum.TryParse<FileImportOptionEnum>(selectedRadioButton.Tag.ToString(), out FileImportOptionEnum selection))
                     {
-                        fileImportOption = selection;
+                        FileImportOption = selection;
                     }
                 }
             }
@@ -393,12 +427,22 @@ namespace TagFind.Pages
                 RadioButton? selectedRadioButton = radioButtons.SelectedItem as RadioButton;
                 if (selectedRadioButton != null)
                 {
-                    if (Enum.TryParse<ConflictPreference>(selectedRadioButton.Tag.ToString(), out ConflictPreference selection))
+                    if (Enum.TryParse<ConflictPreferenceEnum>(selectedRadioButton.Tag.ToString(), out ConflictPreferenceEnum selection))
                     {
-                        conflictPreference = selection;
+                        ConflictPreference = selection;
                     }
                 }
             }
+        }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckOptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ImportFieldRequiredFieldWarningTextBlockShowTrigger = true;
         }
     }
 }

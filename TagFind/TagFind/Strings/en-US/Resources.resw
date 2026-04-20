@@ -566,4 +566,10 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="ImportButton.Content" xml:space="preserve">
     <value>Import</value>
   </data>
+  <data name="ThisFieldIsRequiredTextBlock.Text" xml:space="preserve">
+    <value>This field is required.</value>
+  </data>
+  <data name="CheckOptionsButton.Content" xml:space="preserve">
+    <value>Check Options</value>
+  </data>
 </root>

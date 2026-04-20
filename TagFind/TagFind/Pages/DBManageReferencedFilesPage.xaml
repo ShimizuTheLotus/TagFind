@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:TagFind.Classes.XAMLDataConverters"
+    xmlns:ui="using:TagFind.UI"
     mc:Ignorable="d">
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -54,28 +55,41 @@
                     <Button x:Name="DataSourceFileButton" x:Uid="SelectFromFileButton" Click="DataSourceFileButton_Click"/>
                     <Button x:Name="DataSourceFolderButton" x:Uid="SelectFromFolderButton" Click="DataSourceFolderButton_Click"/>
                 </StackPanel>
-                <TextBlock x:Uid="ImportModeTextBlock" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 8 0 0"/>
+                <StackPanel>
+                    <TextBlock x:Uid="ImportModeTextBlock" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 8 0 0"/>
+                    <ui:RequiredFieldWarningTextBlock ShowTrigger="{Binding ImportFieldRequiredFieldWarningTextBlockShowTrigger}"
+                                                  FieldValue="{Binding ImportMode}"/>
+                </StackPanel>
                 <RadioButtons x:Name="ImportModeRadioButtons" SelectionChanged="ImportModeRadioButtons_SelectionChanged">
                     <RadioButton x:Uid="ImportAllFilesRadioButton" Tag="ImportAllFiles"/>
                     <RadioButton x:Uid="ImportAbsentFilesOnlyRadioButton" Tag="mportAbsentFilesOnly"/>
                 </RadioButtons>
-                <TextBlock x:Uid="FileImportOptionTextBlock" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 8 0 0"/>
+                <StackPanel>
+                    <TextBlock x:Uid="FileImportOptionTextBlock" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 8 0 0"/>
+                    <ui:RequiredFieldWarningTextBlock ShowTrigger="{Binding ImportFieldRequiredFieldWarningTextBlockShowTrigger}"
+                                                  FieldValue="{Binding FileImportOption}"/>
+                </StackPanel>
                 <RadioButtons x:Name="FileImportOptionRadioButtons" SelectionChanged="FileImportOptionRadioButtons_SelectionChanged">
                     <RadioButton x:Uid="OriginalPathRadioButton" Tag="OriginalPath"/>
                     <RadioButton x:Uid="MigratePathRadioButton" Tag="MigratePath"/>
                 </RadioButtons>
-                <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
-                    <TextBlock x:Uid="ConflictPreferenceTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                    <HyperlinkButton x:Name="ConflictPreferenceHelperTextHyperLinkButton" Click="ConflictPreferenceHelperTextHyperLinkButton_Click" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}" Height="32" Width="32" Padding="-8">
-                        <FontIcon Glyph="&#xE946;" FontWeight="Bold" FontSize="16" HorizontalAlignment="Stretch"/>
-                    </HyperlinkButton>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
+                        <TextBlock x:Uid="ConflictPreferenceTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        <HyperlinkButton x:Name="ConflictPreferenceHelperTextHyperLinkButton" Click="ConflictPreferenceHelperTextHyperLinkButton_Click" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}" Height="32" Width="32" Padding="-8">
+                            <FontIcon Glyph="&#xE946;" FontWeight="Bold" FontSize="16" HorizontalAlignment="Stretch"/>
+                        </HyperlinkButton>
+                    </StackPanel>
+                    <ui:RequiredFieldWarningTextBlock ShowTrigger="{Binding ImportFieldRequiredFieldWarningTextBlockShowTrigger}"
+                                                  FieldValue="{Binding ConflictPreference}"/>
                 </StackPanel>
                 <RadioButtons x:Name="ConflictPreferenceRadioButtons" SelectionChanged="ConflictPreferenceRadioButtons_SelectionChanged">
                     <RadioButton x:Uid="SkipRadioButton" Tag="Skip"/>
                     <RadioButton x:Uid="ReplaceRadioButton" Tag="Replace"/>
                     <RadioButton x:Uid="UserDecideRadioButton" Tag="UserDecide"/>
                 </RadioButtons>
-                <Button x:Name="ImportButton" x:Uid="ImportButton" Click="ImportButton_Click"/>
+                <Button x:Name="CheckOptionsButton" x:Uid="CheckOptionsButton"  Click="CheckOptionsButton_Click"/>
+                <Button x:Name="ImportButton" x:Uid="ImportButton" Click="ImportButton_Click" IsEnabled="{Binding AllowImport}"/>
             </StackPanel>
         </ScrollView>
     </Grid>

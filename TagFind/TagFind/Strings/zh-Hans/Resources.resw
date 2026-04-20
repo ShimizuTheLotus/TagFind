@@ -569,4 +569,10 @@
   <data name="ImportButton.Content" xml:space="preserve">
     <value>导入</value>
   </data>
+  <data name="ThisFieldIsRequiredTextBlock.Text" xml:space="preserve">
+    <value>该选项必填。</value>
+  </data>
+  <data name="CheckOptionsButton.Content" xml:space="preserve">
+    <value>检查选项</value>
+  </data>
 </root>
