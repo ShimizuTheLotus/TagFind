@@ -509,8 +509,8 @@
   <data name="Code.CS.ValueWarnings" xml:space="preserve">
     <value>{value} 个警告</value>
   </data>
-  <data name="RestoreReferencedFileFromPathTextBlock.Text" xml:space="preserve">
-    <value>从文件还原引用的文件</value>
+  <data name="ImportReferencedFileFromPathTextBlock.Text" xml:space="preserve">
+    <value>从文件导入引用的文件</value>
   </data>
   <data name="PackToTextBlock.Text" xml:space="preserve">
     <value>打包到</value>
@@ -526,5 +526,44 @@
   </data>
   <data name="SelectFromFolderButton.Content" xml:space="preserve">
     <value>从文件夹选择</value>
+  </data>
+  <data name="Code.CS.HelperText.ImportFileDataSourcePath" xml:space="preserve">
+    <value>选择文件导入源，它可以是文件夹或者本软件创建的压缩文件。文件夹需要包含一个名为content的一级文件夹。</value>
+  </data>
+  <data name="ImportModeTextBlockModeTextBlock.Text" xml:space="preserve">
+    <value>还原模式</value>
+  </data>
+  <data name="OriginalPathRadioButton.Content" xml:space="preserve">
+    <value>原路径</value>
+  </data>
+  <data name="MigratePathRadioButton.Content" xml:space="preserve">
+    <value>迁移路径</value>
+  </data>
+  <data name="ImportAllFilesRadioButton.Content" xml:space="preserve">
+    <value>导入所有文件</value>
+  </data>
+  <data name="ImportAbsentFilesOnlyRadioButton.Content" xml:space="preserve">
+    <value>仅导入缺失的文件</value>
+  </data>
+  <data name="FileImportOptionsTextBlock.Text" xml:space="preserve">
+    <value>文件导入选项</value>
+  </data>
+  <data name="ImportModeTextBlock.Text" xml:space="preserve">
+    <value>导入模式</value>
+  </data>
+  <data name="ConflictPreferenceTextBlock.Text" xml:space="preserve">
+    <value>冲突偏好</value>
+  </data>
+  <data name="Code.CS.HelperText.ConflictPreference" xml:space="preserve">
+    <value>导入时遇到已存在文件的默认冲突处理方式。</value>
+  </data>
+  <data name="SkipRadioButton.Content" xml:space="preserve">
+    <value>跳过</value>
+  </data>
+  <data name="ReplaceRadioButton.Content" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="UserDecideRadioButton.Content" xml:space="preserve">
+    <value>用户抉择</value>
   </data>
 </root>

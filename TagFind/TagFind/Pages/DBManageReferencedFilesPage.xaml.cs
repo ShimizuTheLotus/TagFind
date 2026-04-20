@@ -284,8 +284,51 @@ namespace TagFind.Pages
         {
             if (sender is FrameworkElement frameworkElement)
             {
-                frameworkElement.ShowHelperText("Code/CS/ValueWarnings", new() { { "value", 1 } });
+                frameworkElement.ShowHelperText("Code/CS/HelperText/ImportFileDataSourcePath", new() { { "value", 1 } });
             }
+        }
+
+        private void ImportAllFilesRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ImportAbsentFilesOnlyRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OriginalPathRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MigratePathRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ConflictPreferenceHelperTextHyperLinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is FrameworkElement frameworkElement)
+            {
+                frameworkElement.ShowHelperText("Code/CS/HelperText/ConflictPreference", new() { { "value", 1 } });
+            }
+        }
+
+        private void SkipRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ReplaceRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UserDecideRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

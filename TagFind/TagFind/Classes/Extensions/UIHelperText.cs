@@ -21,6 +21,8 @@ namespace TagFind.Classes.Extensions
                 s = s.FormatLocalizedStringWithParameters(parameters);
             }
             textBlock.Text = s;
+            textBlock.MaxWidth = 320;
+            textBlock.TextWrapping = TextWrapping.WrapWholeWords;
             flyout.Content = textBlock;
             flyout.ShowAt(FrameworkElement);
         }

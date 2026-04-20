@@ -509,7 +509,7 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Code.CS.ValueWarnings" xml:space="preserve">
     <value>{value} warnings</value>
   </data>
-  <data name="RestoreReferencedFileFromPathTextBlock.Text" xml:space="preserve">
+  <data name="ImportReferencedFileFromPathTextBlock.Text" xml:space="preserve">
     <value>Restore Referenced File From Path</value>
   </data>
   <data name="PackToTextBlock.Text" xml:space="preserve">
@@ -526,5 +526,41 @@ Tips: If different things has same name, we recommend separate them into differe
   </data>
   <data name="SelectFromFolderButton.Content" xml:space="preserve">
     <value>Select from folder</value>
+  </data>
+  <data name="Code.CS.HelperText.ImportFileDataSourcePath" xml:space="preserve">
+    <value>Select file import source which can be a folder, or a compressed file created by this program. The folder should have a subfolder named content.</value>
+  </data>
+  <data name="OriginalPathRadioButton.Content" xml:space="preserve">
+    <value>Original path</value>
+  </data>
+  <data name="MigratePathRadioButton.Content" xml:space="preserve">
+    <value>Migrate path</value>
+  </data>
+  <data name="ImportAllFilesRadioButton.Content" xml:space="preserve">
+    <value>Import all files</value>
+  </data>
+  <data name="ImportAbsentFilesOnlyRadioButton.Content" xml:space="preserve">
+    <value>Import absent files only</value>
+  </data>
+  <data name="FileImportOptionsTextBlock.Text" xml:space="preserve">
+    <value>File Import Options</value>
+  </data>
+  <data name="ImportModeTextBlock.Text" xml:space="preserve">
+    <value>Restore Mode</value>
+  </data>
+  <data name="ConflictPreferenceTextBlock.Text" xml:space="preserve">
+    <value>Conflict Preference</value>
+  </data>
+  <data name="Code.CS.HelperText.ConflictPreference" xml:space="preserve">
+    <value>The default way to manage conflict when importing meets a file already exists.</value>
+  </data>
+  <data name="SkipRadioButton.Content" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="ReplaceRadioButton.Content" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="UserDecideRadioButton.Content" xml:space="preserve">
+    <value>User decide</value>
   </data>
 </root>

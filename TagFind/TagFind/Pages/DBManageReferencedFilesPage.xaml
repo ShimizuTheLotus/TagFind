@@ -17,42 +17,65 @@
         <converter:T_StorageItemToPathStringConverter x:Key="T_StorageItemToPathStringConverter"/>
     </Page.Resources>
     <Grid Margin="0 48 0 0">
-        <StackPanel Margin="8 0 8 0">
-            <TextBlock x:Uid="FileReferenceCountTextBlock" Style="{StaticResource TitleTextBlockStyle}"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="FileReferenceCountValueTextBlock" Style="{StaticResource BodyLargeStrongTextBlockStyle}" VerticalAlignment="Center"/>
-                <ProgressRing x:Name="FileReferenceCountProgressRing" IsActive="True" Margin="8 0 0 0" Visibility="{Binding IsGettingReferencedFileInfos, Converter={StaticResource BooleanToVisibilityConverter}}" Height="32" Width="32" />
+        <ScrollView>
+            <StackPanel Margin="8 0 8 32">
+                <TextBlock x:Uid="FileReferenceCountTextBlock" Style="{StaticResource TitleTextBlockStyle}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="FileReferenceCountValueTextBlock" Style="{StaticResource BodyLargeStrongTextBlockStyle}" VerticalAlignment="Center"  Margin="0 8 0 0"/>
+                    <ProgressRing x:Name="FileReferenceCountProgressRing" IsActive="True" Margin="8 0 0 0" Visibility="{Binding IsGettingReferencedFileInfos, Converter={StaticResource BooleanToVisibilityConverter}}" Height="32" Width="32" />
+                </StackPanel>
+                <TextBlock x:Uid="ManageReferencedFilesTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 16 0 0"/>
+                <Expander x:Uid="PackOptionsExpander" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Visibility="Collapsed">
+                    <CheckBox x:Uid="IncludePathMappingFilesCheckBox" IsChecked="True"/>
+                </Expander>
+                <TextBlock x:Uid="PackPathTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"  Margin="0 8 0 0"/>
+                <TextBlock x:Name="PackPathValueTextBlock" Text="{Binding PackStorageFolder, Converter={StaticResource StorageFolderToPathStringConverter}}"/>
+                <Button x:Name="SelectPackPathPathButton" x:Uid="SelectPathButton" Click="SelectPackPathPathButton_Click"/>
+                <Button x:Name="PackButton" x:Uid="PackButton" Click="PackButton_Click" IsEnabled="{Binding IsReadyForPack}"/>
+                <TextBlock x:Name="PackStatusTextBlock"/>
+                <Expander Header="{Binding FailedFilePackStatusInfos.Count, Converter={StaticResource Int32ToValueWarningStringConverter}}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <ListView x:Name="PackFailedInfoListView">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <InfoBar IsOpen="True" Severity="Warning" Title="{Binding ReferencedFileInfo.Path, Converter={StaticResource StringToFailedCopyStringConverter}}" Message="{Binding Exception}"></InfoBar>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
+                <TextBlock x:Uid="ImportReferencedFileFromPathTextBlock" Style="{StaticResource TitleTextBlockStyle}"/>
+                <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
+                    <TextBlock x:Uid="DataSourcePathTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <HyperlinkButton x:Name="DataSourcePathHelperTextHyperLinkButton" Click="DataSourcePathHelperTextHyperLinkButton_Click" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}" Height="32" Width="32" Padding="-8">
+                        <FontIcon Glyph="&#xE946;" FontWeight="Bold" FontSize="16" HorizontalAlignment="Stretch"/>
+                    </HyperlinkButton>
+                </StackPanel>
+                <TextBlock Text="{Binding RestoreDataSource, Converter={StaticResource T_StorageItemToPathStringConverter}}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="DataSourceFileButton" x:Uid="SelectFromFileButton" Click="DataSourceFileButton_Click"/>
+                    <Button x:Name="DataSourceFolderButton" x:Uid="SelectFromFolderButton" Click="DataSourceFolderButton_Click"/>
+                </StackPanel>
+                <TextBlock x:Uid="ImportModeTextBlock" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 8 0 0"/>
+                <RadioButtons>
+                    <RadioButton x:Name="ImportAllFilesRadioButton" x:Uid="ImportAllFilesRadioButton" Checked="ImportAllFilesRadioButton_Checked"/>
+                    <RadioButton x:Name="ImportAbsentFilesOnlyRadioButton" x:Uid="ImportAbsentFilesOnlyRadioButton" Checked="ImportAbsentFilesOnlyRadioButton_Checked"/>
+                </RadioButtons>
+                <TextBlock x:Uid="FileImportOptionsTextBlock" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0 8 0 0"/>
+                <RadioButtons>
+                    <RadioButton x:Name="OriginalPathRadioButton" x:Uid="OriginalPathRadioButton" Checked="OriginalPathRadioButton_Checked"/>
+                    <RadioButton x:Name="MigratePathRadioButton" x:Uid="MigratePathRadioButton" Checked="MigratePathRadioButton_Checked"/>
+                </RadioButtons>
+                <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
+                    <TextBlock x:Uid="ConflictPreferenceTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <HyperlinkButton x:Name="ConflictPreferenceHelperTextHyperLinkButton" Click="ConflictPreferenceHelperTextHyperLinkButton_Click" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}" Height="32" Width="32" Padding="-8">
+                        <FontIcon Glyph="&#xE946;" FontWeight="Bold" FontSize="16" HorizontalAlignment="Stretch"/>
+                    </HyperlinkButton>
+                </StackPanel>
+                <RadioButtons>
+                    <RadioButton x:Name="SkipRadioButton" x:Uid="SkipRadioButton" Checked="SkipRadioButton_Checked"/>
+                    <RadioButton x:Name="ReplaceRadioButton" x:Uid="ReplaceRadioButton" Checked="ReplaceRadioButton_Checked"/>
+                    <RadioButton x:Name="UserDecideRadioButton" x:Uid="UserDecideRadioButton" Checked="UserDecideRadioButton_Checked"/>
+                </RadioButtons>
             </StackPanel>
-            <TextBlock x:Uid="ManageReferencedFilesTextBlock" Style="{StaticResource TitleTextBlockStyle}" Margin="0 16 0 0"/>
-            <Expander x:Uid="PackOptionsExpander" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Visibility="Collapsed">
-                <CheckBox x:Uid="IncludePathMappingFilesCheckBox" IsChecked="True"/>
-            </Expander>
-            <TextBlock x:Uid="PackPathTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
-            <TextBlock x:Name="PackPathValueTextBlock" Text="{Binding PackStorageFolder, Converter={StaticResource StorageFolderToPathStringConverter}}"/>
-            <Button x:Name="SelectPackPathPathButton" x:Uid="SelectPathButton" Click="SelectPackPathPathButton_Click"/>
-            <Button x:Name="PackButton" x:Uid="PackButton" Click="PackButton_Click" IsEnabled="{Binding IsReadyForPack}"/>
-            <TextBlock x:Name="PackStatusTextBlock"/>
-            <Expander Header="{Binding FailedFilePackStatusInfos.Count, Converter={StaticResource Int32ToValueWarningStringConverter}}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                <ListView x:Name="PackFailedInfoListView">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <InfoBar IsOpen="True" Severity="Warning" Title="{Binding ReferencedFileInfo.Path, Converter={StaticResource StringToFailedCopyStringConverter}}" Message="{Binding Exception}"></InfoBar>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-            <TextBlock x:Uid="RestoreReferencedFileFromPathTextBlock" Style="{StaticResource TitleTextBlockStyle}"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Uid="DataSourcePathTextBlock" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                <HyperlinkButton x:Name="DataSourcePathHelperTextHyperLinkButton" Click="DataSourcePathHelperTextHyperLinkButton_Click" Foreground="{ThemeResource SystemControlHyperlinkTextBrush}" Height="32" Width="32" Padding="-8">
-                    <FontIcon Glyph="&#xE946;" FontWeight="Bold" FontSize="16" HorizontalAlignment="Stretch"/>
-                </HyperlinkButton>
-            </StackPanel>
-            <TextBlock Text="{Binding RestoreDataSource, Converter={StaticResource T_StorageItemToPathStringConverter}}"/>
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="DataSourceFileButton" x:Uid="SelectFromFileButton" Click="DataSourceFileButton_Click"/>
-                <Button x:Name="DataSourceFolderButton" x:Uid="SelectFromFolderButton" Click="DataSourceFolderButton_Click"/>
-            </StackPanel>
-        </StackPanel>
+        </ScrollView>
     </Grid>
 </Page>
