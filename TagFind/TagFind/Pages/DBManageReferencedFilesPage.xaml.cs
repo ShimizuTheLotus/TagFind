@@ -23,6 +23,7 @@ using TagFind.Interfaces.IPageNavigationParameter;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using TagFind.Classes.Enums;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -108,22 +109,6 @@ namespace TagFind.Pages
             }
         }
         public bool _importFieldRequiredFieldWarningTextBlockShowTrigger = false;
-        public enum ImportModeEnum
-        {
-            ImportAllFiles,
-            mportAbsentFilesOnly
-        }
-        public enum FileImportOptionEnum
-        {
-            OriginalPath,
-            MigratePath
-        }
-        public enum ConflictPreferenceEnum
-        {
-            Skip,
-            Replace,
-            UserDecide
-        }
 
         public ImportModeEnum? ImportMode
         {
@@ -187,6 +172,22 @@ namespace TagFind.Pages
                 return true;
             }
         }
+
+        public bool IsImportingFiles
+        {
+            get => _isImportingFiles;
+            set
+            {
+                if (_isImportingFiles != value)
+                {
+                    _isImportingFiles = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsImportingFiles)));
+                }
+            }
+        }
+        private bool _isImportingFiles = false;
+
+        public CancellationTokenSource FileImportingCancellationTokenSource { get; set; } = new();
 
         public ManageReferencedFilesPage()
         {
@@ -435,14 +436,20 @@ namespace TagFind.Pages
             }
         }
 
-        private void ImportButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void CheckOptionsButton_Click(object sender, RoutedEventArgs e)
         {
             ImportFieldRequiredFieldWarningTextBlockShowTrigger = true;
+        }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsImportingFiles = true;
+
+        }
+
+        private void StopImportingButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileImportingCancellationTokenSource.Cancel();
         }
     }
 }

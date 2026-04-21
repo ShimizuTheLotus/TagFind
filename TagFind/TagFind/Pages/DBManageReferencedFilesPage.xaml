@@ -90,6 +90,7 @@
                 </RadioButtons>
                 <Button x:Name="CheckOptionsButton" x:Uid="CheckOptionsButton"  Click="CheckOptionsButton_Click"/>
                 <Button x:Name="ImportButton" x:Uid="ImportButton" Click="ImportButton_Click" IsEnabled="{Binding AllowImport}"/>
+                <Button x:Name="StopImportingButton" x:Uid="StopButton" Click="StopImportingButton_Click" IsEnabled="{Binding IsImportingFiles}"/>
             </StackPanel>
         </ScrollView>
     </Grid>

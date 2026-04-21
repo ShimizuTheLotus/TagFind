@@ -572,4 +572,7 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="CheckOptionsButton.Content" xml:space="preserve">
     <value>Check Options</value>
   </data>
+  <data name="StopButton.Content" xml:space="preserve">
+    <value>Stop</value>
+  </data>
 </root>

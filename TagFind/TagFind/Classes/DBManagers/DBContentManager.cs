@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using TagFind.Classes.DataTypes;
+using TagFind.Classes.Enums;
 using TagFind.Classes.Extensions;
 
 namespace TagFind.Classes.DB
@@ -3102,6 +3103,20 @@ namespace TagFind.Classes.DB
             {
                 MessageManager.PushMessage(MessageType.Error, ex.Message);
             }
+        }
+
+
+        // External File
+        /// <summary>
+        /// Import files from source.
+        /// </summary>
+        /// <param name="ImportMode"></param>
+        /// <param name="FileImportOption"></param>
+        /// <param name="ConflictPreference"></param>
+        public void ImportFileFromSource(ImportModeEnum ImportMode, FileImportOptionEnum FileImportOption, ConflictPreferenceEnum ConflictPreference, CancellationToken CancellationToken)
+        {
+            // List ItemID/Path
+
         }
     }
 
