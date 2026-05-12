@@ -13,7 +13,7 @@ namespace TagFind.Classes.XAMLDataConverters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             Int32 val = (Int32)value;
-            string raw = LocalizedString.GetLocalizedString("Code/CS/ValueWarnings");
+            string raw = LocalizedString.GetLocalizedString("Code.CS.ValueWarnings");
             raw = raw.FormatLocalizedStringWithParameters(new() { { "value", val } });
             return raw;
         }

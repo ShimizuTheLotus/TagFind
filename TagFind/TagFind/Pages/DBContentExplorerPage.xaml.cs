@@ -361,10 +361,10 @@ namespace TagFind.Pages
         {
             ContentDialog DeleteSelectionDialog = new();
             DeleteSelectionDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            DeleteSelectionDialog.Title = LocalizedString.GetLocalizedString("ConfirmDeletingDataItemsDialogTitle/String");
+            DeleteSelectionDialog.Title = LocalizedString.GetLocalizedString("ConfirmDeletingDataItemsDialogTitle.String");
             DeleteSelectionDialog.XamlRoot = this.XamlRoot;
-            DeleteSelectionDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Delete/String");
-            DeleteSelectionDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel/String");
+            DeleteSelectionDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Delete.String");
+            DeleteSelectionDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel.String");
             DeleteSelectionDialog.DefaultButton = ContentDialogButton.Secondary;
 
             ConfirmDeleteDataItemContentDialogPage content = new();

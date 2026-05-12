@@ -3131,116 +3131,140 @@ namespace TagFind.Classes.DB
             // Source path is a compressed file.
             if (File.Exists(SourceBasePath))
             {
-                using (ZipArchive archive = ZipFile.OpenRead(SourceBasePath))
+                bool isZip = false;
+                try
                 {
-                    // Import all referenced files.
-                    if (ImportMode == ImportModeEnum.ImportAllReferencedFiles)
+                    using (ZipArchive archive = ZipFile.OpenRead(SourceBasePath))
                     {
-                        foreach (var info in DBItemIDReferenceFilePathInfo)
+                        isZip = true;
+                    }
+                }
+                catch
+                {
+
+                }
+                if (!isZip)
+                {
+                    yield return new()
+                    {
+                        FileMigratingStatus = FileMigratingStatusEnum.FileSourceNotValid,
+                    };
+                    yield break;
+                }
+                try
+                {
+                    using (ZipArchive archive = ZipFile.OpenRead(SourceBasePath))
+                    {
+                        // Import all referenced files.
+                        if (ImportMode == ImportModeEnum.ImportAllReferencedFiles)
                         {
-                            CancellationToken.ThrowIfCancellationRequested();
-                            string referencedFilePath = info.Key;
-                            ZipArchiveEntry? entry;
-                            bool entryGot = false;
-                            try
+                            foreach (var info in DBItemIDReferenceFilePathInfo)
                             {
-                                entry = archive.GetEntry(referencedFilePath.DiskNameToFolder());
-                                entryGot = true;
-                            }
-                            catch
-                            {
-                                continue;
-                            }
-
-                            // Exists
-                            if (entry is not null && entryGot)
-                            {
-                                FileMigratingInfo fileMigratingInfo = new()
+                                CancellationToken.ThrowIfCancellationRequested();
+                                string referencedFilePath = info.Key;
+                                ZipArchiveEntry? entry;
+                                bool entryGot = false;
+                                try
                                 {
-                                    FileMigratingStatus = FileMigratingStatusEnum.Migrating,
-                                    Path = referencedFilePath
-                                };
-                                yield return fileMigratingInfo;
-
-                                // Target file already exists, need to check conflict.
-                                if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath)))
+                                    entry = archive.GetEntry(referencedFilePath.DiskNameToFolder());
+                                    entryGot = true;
+                                }
+                                catch
                                 {
-                                    if (ConflictPreference == ConflictPreferenceEnum.Skip)
-                                    {
-                                        continue;
-                                    }
-                                    else if (ConflictPreference == ConflictPreferenceEnum.Replace)
-                                    {
-                                        bool isSucceed = false;
-                                        try
-                                        {
-                                            entry.ExtractToFile(FileStorageExtensions.GetTargetStoragePath(targetBasePath, entry.FullName.GetFilePathWithDiskNameFromArchiveEntry()));
-                                            isSucceed = true;
-                                        }
-                                        catch
-                                        {
+                                    continue;
+                                }
 
-                                        }
+                                // Exists
+                                if (entry is not null && entryGot)
+                                {
+                                    FileMigratingInfo fileMigratingInfo = new()
+                                    {
+                                        FileMigratingStatus = FileMigratingStatusEnum.Migrating,
+                                        Path = referencedFilePath
+                                    };
+                                    yield return fileMigratingInfo;
 
-                                        if (isSucceed)
+                                    // Target file already exists, need to check conflict.
+                                    if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath)))
+                                    {
+                                        if (ConflictPreference == ConflictPreferenceEnum.Skip)
+                                        {
+                                            continue;
+                                        }
+                                        else if (ConflictPreference == ConflictPreferenceEnum.Replace)
+                                        {
+                                            bool isSucceed = false;
+                                            try
+                                            {
+                                                entry.ExtractToFile(FileStorageExtensions.GetTargetStoragePath(targetBasePath, entry.FullName.GetFilePathWithDiskNameFromArchiveEntry()));
+                                                isSucceed = true;
+                                            }
+                                            catch
+                                            {
+
+                                            }
+
+                                            if (isSucceed)
+                                            {
+                                                yield return new FileMigratingInfo()
+                                                {
+                                                    FileMigratingStatus = FileMigratingStatusEnum.Succeeded,
+                                                    Path = referencedFilePath
+                                                };
+                                            }
+                                            else
+                                            {
+                                                yield return new FileMigratingInfo()
+                                                {
+                                                    FileMigratingStatus = FileMigratingStatusEnum.OperationFailed,
+                                                    Path = referencedFilePath
+                                                };
+                                            }
+                                        }
+                                        else if (ConflictPreference == ConflictPreferenceEnum.UserDecide)
                                         {
                                             yield return new FileMigratingInfo()
                                             {
-                                                FileMigratingStatus = FileMigratingStatusEnum.Succeeded,
+                                                FileMigratingStatus = FileMigratingStatusEnum.Conflict,
                                                 Path = referencedFilePath
                                             };
                                         }
-                                        else
-                                        {
-                                            yield return new FileMigratingInfo()
-                                            {
-                                                FileMigratingStatus = FileMigratingStatusEnum.OperationFailed,
-                                                Path = referencedFilePath
-                                            };
-                                        }
-                                    }
-                                    else if (ConflictPreference == ConflictPreferenceEnum.UserDecide)
-                                    {
-                                        yield return new FileMigratingInfo()
-                                        {
-                                            FileMigratingStatus = FileMigratingStatusEnum.Conflict,
-                                            Path = referencedFilePath
-                                        };
                                     }
                                 }
-                            }
-                            yield return new FileMigratingInfo()
-                            {
-                                FileMigratingStatus = FileMigratingStatusEnum.FileSourceNotExists,
-                                Path = referencedFilePath
-                            };
-                        }
-                    }
-
-                    // Import absent files only.
-                    else if (ImportMode == ImportModeEnum.ImportAbsentFilesOnly)
-                    {
-                        foreach (var info in DBItemIDReferenceFilePathInfo)
-                        {
-                            CancellationToken.ThrowIfCancellationRequested();
-                            string referencedFilePath = info.Key;
-                            // Target file already exists, skip.
-                            if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath)))
-                            {
-                                continue;
-                            }
-                            if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(SourceBasePath, referencedFilePath)))
-                            {
-                                FileMigratingInfo fileMigratingInfo = new()
+                                yield return new FileMigratingInfo()
                                 {
-                                    FileMigratingStatus = FileMigratingStatusEnum.Migrating,
+                                    FileMigratingStatus = FileMigratingStatusEnum.FileSourceNotExists,
                                     Path = referencedFilePath
                                 };
-                                yield return fileMigratingInfo;
+                            }
+                        }
+
+                        // Import absent files only.
+                        else if (ImportMode == ImportModeEnum.ImportAbsentFilesOnly)
+                        {
+                            foreach (var info in DBItemIDReferenceFilePathInfo)
+                            {
+                                CancellationToken.ThrowIfCancellationRequested();
+                                string referencedFilePath = info.Key;
+                                // Target file already exists, skip.
+                                if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath)))
+                                {
+                                    continue;
+                                }
+                                if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(SourceBasePath, referencedFilePath)))
+                                {
+                                    FileMigratingInfo fileMigratingInfo = new()
+                                    {
+                                        FileMigratingStatus = FileMigratingStatusEnum.Migrating,
+                                        Path = referencedFilePath
+                                    };
+                                    yield return fileMigratingInfo;
+                                }
                             }
                         }
                     }
                 }
+                finally { }
             }
             // Source path is a folder.
             else
@@ -3349,7 +3373,7 @@ namespace TagFind.Classes.DB
                         }
                     }
                 }
-            }
+                }
         }
     }
 
@@ -3855,15 +3879,15 @@ namespace TagFind.Classes.DB
                 {
                     return reader.GetString(4);
                 }
-                string failedMessage = LocalizedString.GetLocalizedString("Code/CS/FailedToGetPropertyNameWithIDWithReason");
-                string failedReason = LocalizedString.GetLocalizedString("Code/CS/FailedToFindMatchedInfoFromDatabase");
+                string failedMessage = LocalizedString.GetLocalizedString("Code.CS.FailedToGetPropertyNameWithIDWithReason");
+                string failedReason = LocalizedString.GetLocalizedString("Code.CS.FailedToFindMatchedInfoFromDatabase");
                 string lfailedMessage = failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", failedReason } });
                 MessageManager.PushMessage(MessageType.Warning, lfailedMessage);
                 return string.Empty;
             }
             catch (Exception ex)
             {
-                string failedMessage = LocalizedString.GetLocalizedString("Code/CS/FailedToGetPropertyNameWithIDWithReason");
+                string failedMessage = LocalizedString.GetLocalizedString("Code.CS.FailedToGetPropertyNameWithIDWithReason");
                 string lfailedMessage = failedMessage.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "ID", PropertyID }, { "Reason", ex.Message } });
                 MessageManager.PushMessage(MessageType.Error, lfailedMessage);
                 return string.Empty;

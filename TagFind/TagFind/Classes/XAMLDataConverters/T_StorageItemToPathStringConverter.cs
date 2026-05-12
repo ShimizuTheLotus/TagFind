@@ -17,7 +17,7 @@ namespace TagFind.Classes.XAMLDataConverters
             T_StorageItem item = (T_StorageItem)value;
             if (item.Item == null)
             {
-                return LocalizedString.GetLocalizedString("Code/CS/NoPath");
+                return LocalizedString.GetLocalizedString("Code.CS.NoPath");
             }
             if (item.IsStorageFile == true)
             {
@@ -29,7 +29,7 @@ namespace TagFind.Classes.XAMLDataConverters
                 StorageFolder storageFolder = (StorageFolder)item.Item;
                 return storageFolder.Path;
             }
-            return LocalizedString.GetLocalizedString("Code/CS/NoPath");
+            return LocalizedString.GetLocalizedString("Code.CS.NoPath");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -584,4 +584,13 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="MigrateToPathTextBlock.Text" xml:space="preserve">
     <value>Migrate To Path</value>
   </data>
+  <data name="Code.CS.FileIsNotValidCompressedArchive" xml:space="preserve">
+    <value>File is not a valid compressed archive.</value>
+  </data>
+  <data name="Code.CS.FileAlreadyExists" xml:space="preserve">
+    <value>File Already Exists</value>
+  </data>
+  <data name="Code.CS.OperationFailed" xml:space="preserve">
+    <value>Operation Failed</value>
+  </data>
 </root>

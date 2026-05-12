@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TagFind.Classes.DataTypes
 {
-    public enum FileNavigationStatus
+    public enum FileMigationStatus
     {
         Waiting,
         Succeeded,
@@ -16,7 +17,8 @@ namespace TagFind.Classes.DataTypes
     public class ReferencedFilePackStatusInfo
     {
         public ReferencedFileInfo ReferencedFileInfo { get; set; } = new();
-        public FileNavigationStatus FileNavigationStatus { get; set; } = FileNavigationStatus.Waiting;
+        public FileMigationStatus FileMigationStatus { get; set; } = FileMigationStatus.Waiting;
+        public InfoBarSeverity InfoBarSeverity { get; set; } = InfoBarSeverity.Warning;
         public string Exception { get; set; } = string.Empty;
     }
 }

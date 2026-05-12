@@ -48,6 +48,7 @@ namespace TagFind
 
         private async void Current_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
         {
+            e.Handled = true;
             ContentDialog unhandledExceptionMessageDialog = new();
             unhandledExceptionMessageDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
             unhandledExceptionMessageDialog.Title = "Unhandled Exception:";

@@ -24,6 +24,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using TagFind.Classes.Enums;
+using System.Collections.ObjectModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -56,7 +57,7 @@ namespace TagFind.Pages
             }
         }
         private bool _isGettingReferencedFileInfos = false;
-        public List<ReferencedFilePackStatusInfo> FailedFilePackStatusInfos
+        public ObservableCollection<ReferencedFilePackStatusInfo> FailedFilePackStatusInfos
         {
             get => _failedFilePackStatusInfos;
             set
@@ -65,7 +66,18 @@ namespace TagFind.Pages
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FailedFilePackStatusInfos)));
             }
         }
-        private List<ReferencedFilePackStatusInfo> _failedFilePackStatusInfos = [];
+        private ObservableCollection<ReferencedFilePackStatusInfo> _failedFilePackStatusInfos = [];
+
+        public ObservableCollection<ReferencedFilePackStatusInfo> FailedFileMigrateStatusInfos
+        {
+            get => _failedFileMigrateStatusInfos;
+            set
+            {
+                _failedFileMigrateStatusInfos = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FailedFileMigrateStatusInfos)));
+            }
+        }
+        private ObservableCollection<ReferencedFilePackStatusInfo> _failedFileMigrateStatusInfos = [];
 
         public bool IsReadyForPack => !IsGettingReferencedFileInfos && PackStorageFolder != null;
 
@@ -266,7 +278,7 @@ namespace TagFind.Pages
                         ValidFileReferenceCounter++;
                         FileInfo fileInfo = new FileInfo(info.Path);
                         info.StorageSize = await Task.Run(() => new FileInfo(info.Path).Length);
-                        string rawString = LocalizedString.GetLocalizedString("FileReferenceCountValueTextBlock/Text");
+                        string rawString = LocalizedString.GetLocalizedString("FileReferenceCountValueTextBlock.Text");
                         string processedString = rawString.FormatLocalizedStringWithParameters(new Dictionary<string, object>()
                         {
                             { "valid_count", ValidFileReferenceCounter },
@@ -314,7 +326,7 @@ namespace TagFind.Pages
                 // Selected folder does not exist.
                 DispatcherQueue.TryEnqueue(() =>
                 {
-                    PackStatusTextBlock.Text = LocalizedString.GetLocalizedString("Code/CS/Error_SelectedFolderNotExistsOrNoPermission");
+                    PackStatusTextBlock.Text = LocalizedString.GetLocalizedString("Code.CS.Error_SelectedFolderNotExistsOrNoPermission");
                 });
                 return;
             }
@@ -333,28 +345,28 @@ namespace TagFind.Pages
                     {
                         DispatcherQueue.TryEnqueue(() =>
                         {
-                            string s = LocalizedString.GetLocalizedString("Code/CS/Copying_Value");
+                            string s = LocalizedString.GetLocalizedString("Code.CS.Copying_Value");
                             PackStatusTextBlock.Text = s.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "value", info.Path } });
                         });
                         StorageFile storageFile = await StorageFile.GetFileFromPathAsync(info.Path);
                         await storageFile.StorageWithPath(contentFolder);
-                        referencedFilePackStatusInfo.FileNavigationStatus = FileNavigationStatus.Succeeded;
+                        referencedFilePackStatusInfo.FileMigationStatus = FileMigationStatus.Succeeded;
                     }
                     catch (Exception ex)
                     {
-                        referencedFilePackStatusInfo.FileNavigationStatus = FileNavigationStatus.Failed;
+                        referencedFilePackStatusInfo.FileMigationStatus = FileMigationStatus.Failed;
                         referencedFilePackStatusInfo.Exception = ex.Message;
                     }
                 }
                 else
                 {
-                    referencedFilePackStatusInfo.FileNavigationStatus = FileNavigationStatus.Failed;
-                    referencedFilePackStatusInfo.Exception = LocalizedString.GetLocalizedString("Code/CS/FileNotExistOrNoPermissionToAccess");
+                    referencedFilePackStatusInfo.FileMigationStatus = FileMigationStatus.Failed;
+                    referencedFilePackStatusInfo.Exception = LocalizedString.GetLocalizedString("Code.CS.FileNotExistOrNoPermissionToAccess");
                 }
             }
             DispatcherQueue.TryEnqueue(() =>
             {
-                PackStatusTextBlock.Text = LocalizedString.GetLocalizedString("Code/CS/CopyFinished");
+                PackStatusTextBlock.Text = LocalizedString.GetLocalizedString("Code.CS.CopyFinished");
             });
 
             ShowFailedPackList(referencedFilePackStatusInfos);
@@ -362,7 +374,7 @@ namespace TagFind.Pages
 
         public async void ShowFailedPackList(List<ReferencedFilePackStatusInfo> sourceList)
         {
-            FailedFilePackStatusInfos = sourceList.Where(x => x.FileNavigationStatus == FileNavigationStatus.Failed).ToList();
+            FailedFilePackStatusInfos = new ObservableCollection<ReferencedFilePackStatusInfo>(sourceList.Where(x => x.FileMigationStatus == FileMigationStatus.Failed));
             PackFailedInfoListView.ItemsSource = FailedFilePackStatusInfos;
         }
 
@@ -474,10 +486,60 @@ namespace TagFind.Pages
             ImportFieldRequiredFieldWarningTextBlockShowTrigger = true;
         }
 
-        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        private async void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-            IsImportingFiles = true;
-
+            if (ImportMode != null &&
+                FileImportOption != null &&
+                ConflictPreference != null &&
+                ImportDataSource != null)
+            {
+                IsImportingFiles = true;
+                FailedFileMigrateStatusInfos.Clear();
+                MigrateFailedInfoListView.ItemsSource = FailedFileMigrateStatusInfos;
+                try
+                {
+                    await foreach (FileMigratingInfo info in ContentManager.ImportFileFromSource(ImportMode.Value, FileImportOption.Value, ConflictPreference.Value, ImportDataSource.Path, FileImportingCancellationTokenSource.Token, MigratePath: MigratePath))
+                    {
+                        // Invalid file source.
+                        if (info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotExists || info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotValid)
+                        {
+                            FileImportingCancellationTokenSource.Cancel();
+                            string exceptionMessage = info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotExists
+                                ? LocalizedString.GetLocalizedString("Code.CS.FileNotExistOrNoPermissionToAccess")
+                                : LocalizedString.GetLocalizedString("Code.CS.FileIsNotValidCompressedArchive");
+                            FailedFileMigrateStatusInfos.Add(new()
+                            {
+                                InfoBarSeverity = InfoBarSeverity.Error,
+                                Exception = exceptionMessage
+                            });
+                            IsImportingFiles = false;
+                            return;
+                        }
+                        else
+                        {
+                            string exceptionMessage = info.FileMigratingStatus switch
+                            {
+                                FileMigratingStatusEnum.Conflict => LocalizedString.GetLocalizedString("Code.CS.FileAlreadyExists"),
+                                FileMigratingStatusEnum.OperationFailed => LocalizedString.GetLocalizedString("Code.CS.OperationFailed"),
+                                _ => ""
+                            };
+                            FailedFileMigrateStatusInfos.Add(new()
+                            {
+                                ReferencedFileInfo = new()
+                                {
+                                    Path = info.Path
+                                },
+                                FileMigationStatus = FileMigationStatus.Failed,
+                                Exception = exceptionMessage
+                            });
+                        }
+                    }
+                }
+                finally
+                {
+                    IsImportingFiles = false;
+                }
+            }
         }
 
         private void StopImportingButton_Click(object sender, RoutedEventArgs e)

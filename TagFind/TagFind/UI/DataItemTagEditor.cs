@@ -195,11 +195,11 @@ namespace TagFind.UI
                     {
                         ContentDialog createTagDialog = new();
                         createTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-                        createTagDialog.Title = LocalizedString.GetLocalizedString("TagNotExists/String");
-                        createTagDialog.Content = LocalizedString.GetLocalizedString("DoYouWantToCreateThisTagNow/String");
+                        createTagDialog.Title = LocalizedString.GetLocalizedString("TagNotExists.String");
+                        createTagDialog.Content = LocalizedString.GetLocalizedString("DoYouWantToCreateThisTagNow.String");
                         createTagDialog.XamlRoot = this.XamlRoot;
-                        createTagDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Create/String");
-                        createTagDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel/String");
+                        createTagDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Create.String");
+                        createTagDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel.String");
                         createTagDialog.DefaultButton = ContentDialogButton.Primary;
                         createTagDialog.PrimaryButtonClick += CreateTagDialog_PrimaryButtonClick;
                         await createTagDialog.ShowAsync();

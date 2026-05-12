@@ -12,7 +12,7 @@ namespace TagFind.Classes.XAMLDataConverters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            string s = LocalizedString.GetLocalizedString("Code/CS/FailedCopyString");
+            string s = LocalizedString.GetLocalizedString("Code.CS.FailedCopyString");
             
             if (value is string str)
             {

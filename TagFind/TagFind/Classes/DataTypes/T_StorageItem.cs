@@ -63,6 +63,25 @@ namespace TagFind.Classes.DataTypes
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public string Path
+        {
+            get
+            {
+                if (IsStorageFile is null)
+                {
+                    return string.Empty;
+                }
+                else if (IsStorageFile == true)
+                {
+                    return fileInstant?.Path ?? string.Empty;
+                }
+                else
+                {
+                    return folderInstant?.Path ?? string.Empty;
+                }
+            }
+        }
+
         public T_StorageItem() { }
         public T_StorageItem(StorageFolder folder)
         {

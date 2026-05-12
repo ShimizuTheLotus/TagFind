@@ -584,4 +584,13 @@
   <data name="MigrateToPathTextBlock.Text" xml:space="preserve">
     <value>迁移到路径</value>
   </data>
+  <data name="Code.CS.FileIsNotValidCompressedArchive" xml:space="preserve">
+    <value>文件不是有效的压缩文档。</value>
+  </data>
+  <data name="Code.CS.FileAlreadyExists" xml:space="preserve">
+    <value>文件已存在</value>
+  </data>
+  <data name="Code.CS.OperationFailed" xml:space="preserve">
+    <value>操作失败</value>
+  </data>
 </root>

@@ -16,7 +16,7 @@ namespace TagFind.Classes.XAMLDataConverters
             StorageFolder? storageFolder = (StorageFolder?)value;
             if(storageFolder != null)
                 return storageFolder.Path;
-            return LocalizedString.GetLocalizedString("Code/CS/NotSelected");
+            return LocalizedString.GetLocalizedString("Code.CS.NotSelected");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

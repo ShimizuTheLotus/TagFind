@@ -120,8 +120,8 @@ public sealed partial class DBListPage : Page, IDatabaseRemoveReferencePage
         CreateDatabaseDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
         CreateDatabaseDialog.TitleTemplate = CreateTitleTemplate();
         CreateDatabaseDialog.XamlRoot = this.XamlRoot;
-        CreateDatabaseDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("CreateDatabaseDialog/PrimaryButtonText");
-        CreateDatabaseDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("CreateDatabaseDialog/SecondaryButtonText");
+        CreateDatabaseDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("CreateDatabaseDialog.PrimaryButtonText");
+        CreateDatabaseDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("CreateDatabaseDialog.SecondaryButtonText");
         CreateDatabaseDialog.DefaultButton = ContentDialogButton.Primary;
         CreateDatabaseDialog.IsPrimaryButtonEnabled = false;
 

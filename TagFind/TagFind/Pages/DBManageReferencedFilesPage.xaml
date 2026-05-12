@@ -105,6 +105,15 @@
                 <Button x:Name="CheckOptionsButton" x:Uid="CheckOptionsButton"  Click="CheckOptionsButton_Click"/>
                 <Button x:Name="ImportButton" x:Uid="ImportButton" Click="ImportButton_Click" IsEnabled="{Binding AllowImport}"/>
                 <Button x:Name="StopImportingButton" x:Uid="StopButton" Click="StopImportingButton_Click" IsEnabled="{Binding IsImportingFiles}"/>
+                <Expander Header="{Binding FailedFileMigrateStatusInfos.Count, Converter={StaticResource Int32ToValueWarningStringConverter}}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <ListView x:Name="MigrateFailedInfoListView">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <InfoBar IsOpen="True" Severity="{Binding InfoBarSeverity}" Title="{Binding ReferencedFileInfo.Path, Converter={StaticResource StringToFailedCopyStringConverter}}" Message="{Binding Exception}"></InfoBar>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
             </StackPanel>
         </ScrollView>
     </Grid>

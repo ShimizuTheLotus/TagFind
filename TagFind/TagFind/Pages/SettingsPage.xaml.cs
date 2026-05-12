@@ -47,9 +47,9 @@ namespace TagFind.Pages
         {
             ContentDialog TutorialDialog = new();
             TutorialDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            TutorialDialog.Title = LocalizedString.GetLocalizedString("TutorialTextBlock/Text");
+            TutorialDialog.Title = LocalizedString.GetLocalizedString("TutorialTextBlock.Text");
             TutorialDialog.XamlRoot = this.XamlRoot;
-            TutorialDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Close/String");
+            TutorialDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Close.String");
             TutorialDialog.DefaultButton = ContentDialogButton.Primary;
             TutorialDialog.Content = new TutorialContentDialogPage();
 

@@ -13,7 +13,7 @@ namespace TagFind.Classes.Extensions
             try
             {
                 var resourceLoader = new Microsoft.Windows.ApplicationModel.Resources.ResourceLoader();
-                return resourceLoader.GetString(key);
+                return resourceLoader.GetString(key.Replace(".", "/"));
             }
             catch
             {

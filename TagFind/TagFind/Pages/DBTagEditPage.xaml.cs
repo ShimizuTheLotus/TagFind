@@ -87,11 +87,11 @@ namespace TagFind.Pages
         {
             ContentDialog deleteTagDialog = new();
             deleteTagDialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            deleteTagDialog.Title = LocalizedString.GetLocalizedString("AreYouSureYouWantToRemoveThisTag/String");
-            deleteTagDialog.Content = LocalizedString.GetLocalizedString("AllReferencesWillBeRemovedAlong/String");
+            deleteTagDialog.Title = LocalizedString.GetLocalizedString("AreYouSureYouWantToRemoveThisTag.String");
+            deleteTagDialog.Content = LocalizedString.GetLocalizedString("AllReferencesWillBeRemovedAlong.String");
             deleteTagDialog.XamlRoot = this.XamlRoot;
-            deleteTagDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Remove/String");
-            deleteTagDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel/String");
+            deleteTagDialog.PrimaryButtonText = LocalizedString.GetLocalizedString("Remove.String");
+            deleteTagDialog.SecondaryButtonText = LocalizedString.GetLocalizedString("Cancel.String");
             deleteTagDialog.DefaultButton = ContentDialogButton.Secondary;
             deleteTagDialog.PrimaryButtonClick += DeleteTagDialog_PrimaryButtonClick; ;
             await deleteTagDialog.ShowAsync();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace TagFind.Classes.DataTypes
         Migrating,
         Succeeded,
         FileSourceNotExists,
+        FileSourceNotValid,
         Conflict,
         OperationFailed,
         FailedForUnknownReason
