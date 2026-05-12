@@ -9,7 +9,8 @@ namespace TagFind.Classes.Enums
     public enum ImportModeEnum
     {
         ImportAllFiles,
-        mportAbsentFilesOnly
+        ImportAllReferencedFiles,
+        ImportAbsentFilesOnly
     }
     public enum FileImportOptionEnum
     {

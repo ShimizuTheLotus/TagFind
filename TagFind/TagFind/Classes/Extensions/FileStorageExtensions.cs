@@ -49,5 +49,39 @@ namespace TagFind.Classes.Extensions
             }
             return isSucceeded;
         }
+
+        public static string GetTargetStoragePath(string basePath, string originalPath)
+        {
+            if (string.IsNullOrWhiteSpace(basePath))
+            {
+                return originalPath;
+            }
+            string folderizedPath = originalPath.Replace(":", "");
+            return Path.Combine(basePath, folderizedPath);
+        }
+
+        public static string GetFilePathWithDiskNameFromArchiveEntry(this string Path)
+        {
+            StringBuilder stringBuilder = new(Path);
+            string contentEntryHead = Consts.FileArchive.ContentFolderName + "\\";
+            int index = Path.IndexOf(contentEntryHead);
+            if (index != -1)
+            {
+                stringBuilder.Remove(0, contentEntryHead.Length);
+                int slashIndex = Path.IndexOf("\\");
+                if (slashIndex != -1)
+                {
+                    stringBuilder.Remove(slashIndex, "\\".Length);
+                    stringBuilder.Insert(slashIndex, ":");
+                }
+                return stringBuilder.ToString();
+            }
+            return Path;
+        }
+
+        public static string DiskNameToFolder(this string Path)
+        {
+            return Path.Replace(":", "\\");
+        }
     }
 }

@@ -575,4 +575,13 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="StopButton.Content" xml:space="preserve">
     <value>Stop</value>
   </data>
+  <data name="ImportAllReferencedFilesRadioButton.Content" xml:space="preserve">
+    <value>Import all referenced files</value>
+  </data>
+  <data name="ImportModeTextBlockModeTextBlock.Text" xml:space="preserve">
+    <value>Import Mode</value>
+  </data>
+  <data name="MigrateToPathTextBlock.Text" xml:space="preserve">
+    <value>Migrate To Path</value>
+  </data>
 </root>

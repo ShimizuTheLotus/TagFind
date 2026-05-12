@@ -105,6 +105,11 @@ namespace TagFind.Classes
             }
         }
 
+        public static class FileArchive
+        {
+            public const string ContentFolderName = "Content";
+        }
+
         public static class ConnectedAnimationKeys
         {
             public static object OpenDatabaseFromListAnimation = new();

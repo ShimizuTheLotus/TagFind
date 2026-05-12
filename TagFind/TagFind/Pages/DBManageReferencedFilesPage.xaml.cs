@@ -135,6 +135,9 @@ namespace TagFind.Pages
                     _fileImportOption = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileImportOption)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AllowImport)));
+
+                    MigratePathEnabled = value == FileImportOptionEnum.MigratePath;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MigratePathEnabled)));
                 }
             }
         }
@@ -153,6 +156,22 @@ namespace TagFind.Pages
             }
         }
         private ConflictPreferenceEnum? _conflictPreference = null;
+
+        public string MigratePath
+        {
+            get => _migratePath;
+            set
+            {
+                if (value != _migratePath)
+                {
+                    _migratePath = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MigratePath)));
+                }
+            }
+        }
+        private string _migratePath = string.Empty;
+        public bool MigratePathEnabled { get; set; } = false;
+
         public bool AllowImport
         {
             get
@@ -433,6 +452,20 @@ namespace TagFind.Pages
                         ConflictPreference = selection;
                     }
                 }
+            }
+        }
+
+        private async void SelectMigrateFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Microsoft.UI.Xaml.Window();
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+            Microsoft.Windows.Storage.Pickers.FolderPicker folderPicker = new(windowId);
+            var result = await folderPicker.PickSingleFolderAsync();
+            window.Close();
+            if (result != null)
+            {
+                MigratePath = result.Path;
             }
         }
 

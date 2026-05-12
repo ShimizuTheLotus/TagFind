@@ -530,9 +530,6 @@
   <data name="Code.CS.HelperText.ImportFileDataSourcePath" xml:space="preserve">
     <value>选择文件导入源，它可以是文件夹或者本软件创建的压缩文件。文件夹需要包含一个名为content的一级文件夹。</value>
   </data>
-  <data name="ImportModeTextBlockModeTextBlock.Text" xml:space="preserve">
-    <value>还原模式</value>
-  </data>
   <data name="OriginalPathRadioButton.Content" xml:space="preserve">
     <value>原路径</value>
   </data>
@@ -577,5 +574,14 @@
   </data>
   <data name="StopButton.Content" xml:space="preserve">
     <value>停止</value>
+  </data>
+  <data name="ImportAllReferencedFilesRadioButton.Content" xml:space="preserve">
+    <value>导入所有引用的文件</value>
+  </data>
+  <data name="ImportModeTextBlockModeTextBlock.Text" xml:space="preserve">
+    <value>导入模式</value>
+  </data>
+  <data name="MigrateToPathTextBlock.Text" xml:space="preserve">
+    <value>迁移到路径</value>
   </data>
 </root>
