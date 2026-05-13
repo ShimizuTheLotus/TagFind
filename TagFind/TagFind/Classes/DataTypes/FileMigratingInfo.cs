@@ -11,8 +11,9 @@ namespace TagFind.Classes.DataTypes
     {
         Migrating,
         Succeeded,
-        FileSourceNotExists,
+        FileSourceNotExists,// File source is a zip archive or a folder, containing the files to be migrated.
         FileSourceNotValid,
+        SourceFileNotExists,// Source file is the file to be migrated, which is inside the file source.
         Conflict,
         OperationFailed,
         FailedForUnknownReason

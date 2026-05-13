@@ -8,7 +8,7 @@ namespace TagFind.Classes.Enums
 {
     public enum ImportModeEnum
     {
-        ImportAllFiles,
+        //ImportAllFiles,
         ImportAllReferencedFiles,
         ImportAbsentFilesOnly
     }

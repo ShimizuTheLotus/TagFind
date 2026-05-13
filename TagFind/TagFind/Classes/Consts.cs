@@ -107,7 +107,7 @@ namespace TagFind.Classes
 
         public static class FileArchive
         {
-            public const string ContentFolderName = "Content";
+            public const string ContentFolderName = "content";
         }
 
         public static class ConnectedAnimationKeys

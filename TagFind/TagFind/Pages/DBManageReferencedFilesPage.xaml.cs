@@ -410,7 +410,7 @@ namespace TagFind.Pages
         {
             if (sender is FrameworkElement frameworkElement)
             {
-                frameworkElement.ShowHelperText("Code/CS/HelperText/ImportFileDataSourcePath");
+                frameworkElement.ShowHelperText("Code.CS.HelperText.ImportFileDataSourcePath");
             }
         }
 
@@ -418,7 +418,7 @@ namespace TagFind.Pages
         {
             if (sender is FrameworkElement frameworkElement)
             {
-                frameworkElement.ShowHelperText("Code/CS/HelperText/ConflictPreference");
+                frameworkElement.ShowHelperText("Code.CS.HelperText.ConflictPreference");
             }
         }
 
@@ -493,15 +493,33 @@ namespace TagFind.Pages
                 ConflictPreference != null &&
                 ImportDataSource != null)
             {
+                FileImportingCancellationTokenSource = new();
                 IsImportingFiles = true;
                 FailedFileMigrateStatusInfos.Clear();
                 MigrateFailedInfoListView.ItemsSource = FailedFileMigrateStatusInfos;
+                DBItemIDReferenceFilePathInfo FileReferenceInfo = [];
+                foreach (var item in ReferencedFileInfos)
+                {
+                    FileReferenceInfo.Add(item.DataItemID, item.Path);
+                }
                 try
                 {
-                    await foreach (FileMigratingInfo info in ContentManager.ImportFileFromSource(ImportMode.Value, FileImportOption.Value, ConflictPreference.Value, ImportDataSource.Path, FileImportingCancellationTokenSource.Token, MigratePath: MigratePath))
+                    await foreach (FileMigratingInfo info in ContentManager.ImportFileFromSource(ImportMode.Value, FileImportOption.Value, ConflictPreference.Value, ImportDataSource.Path, FileImportingCancellationTokenSource.Token, DBItemIDReferenceFilePathInfo: FileReferenceInfo, MigratePath: MigratePath))
                     {
                         // Invalid file source.
-                        if (info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotExists || info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotValid)
+                        if (info.FileMigratingStatus == FileMigratingStatusEnum.Migrating)
+                        {
+                            DispatcherQueue.TryEnqueue(() =>
+                            {
+                                string s = LocalizedString.GetLocalizedString("Code.CS.Copying_Value");
+                                MigrateStatusTextBlock.Text = s.FormatLocalizedStringWithParameters(new Dictionary<string, object>() { { "value", info.Path } });
+                            });
+                        }
+                        else if (info.FileMigratingStatus == FileMigratingStatusEnum.Succeeded)
+                        {
+                            continue;
+                        }
+                        else if (info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotExists || info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotValid)
                         {
                             FileImportingCancellationTokenSource.Cancel();
                             string exceptionMessage = info.FileMigratingStatus == FileMigratingStatusEnum.FileSourceNotExists
@@ -521,6 +539,7 @@ namespace TagFind.Pages
                             {
                                 FileMigratingStatusEnum.Conflict => LocalizedString.GetLocalizedString("Code.CS.FileAlreadyExists"),
                                 FileMigratingStatusEnum.OperationFailed => LocalizedString.GetLocalizedString("Code.CS.OperationFailed"),
+                                FileMigratingStatusEnum.SourceFileNotExists => LocalizedString.GetLocalizedString("Code.CS.FileNotExists"),
                                 _ => ""
                             };
                             FailedFileMigrateStatusInfos.Add(new()

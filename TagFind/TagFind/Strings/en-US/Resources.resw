@@ -593,4 +593,7 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Code.CS.OperationFailed" xml:space="preserve">
     <value>Operation Failed</value>
   </data>
+  <data name="Code.CS.FileNotExists" xml:space="preserve">
+    <value>File Not Exists</value>
+  </data>
 </root>

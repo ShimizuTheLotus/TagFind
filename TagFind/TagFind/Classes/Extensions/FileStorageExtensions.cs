@@ -63,15 +63,14 @@ namespace TagFind.Classes.Extensions
         public static string GetFilePathWithDiskNameFromArchiveEntry(this string Path)
         {
             StringBuilder stringBuilder = new(Path);
-            string contentEntryHead = Consts.FileArchive.ContentFolderName + "\\";
+            string contentEntryHead = Consts.FileArchive.ContentFolderName + "/";
             int index = Path.IndexOf(contentEntryHead);
             if (index != -1)
             {
                 stringBuilder.Remove(0, contentEntryHead.Length);
-                int slashIndex = Path.IndexOf("\\");
+                int slashIndex = stringBuilder.ToString().IndexOf("/");
                 if (slashIndex != -1)
                 {
-                    stringBuilder.Remove(slashIndex, "\\".Length);
                     stringBuilder.Insert(slashIndex, ":");
                 }
                 return stringBuilder.ToString();
@@ -79,9 +78,22 @@ namespace TagFind.Classes.Extensions
             return Path;
         }
 
+        public static string GetRelativeFilePathWithContentFolder(this string s)
+        {
+            s = s.Replace(":", "");
+            return System.IO.Path.Combine(Consts.FileArchive.ContentFolderName, s).Replace("\\", "/");
+        }
+
         public static string DiskNameToFolder(this string Path)
         {
-            return Path.Replace(":", "\\");
+            return Path.Replace(":", "");
+        }
+
+        public static string PathToArchiveEntry(this string Path)
+        {
+            string s = Path.DiskNameToFolder();
+            s = System.IO.Path.Combine(Consts.FileArchive.ContentFolderName, s);
+            return s.Replace("\\", "/");
         }
     }
 }
