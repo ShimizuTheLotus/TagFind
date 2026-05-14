@@ -596,4 +596,10 @@
   <data name="Code.CS.FileNotExists" xml:space="preserve">
     <value>文件不存在</value>
   </data>
+  <data name="PathHeaderAreaGrid.Header" xml:space="preserve">
+    <value>路径</value>
+  </data>
+  <data name="DescriptionHeaderAreaGrid.Header" xml:space="preserve">
+    <value>描述</value>
+  </data>
 </root>

@@ -596,4 +596,10 @@ Tips: If different things has same name, we recommend separate them into differe
   <data name="Code.CS.FileNotExists" xml:space="preserve">
     <value>File Not Exists</value>
   </data>
+  <data name="PathHeaderAreaGrid.Header" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="DescriptionHeaderAreaGrid.Header" xml:space="preserve">
+    <value>Description</value>
+  </data>
 </root>

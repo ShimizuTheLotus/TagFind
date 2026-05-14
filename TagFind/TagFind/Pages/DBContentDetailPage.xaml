@@ -33,12 +33,11 @@
                     <StackPanel x:Name="TextStackPanel" Margin="32 0 0 0"
                                 RelativePanel.RightOf="ItemImage"
                                 RelativePanel.AlignTopWithPanel="True"
-                                RelativePanel.AlignRightWithPanel="True">
+                                RelativePanel.AlignRightWithPanel="True"
+                                Spacing="8">
                         <TextBlock x:Name="TitleTextBlock" Style="{StaticResource TitleLargeTextBlockStyle}"/>
-                        <TextBlock x:Uid="PathTextBlock" Margin="0 8 0 4" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                        <Grid Padding="8" CornerRadius="8"
-                              Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
-                            <BreadcrumbBar x:Name="BreadcrumbBar" Grid.Column="0" VerticalAlignment="Center">
+                        <ui:HeaderAreaGrid x:Uid="PathHeaderAreaGrid">
+                            <BreadcrumbBar x:Name="BreadcrumbBar">
                                 <BreadcrumbBar.ItemTemplate>
                                     <DataTemplate>
                                         <BreadcrumbBarItem Content="{Binding}" AutomationProperties.Name="{Binding Name}">
@@ -51,9 +50,10 @@
                                     </DataTemplate>
                                 </BreadcrumbBar.ItemTemplate>
                             </BreadcrumbBar>
-                        </Grid>
-                        <TextBlock x:Uid="DescriptionTextBlock" Margin="0 8 0 4" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                        <TextBlock x:Name="DescriptionTextBlock" TextWrapping="Wrap" Margin="0 48 0 0"/>
+                        </ui:HeaderAreaGrid>
+                        <ui:HeaderAreaGrid x:Uid="DescriptionHeaderAreaGrid">
+                            <TextBlock x:Name="DescriptionTextBlock" TextWrapping="Wrap" Margin="0 48 0 0"/>
+                        </ui:HeaderAreaGrid>
                     </StackPanel>
                     <ui:TagsWrapPanel x:Name="TagsWrapPanel"
                                       RelativePanel.AlignLeftWith="TextStackPanel"

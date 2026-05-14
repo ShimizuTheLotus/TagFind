@@ -769,4 +769,35 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:HeaderAreaGrid" xmlns:local="using:TagFind.UI">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:HeaderAreaGrid">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel x:Name="PART_BasePanel">
+                            <Grid x:Name="PART_HeaderGrid"
+                                  Background="{ThemeResource SystemColorControlAccentBrush}"
+                                  CornerRadius="8 8 0 0"
+                                  HorizontalAlignment="Left"
+                                  Padding="16 4 16 4">
+                                <TextBlock x:Name="PART_HeaderTextBlock"
+                                           Foreground="{ThemeResource TextOnAccentFillColorDefault}"
+                                           Style="{ThemeResource SubtitleTextBlockStyle}"
+                                           FontWeight="Bold"/>
+                            </Grid>
+                            <Grid x:Name="PART_BodyGrid"
+                                  Padding="8"
+                                  BorderThickness="0.8 0.8 0.8 1"
+                                  BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
+                                  CornerRadius="0 8 8 8"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
