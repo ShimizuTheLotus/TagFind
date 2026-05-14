@@ -595,7 +595,7 @@ namespace TagFind.Classes.DB
                             emptyResult = (await DataItemsGetChildOfParentItemAsync(dataItemSearchConfig.ParentOrAncestorIDLimit, useLock: false)).ToList();
                             return emptyResult;
                         }
-                        else if(dataItemSearchConfig.SearchMode == SearchModeEnum.Folder)
+                        else if (dataItemSearchConfig.SearchMode == SearchModeEnum.Folder)
                         {
                             emptyResult = (await GetAllChildDataItemsDFS(dataItemSearchConfig.ParentOrAncestorIDLimit)).ToList();
                             return emptyResult;
@@ -604,7 +604,7 @@ namespace TagFind.Classes.DB
                         {
                             HashSet<DataItem> results = [];
                             string cmd = $"SELECT * FROM {nameof(DataItems)} ";
-                            SqliteCommand sqlCmd = new (cmd, dbConnection);
+                            SqliteCommand sqlCmd = new(cmd, dbConnection);
                             SqliteDataReader reader = sqlCmd.ExecuteReader();
                             reader.DataItemsAddDataItemsFromReader(ref results, dbConnection, MessageManager);
                             return results.ToList();
@@ -1721,7 +1721,7 @@ namespace TagFind.Classes.DB
                 _lock.Release();
             }
         }
-        
+
         public async Task DataItemBatchDelete(List<long> rootIDs, bool removeChilds)
         {
             // Do not add lock on this function!
@@ -1778,7 +1778,7 @@ namespace TagFind.Classes.DB
         {
             var allChildIds = new List<DataItem>();
             var queue = new Queue<DataItem>();
-            queue.Enqueue(new DataItem() { ID = parentID});
+            queue.Enqueue(new DataItem() { ID = parentID });
 
             while (queue.Count > 0)
             {
@@ -2188,7 +2188,7 @@ namespace TagFind.Classes.DB
 #if !DEBUG
             catch (Exception ex)
             {
-              MessageManager.PushMessage(MessageType.Error, ex.Message);
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
             }
 #endif
 
@@ -2325,7 +2325,7 @@ namespace TagFind.Classes.DB
             }
             if (tags.Count == 0) return new();
             return tags.First();
-        }        
+        }
 
         /// <summary>
         /// Add a unique tag to tag pool.
@@ -3111,9 +3111,9 @@ namespace TagFind.Classes.DB
         /// <summary>
         /// Import files from source.
         /// </summary>
-        /// <param name="ImportMode"></param>
-        /// <param name="FileImportOption"></param>
-        /// <param name="ConflictPreference"></param>
+        /// <param name="ImportMode">Import all or absent files only.</param>
+        /// <param name="FileImportOption">Where user want the files to be imported.</param>
+        /// <param name="ConflictPreference">How user want to manage file conflict.</param>
         public async IAsyncEnumerable<FileMigratingInfo> ImportFileFromSource(ImportModeEnum ImportMode, FileImportOptionEnum FileImportOption, ConflictPreferenceEnum ConflictPreference, string SourceBasePath, [EnumeratorCancellation] CancellationToken CancellationToken, DBItemIDReferenceFilePathInfo? DBItemIDReferenceFilePathInfo = null, string MigratePath = "")
         {
             string targetBasePath = FileImportOption == FileImportOptionEnum.OriginalPath ? MigratePath : "";
@@ -3159,8 +3159,9 @@ namespace TagFind.Classes.DB
                     foreach (var info in DBItemIDReferenceFilePathInfo)
                     {
                         CancellationToken.ThrowIfCancellationRequested();
+                        HashSet<long> fileReferenceDataItemIDRecords = info.Value;
                         string referencedFilePath = info.Key;
-                        await foreach (var fileMigratingInfo in TryImportSingleFileFromArchive(archive, referencedFilePath, targetBasePath, ImportMode, ConflictPreference))
+                        await foreach (var fileMigratingInfo in TryImportSingleFileFromArchive(archive, referencedFilePath, targetBasePath, fileReferenceDataItemIDRecords, ImportMode, ConflictPreference))
                         {
                             yield return fileMigratingInfo;
                         }
@@ -3174,15 +3175,16 @@ namespace TagFind.Classes.DB
                 foreach (var info in DBItemIDReferenceFilePathInfo)
                 {
                     CancellationToken.ThrowIfCancellationRequested();
+                    HashSet<long> fileReferenceDataItemIDRecords = info.Value;
                     string referencedFilePath = info.Key;
-                    await foreach(var fileMigratingInfo in TryImportSingleFileFromFolder(SourceBasePath, referencedFilePath, targetBasePath, ImportMode, ConflictPreference))
+                    await foreach (var fileMigratingInfo in TryImportSingleFileFromFolder(SourceBasePath, referencedFilePath, targetBasePath, fileReferenceDataItemIDRecords, ImportMode, ConflictPreference))
                     {
                         yield return fileMigratingInfo;
                     }
                 }
             }
         }
-        private async IAsyncEnumerable<FileMigratingInfo> TryImportSingleFileFromArchive(ZipArchive archive, string referencedFilePath, string targetBasePath, ImportModeEnum ImportMode, ConflictPreferenceEnum ConflictPreference)
+        private async IAsyncEnumerable<FileMigratingInfo> TryImportSingleFileFromArchive(ZipArchive archive, string referencedFilePath, string targetBasePath, HashSet<long> FileReferenceDataItemIDRecords, ImportModeEnum ImportMode, ConflictPreferenceEnum ConflictPreference)
         {
             ZipArchiveEntry? entry = null;
             bool entryGot = false;
@@ -3224,7 +3226,7 @@ namespace TagFind.Classes.DB
                     else if (ConflictPreference == ConflictPreferenceEnum.Replace)
                     {
                         // Try to replace file, if failed, return operation failed.
-                        if (TryDuplicateSingleFileFromArchiveToTargetPath(entry, targetBasePath))
+                        if (TryDuplicateSingleFileFromArchiveToTargetPathAndUpdateReferencedPath(entry, targetBasePath, FileReferenceDataItemIDRecords))
                         {
                             yield return new FileMigratingInfo()
                             {
@@ -3254,7 +3256,7 @@ namespace TagFind.Classes.DB
                 else
                 {
                     // Try to replace file, if failed, return operation failed.
-                    if (TryDuplicateSingleFileFromArchiveToTargetPath(entry, targetBasePath))
+                    if (TryDuplicateSingleFileFromArchiveToTargetPathAndUpdateReferencedPath(entry, targetBasePath, FileReferenceDataItemIDRecords))
                     {
                         yield return new FileMigratingInfo()
                         {
@@ -3282,23 +3284,26 @@ namespace TagFind.Classes.DB
                 };
             }
         }
-        private bool TryDuplicateSingleFileFromArchiveToTargetPath(ZipArchiveEntry entry, string targetBasePath)
+        private bool TryDuplicateSingleFileFromArchiveToTargetPathAndUpdateReferencedPath(ZipArchiveEntry entry, string targetBasePath, HashSet<long> FileReferenceDataItemIDRecords)
         {
             bool isSucceed = false;
             try
             {
-                string s = entry.FullName.GetFilePathWithDiskNameFromArchiveEntry();
-                entry.ExtractToFile(FileStorageExtensions.GetTargetStoragePath(targetBasePath, entry.FullName.GetFilePathWithDiskNameFromArchiveEntry()), true);
+                string targetRelativeFilePath = entry.FullName.GetFilePathWithDiskNameFromArchiveEntry();
+                string targetFilePath = FileStorageExtensions.GetTargetStoragePath(targetBasePath, entry.FullName.GetFilePathWithDiskNameFromArchiveEntry());
+                entry.ExtractToFile(targetFilePath, true);
                 isSucceed = true;
+                DataItemFastSearchUpdateReferencedFilePath(targetFilePath, FileReferenceDataItemIDRecords);
             }
-            catch(Exception ex) { }
+            catch (Exception ex) { }
             return isSucceed;
         }
-        private async IAsyncEnumerable<FileMigratingInfo> TryImportSingleFileFromFolder(string sourceBasePath, string referencedFilePath, string targetBasePath, ImportModeEnum ImportMode, ConflictPreferenceEnum ConflictPreference)
+        private async IAsyncEnumerable<FileMigratingInfo> TryImportSingleFileFromFolder(string sourceBasePath, string referencedFilePath, string targetBasePath, HashSet<long> FileReferenceDataItemIDRecords, ImportModeEnum ImportMode, ConflictPreferenceEnum ConflictPreference)
         {
             // Source file exists.
-            string s = FileStorageExtensions.GetTargetStoragePath(sourceBasePath, referencedFilePath.GetRelativeFilePathWithContentFolder());
-            if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(sourceBasePath, referencedFilePath.GetRelativeFilePathWithContentFolder())))
+            string sourceFilePath = FileStorageExtensions.GetTargetStoragePath(sourceBasePath, referencedFilePath.GetRelativeFilePathWithContentFolder());
+            string targetFilePath = FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath);
+            if (Path.Exists(sourceFilePath))
             {
                 yield return new()
                 {
@@ -3307,7 +3312,7 @@ namespace TagFind.Classes.DB
                 };
 
                 // Target file already exists, need to check conflict.
-                if (Path.Exists(FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath)) && ImportMode == ImportModeEnum.ImportAllReferencedFiles)
+                if (Path.Exists(targetFilePath) && ImportMode == ImportModeEnum.ImportAllReferencedFiles)
                 {
                     if (ConflictPreference == ConflictPreferenceEnum.Skip)
                     {
@@ -3318,18 +3323,19 @@ namespace TagFind.Classes.DB
                         bool isSucceed = false;
                         try
                         {
-                            File.Copy(FileStorageExtensions.GetTargetStoragePath(sourceBasePath, referencedFilePath.GetRelativeFilePathWithContentFolder()), FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath), true);
+                            File.Copy(sourceFilePath, targetFilePath, true);
                             isSucceed = true;
                         }
                         catch { }
 
-                        if(isSucceed)
+                        if (isSucceed)
                         {
                             yield return new FileMigratingInfo()
                             {
                                 FileMigratingStatus = FileMigratingStatusEnum.Succeeded,
                                 Path = referencedFilePath
                             };
+                            DataItemFastSearchUpdateReferencedFilePath(targetFilePath, FileReferenceDataItemIDRecords);
                         }
                         else
                         {
@@ -3355,7 +3361,7 @@ namespace TagFind.Classes.DB
                     bool isSucceed = false;
                     try
                     {
-                        File.Copy(FileStorageExtensions.GetTargetStoragePath(sourceBasePath, referencedFilePath.GetRelativeFilePathWithContentFolder()), FileStorageExtensions.GetTargetStoragePath(targetBasePath, referencedFilePath));
+                        File.Copy(sourceFilePath, targetFilePath);
                         isSucceed = true;
                     }
                     catch { }
@@ -3367,6 +3373,7 @@ namespace TagFind.Classes.DB
                             FileMigratingStatus = FileMigratingStatusEnum.Succeeded,
                             Path = referencedFilePath
                         };
+                        DataItemFastSearchUpdateReferencedFilePath(targetFilePath, FileReferenceDataItemIDRecords);
                     }
                     else
                     {
@@ -3386,6 +3393,25 @@ namespace TagFind.Classes.DB
                     FileMigratingStatus = FileMigratingStatusEnum.SourceFileNotExists,
                     Path = referencedFilePath
                 };
+            }
+        }
+        private void DataItemFastSearchUpdateReferencedFilePath(string NewPath, HashSet<long> RelatedDataItemIDs)
+        {
+            try
+            {
+                string command =
+                    $"UPDATE {nameof(DataItemFastSearch)} " +
+                    $"SET {nameof(DataItemFastSearch.RefPath)} = @{nameof(DataItemFastSearch.RefPath)} " +
+                    $"WHERE {nameof(DataItemFastSearch.DataItemID)} IN @{nameof(DataItemFastSearch.DataItemID)}";
+
+                SqliteCommand sqliteCommand = new(command, dbConnection);
+                sqliteCommand.Parameters.AddWithValue($"@{nameof(DataItemFastSearch.RefPath)}", NewPath);
+                sqliteCommand.Parameters.AddWithValue($"@{nameof(DataItemFastSearch.DataItemID)}", string.Join(",", RelatedDataItemIDs));
+                sqliteCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageManager.PushMessage(MessageType.Error, ex.Message);
             }
         }
     }
