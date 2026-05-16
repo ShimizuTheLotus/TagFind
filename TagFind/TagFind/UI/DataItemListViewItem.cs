@@ -125,6 +125,10 @@ namespace TagFind.UI
                 {
                     _itemIcon.Glyph = "\uE8B2";
                 }
+                else
+                {
+                    _itemIcon.Glyph = "\uF158";
+                }
             }
             if (_tagsWrapPanel != null)
             {
