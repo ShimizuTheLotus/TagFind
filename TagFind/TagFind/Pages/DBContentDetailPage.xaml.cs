@@ -114,6 +114,7 @@ namespace TagFind.Pages
             {
                 ItemImage.Source = await path.GetImageThumbnail(-1, 200);
             }
+            ItemIcon.Glyph = path.GetPathIcon();
 
             if (path != string.Empty)
             {

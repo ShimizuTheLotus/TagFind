@@ -18,6 +18,19 @@
                     <AppBarButton x:Name="EditAppBarButton" x:Uid="EditAppBarButton" Click="EditAppBarButton_Click" Icon="Edit"/>
                 </CommandBar>
                 <RelativePanel Margin="16 0 0 0">
+                    <Viewbox RelativePanel.AlignLeftWithPanel="True"
+                             RelativePanel.AlignTopWithPanel="True"
+                             MaxWidth="200"
+                             MaxHeight="200">
+                        <FontIcon x:Name="ItemIcon">
+                            <FontIcon.Foreground>
+                                <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#7CCFF4" Offset="0.0"/>
+                                    <GradientStop Color="#5DB1F4" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </FontIcon.Foreground>
+                        </FontIcon>
+                    </Viewbox>
                     <Image x:Name="ItemImage"
                            RelativePanel.AlignLeftWithPanel="True"
                            RelativePanel.AlignTopWithPanel="True"/>

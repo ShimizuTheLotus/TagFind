@@ -104,31 +104,7 @@ namespace TagFind.UI
             }
             if (_itemIcon != null)
             {
-                var path = DataItem.RefPath;
-                if (path.IsImageFile())
-                {
-                    // Do nothing
-                }
-                else if (path.IsDocumentFile())
-                {
-                    _itemIcon.Glyph = "\uF000";
-                }
-                else if (path.IsArchiveFile())
-                {
-                    _itemIcon.Glyph = "\uF012";
-                }
-                else if (path.IsAudioFile())
-                {
-                    _itemIcon.Glyph = "\uE8D6";
-                }
-                else if (path.IsVideoFile())
-                {
-                    _itemIcon.Glyph = "\uE8B2";
-                }
-                else
-                {
-                    _itemIcon.Glyph = "\uF158";
-                }
+                _itemIcon.Glyph = DataItem.RefPath.GetPathIcon();
             }
             if (_tagsWrapPanel != null)
             {

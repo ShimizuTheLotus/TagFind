@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Media.Imaging;
+using Microsoft.UI.Xaml.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,12 +35,12 @@ namespace TagFind.Classes.Extensions
             if (string.IsNullOrWhiteSpace(path))
                 return false;
 
-            if (path.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+            if (path.IndexOfAny(System.IO.Path.GetInvalidPathChars()) >= 0)
                 return false;
 
             try
             {
-                string fullPath = Path.GetFullPath(path);
+                string fullPath = System.IO.Path.GetFullPath(path);
                 return true;
             }
             catch
@@ -134,7 +135,7 @@ namespace TagFind.Classes.Extensions
                 yield break;
             }   
 
-            string ext = Path.GetExtension(filePath).ToLowerInvariant();
+            string ext = System.IO.Path.GetExtension(filePath).ToLowerInvariant();
 
             // Text-like files: stream line by line
             string[] textLike = { ".txt", ".csv", ".log", ".md", ".json", ".xml", ".rtf"};
@@ -242,7 +243,7 @@ namespace TagFind.Classes.Extensions
             {
                 if (!File.Exists(filePath))
                 {
-                    return HasDirectoryAccess(Path.GetDirectoryName(filePath), accessType);
+                    return HasDirectoryAccess(System.IO.Path.GetDirectoryName(filePath), accessType);
                 }
 
                 // Get safety info
@@ -430,6 +431,37 @@ namespace TagFind.Classes.Extensions
             {
                 return await EmptyBitmapImageAsync();
             }
+        }
+
+        public static string GetPathIcon(this string Path)
+        {
+            string value = string.Empty;
+            if (Path.IsImageFile())
+            {
+                // Do nothing
+            }
+            else if (Path.IsDocumentFile())
+            {
+                value = "\uF000";
+            }
+            else if (Path.IsArchiveFile())
+            {
+                value = "\uF012";
+            }
+            else if (Path.IsAudioFile())
+            {
+                value = "\uE8D6";
+            }
+            else if (Path.IsVideoFile())
+            {
+                value = "\uE8B2";
+            }
+            else
+            {
+                value = "\uF158";
+            }
+
+            return value;
         }
 
         private static async Task<BitmapImage> EmptyBitmapImageAsync()

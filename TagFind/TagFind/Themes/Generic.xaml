@@ -114,7 +114,6 @@
                                   Margin="0 8 0 8"
                                   RelativePanel.AlignLeftWithPanel="True"
                                   RelativePanel.AlignTopWithPanel="True">
-                                <Image x:Name="PART_Image" Height="100" Width="100"/>
                                 <Viewbox Stretch="Fill"
                                          Margin="16">
                                     <FontIcon x:Name="PART_ItemIcon" FontWeight="Black">
@@ -126,6 +125,7 @@
                                         </FontIcon.Foreground>
                                     </FontIcon>
                                 </Viewbox>
+                                <Image x:Name="PART_Image" Height="100" Width="100"/>
                                 <Grid x:Name="PART_ImageOverlay" Height="100" Width="100" 
                                       Opacity="0" IsHitTestVisible="False">
                                     <Rectangle Height="100" Width="100" Fill="#66000000"/>
