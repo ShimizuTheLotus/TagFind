@@ -378,16 +378,18 @@ namespace TagFind.Classes.Extensions
         {
             try
             {
-                if (filePath.IsDocumentFile())
-                {
-                    return new BitmapImage(new Uri("ms-appx:///Assets/DataItemThumbnail/TextDataItem.png", UriKind.Absolute));
-                }
                 if (filePath.IsImageFile())
                 {
                     return await GetImageThumbnail(filePath, width, height);
                 }
+                // Now use font instead to improve visual effect.
+                //if (filePath.IsDocumentFile())
+                //{
+                //    return new BitmapImage(new Uri("ms-appx:///Assets/DataItemThumbnail/TextDataItem.png", UriKind.Absolute));
+                //}
                 // Is other object
-                return new BitmapImage(new Uri("ms-appx:///Assets/DataItemThumbnail/ObjectDataItem.png", UriKind.Absolute));
+                //return new BitmapImage(new Uri("ms-appx:///Assets/DataItemThumbnail/ObjectDataItem.png", UriKind.Absolute));
+                return await EmptyTransparentBitmapImageAsync();
             }
             catch
             {
@@ -465,5 +467,39 @@ namespace TagFind.Classes.Extensions
             return bitmapImage;
         }
 
+        private static async Task<BitmapImage> EmptyTransparentBitmapImageAsync()
+        {
+            const int width = 100;
+            const int height = 100;
+            var pixelData = new byte[width * height * 4];
+
+            for (int i = 0; i < pixelData.Length; i += 4)
+            {
+                pixelData[i] = 0;
+                pixelData[i + 1] = 0;
+                pixelData[i + 2] = 0;
+                pixelData[i + 3] = 0;
+            }
+
+            var softwareBitmap = SoftwareBitmap.CreateCopyFromBuffer(
+                pixelData.AsBuffer(),
+                BitmapPixelFormat.Bgra8,
+                width,
+                height
+            );
+
+            var bitmapImage = new BitmapImage();
+            using (var stream = new InMemoryRandomAccessStream())
+            {
+                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
+                encoder.SetSoftwareBitmap(softwareBitmap);
+                await encoder.FlushAsync();
+
+                stream.Seek(0);
+                await bitmapImage.SetSourceAsync(stream);
+            }
+
+            return bitmapImage;
+        }
     }
 }

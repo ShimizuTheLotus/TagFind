@@ -115,6 +115,17 @@
                                   RelativePanel.AlignLeftWithPanel="True"
                                   RelativePanel.AlignTopWithPanel="True">
                                 <Image x:Name="PART_Image" Height="100" Width="100"/>
+                                <Viewbox Stretch="Fill"
+                                         Margin="16">
+                                    <FontIcon x:Name="PART_ItemIcon" FontWeight="Black">
+                                        <FontIcon.Foreground>
+                                            <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#7CCFF4" Offset="0.0"/>
+                                                <GradientStop Color="#5DB1F4" Offset="1.0"/>
+                                            </LinearGradientBrush>
+                                        </FontIcon.Foreground>
+                                    </FontIcon>
+                                </Viewbox>
                                 <Grid x:Name="PART_ImageOverlay" Height="100" Width="100" 
                                       Opacity="0" IsHitTestVisible="False">
                                     <Rectangle Height="100" Width="100" Fill="#66000000"/>
@@ -778,12 +789,19 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <StackPanel x:Name="PART_BasePanel">
+                        <Grid x:Name="PART_BasePanel">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
                             <Grid x:Name="PART_HeaderGrid"
                                   Background="{ThemeResource SystemColorControlAccentBrush}"
-                                  CornerRadius="8 8 0 0"
+                                  CornerRadius="8 8 8 8"
                                   HorizontalAlignment="Left"
-                                  Padding="16 4 16 4">
+                                  Padding="16 4 16 4"
+                                  Translation="-8 12 0"
+                                  Grid.Row="0"
+                                  Canvas.ZIndex="1">
                                 <TextBlock x:Name="PART_HeaderTextBlock"
                                            Foreground="{ThemeResource TextOnAccentFillColorDefault}"
                                            Style="{ThemeResource SubtitleTextBlockStyle}"
@@ -791,10 +809,11 @@
                             </Grid>
                             <Grid x:Name="PART_BodyGrid"
                                   Padding="8"
-                                  BorderThickness="0.8 0.8 0.8 1"
+                                  BorderThickness="1 1 1 1.8"
                                   BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
-                                  CornerRadius="0 8 8 8"/>
-                        </StackPanel>
+                                  CornerRadius="0 8 8 8"
+                                  Grid.Row="1"/>
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

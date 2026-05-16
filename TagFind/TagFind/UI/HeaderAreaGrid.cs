@@ -18,7 +18,6 @@ namespace TagFind.UI;
 [ContentProperty(Name = nameof(Children))]
 public sealed partial class HeaderAreaGrid : Control
 {
-    private StackPanel? _basePanel;
     private Grid? _headerGrid;
     private TextBlock? _headerTextBlock;
     private Grid? _bodyGrid;
@@ -53,7 +52,6 @@ public sealed partial class HeaderAreaGrid : Control
     {
         base.OnApplyTemplate();
 
-        _basePanel = GetTemplateChild("PART_BasePanel") as StackPanel;
         _headerGrid = GetTemplateChild("PART_HeaderGrid") as Grid;
         _headerTextBlock = GetTemplateChild("PART_HeaderTextBlock") as TextBlock;
         _bodyGrid = GetTemplateChild("PART_BodyGrid") as Grid;

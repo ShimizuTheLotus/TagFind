@@ -1,3 +1,4 @@
+using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
@@ -20,6 +21,7 @@ namespace TagFind.UI
     public sealed partial class DataItemListViewItem : Control
     {
         private Image? _thumbnailImage;
+        private FontIcon? _itemIcon;
         private TagsWrapPanel? _tagsWrapPanel;
         private Grid? _thumbnailImageOverlay;
 
@@ -69,6 +71,7 @@ namespace TagFind.UI
             base.OnApplyTemplate();
 
             _thumbnailImage = GetTemplateChild("PART_Image") as Image;
+            _itemIcon = GetTemplateChild("PART_ItemIcon") as FontIcon;
             _tagsWrapPanel = GetTemplateChild("PART_TagsWrapPanel") as TagsWrapPanel;
             _thumbnailImageOverlay = GetTemplateChild("PART_ImageOverlay") as Grid;
 
@@ -98,6 +101,30 @@ namespace TagFind.UI
             {
                 var image = await DataItem.RefPath.GetThumbnail(100, 100);
                 _thumbnailImage.Source = image;
+            }
+            if (_itemIcon != null)
+            {
+                var path = DataItem.RefPath;
+                if (path.IsImageFile())
+                {
+                    // Do nothing
+                }
+                else if (path.IsDocumentFile())
+                {
+                    _itemIcon.Glyph = "\uF000";
+                }
+                else if (path.IsArchiveFile())
+                {
+                    _itemIcon.Glyph = "\uF012";
+                }
+                else if (path.IsAudioFile())
+                {
+                    _itemIcon.Glyph = "\uE8D6";
+                }
+                else if (path.IsVideoFile())
+                {
+                    _itemIcon.Glyph = "\uE8B2";
+                }
             }
             if (_tagsWrapPanel != null)
             {
