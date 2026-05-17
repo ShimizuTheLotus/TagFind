@@ -482,7 +482,8 @@ namespace TagFind.Classes.Extensions
                 pixelData.AsBuffer(),
                 BitmapPixelFormat.Bgra8,
                 width,
-                height
+                height,
+                BitmapAlphaMode.Straight // For full transparent image to fix crash.
             );
 
             var bitmapImage = new BitmapImage();
