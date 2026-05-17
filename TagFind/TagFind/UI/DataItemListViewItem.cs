@@ -20,6 +20,7 @@ namespace TagFind.UI
 {
     public sealed partial class DataItemListViewItem : Control
     {
+        private Grid? _imageGrid;
         private Image? _thumbnailImage;
         private FontIcon? _itemIcon;
         private TagsWrapPanel? _tagsWrapPanel;
@@ -48,19 +49,19 @@ namespace TagFind.UI
         private void DataItemListViewItem_Loaded(object sender, RoutedEventArgs e)
         {
             this.Unloaded += DataItemListViewItem_Unloaded;
-            if (_thumbnailImage != null)
+            if (_imageGrid != null)
             {
-                _thumbnailImage.PointerEntered += _thumbnailImage_PointerEntered;
-                _thumbnailImage.PointerExited += _thumbnailImage_PointerExited;
+                _imageGrid.PointerEntered += _imageGrid_PointerEntered;
+                _imageGrid.PointerExited += _imageGrid_PointerExited;
             }
         }
 
         private void DataItemListViewItem_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (_thumbnailImage != null)
+            if (_imageGrid != null)
             {
-                _thumbnailImage.PointerEntered -= _thumbnailImage_PointerEntered;
-                _thumbnailImage.PointerExited -= _thumbnailImage_PointerExited;
+                _imageGrid.PointerEntered -= _imageGrid_PointerEntered;
+                _imageGrid.PointerExited -= _imageGrid_PointerExited;
             }
             //this.Loaded -= DataItemListViewItem_Loaded;
             this.Unloaded -= DataItemListViewItem_Unloaded;
@@ -70,6 +71,7 @@ namespace TagFind.UI
         {
             base.OnApplyTemplate();
 
+            _imageGrid = GetTemplateChild("PART_ImageGrid") as Grid;
             _thumbnailImage = GetTemplateChild("PART_Image") as Image;
             _itemIcon = GetTemplateChild("PART_ItemIcon") as FontIcon;
             _tagsWrapPanel = GetTemplateChild("PART_TagsWrapPanel") as TagsWrapPanel;
@@ -78,12 +80,12 @@ namespace TagFind.UI
             UpdateUI();
         }
 
-        private void _thumbnailImage_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void _imageGrid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(this, "ImageNormal", true);
         }
 
-        private void _thumbnailImage_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void _imageGrid_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             VisualStateManager.GoToState(this, "ImageHover", true);
         }

@@ -113,9 +113,12 @@
                                   Height="100" Width="100"
                                   Margin="0 8 0 8"
                                   RelativePanel.AlignLeftWithPanel="True"
-                                  RelativePanel.AlignTopWithPanel="True">
+                                  RelativePanel.AlignTopWithPanel="True"
+                                  Background="Transparent"
+                                  IsHitTestVisible="True">
                                 <Viewbox Stretch="Fill"
-                                         Margin="16">
+                                         Margin="16"
+                                         IsHitTestVisible="False">
                                     <FontIcon x:Name="PART_ItemIcon" FontWeight="Black">
                                         <FontIcon.Foreground>
                                             <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
@@ -125,13 +128,14 @@
                                         </FontIcon.Foreground>
                                     </FontIcon>
                                 </Viewbox>
-                                <Image x:Name="PART_Image" Height="100" Width="100"/>
+                                <Image x:Name="PART_Image" Height="100" Width="100" IsHitTestVisible="False"/>
                                 <Grid x:Name="PART_ImageOverlay" Height="100" Width="100" 
                                       Opacity="0" IsHitTestVisible="False">
-                                    <Rectangle Height="100" Width="100" Fill="#66000000"/>
+                                    <Rectangle Height="100" Width="100" Fill="#66000000" IsHitTestVisible="False"/>
                                     <TextBlock x:Uid="DetailTextBlock"
                                                HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
+                                               VerticalAlignment="Center"
+                                               IsHitTestVisible="False"/>
                                 </Grid>
                             </Grid>
                             <StackPanel Margin="32 0 0 0"

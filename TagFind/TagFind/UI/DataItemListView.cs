@@ -136,11 +136,12 @@ namespace TagFind.UI
             var listViewItem = FindParent<ListViewItem>(originalSource);
             if (listViewItem != null)
             {
-                var tem = _listView.ItemFromContainer(listViewItem);
+                var item = _listView.ItemFromContainer(listViewItem);
 
-                if (tem is DataItem dataItem)
+                if (item is DataItem dataItem)
                 {
-                    if (e.OriginalSource is Image)
+                    // User wants to view the detail of this item.
+                    if (e.OriginalSource is FrameworkElement fr && fr.Name == "PART_ImageGrid")
                     {
                         RequestOpenDataItemDetail?.Invoke(this, dataItem);
                     }

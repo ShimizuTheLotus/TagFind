@@ -375,7 +375,7 @@ namespace TagFind.Classes.Extensions
 
 
 
-        public static async Task<BitmapImage> GetThumbnail(this string filePath, int width, int height)
+        public static async Task<BitmapImage?> GetThumbnail(this string filePath, int width, int height)
         {
             try
             {
@@ -390,7 +390,7 @@ namespace TagFind.Classes.Extensions
                 //}
                 // Is other object
                 //return new BitmapImage(new Uri("ms-appx:///Assets/DataItemThumbnail/ObjectDataItem.png", UriKind.Absolute));
-                return await EmptyTransparentBitmapImageAsync();
+                return null;
             }
             catch
             {
@@ -476,42 +476,6 @@ namespace TagFind.Classes.Extensions
                 pixelData[i + 1] = 0;
                 pixelData[i + 2] = 0;
                 pixelData[i + 3] = 255;
-            }
-
-            var softwareBitmap = SoftwareBitmap.CreateCopyFromBuffer(
-                pixelData.AsBuffer(),
-                BitmapPixelFormat.Bgra8,
-                width,
-                height,
-                BitmapAlphaMode.Straight // For full transparent image to fix crash.
-            );
-
-            var bitmapImage = new BitmapImage();
-            using (var stream = new InMemoryRandomAccessStream())
-            {
-                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
-                encoder.SetSoftwareBitmap(softwareBitmap);
-                await encoder.FlushAsync();
-
-                stream.Seek(0);
-                await bitmapImage.SetSourceAsync(stream);
-            }
-
-            return bitmapImage;
-        }
-
-        private static async Task<BitmapImage> EmptyTransparentBitmapImageAsync()
-        {
-            const int width = 100;
-            const int height = 100;
-            var pixelData = new byte[width * height * 4];
-
-            for (int i = 0; i < pixelData.Length; i += 4)
-            {
-                pixelData[i] = 0;
-                pixelData[i + 1] = 0;
-                pixelData[i + 2] = 0;
-                pixelData[i + 3] = 0;
             }
 
             var softwareBitmap = SoftwareBitmap.CreateCopyFromBuffer(

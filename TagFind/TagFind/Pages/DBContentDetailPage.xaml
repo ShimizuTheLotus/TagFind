@@ -33,7 +33,9 @@
                     </Viewbox>
                     <Image x:Name="ItemImage"
                            RelativePanel.AlignLeftWithPanel="True"
-                           RelativePanel.AlignTopWithPanel="True"/>
+                           RelativePanel.AlignTopWithPanel="True"
+                           Width="200"
+                           Height="200"/>
                     <Button x:Name="OpenFileButton"
                             x:Uid="OpenButton"
                             Margin="0 32 0 0"
